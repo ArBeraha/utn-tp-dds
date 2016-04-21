@@ -9,18 +9,13 @@ public class Geolocalizacion {
 		longitud = unaLongitud;
 	}
 	
-	
 	public double getLatitud() {
 		return latitud;
 	}
 
-
-
 	public double getLongitud() {
 		return longitud;
 	}
-
-
 
 	public double calcularDistanciaEnCuadras(Geolocalizacion geolocalizacion){
 		double unidadCuadra = 100;
