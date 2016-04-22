@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class LocalComercial extends PuntoDeInteres {
 
@@ -25,15 +25,14 @@ public class LocalComercial extends PuntoDeInteres {
     }
 
     @Override
-    public boolean obtenerDisponibilidad(Calendar fecha) {
+    public boolean estaDisponible(LocalDateTime fechaHora) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean esCercano(Geolocalizacion geolocalizacion) {
-        return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro()
-                .obtenerRadioCercania();
+        return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro().obtenerRadioCercania();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class CGP extends PuntoDeInteres {
 
@@ -29,20 +29,19 @@ public class CGP extends PuntoDeInteres {
     }
 
     @Override
-    protected boolean obtenerDisponibilidad(Calendar fecha) {
+    protected boolean estaDisponible(LocalDateTime fechaHora) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     protected boolean tienePalabra(String palabra) {
-        boolean retorno = false;
         for (Servicio servicio : servicios) {
             if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
-                retorno = true;
+                return true;
             }
         }
-        return retorno;
+        return false;
     }
 
     public boolean esCercano(CGP cgpTerminal) {

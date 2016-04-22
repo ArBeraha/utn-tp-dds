@@ -1,8 +1,13 @@
 package model;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class ParadaColectivo extends PuntoDeInteres {
+
+    public ParadaColectivo() {
+        Arrays.fill(this.getDiasAtencion(), true);
+    }
 
     private String linea;
 
@@ -15,8 +20,8 @@ public class ParadaColectivo extends PuntoDeInteres {
     }
 
     @Override
-    public boolean obtenerDisponibilidad(Calendar fecha) {
-        return false;
+    public boolean estaDisponible(LocalDateTime fechaHora) {
+        return true;
     }
 
     @Override

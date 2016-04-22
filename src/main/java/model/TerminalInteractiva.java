@@ -41,5 +41,14 @@ public class TerminalInteractiva {
         }
         return resultadoBusqueda;
     }
+    
+    public boolean esCercano(PuntoDeInteres poi){
+        return poi.esCercano(poi.getGeolocalizacion());
+    }
+    
+    public boolean estaDisponible(PuntoDeInteres poi){
+        //TODO
+        return false;
+    }
 
 }
