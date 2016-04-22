@@ -16,6 +16,14 @@ public class LocalComercial extends PuntoDeInteres {
         this.nombre = nombre;
     }
 
+    public Rubro getRubro() {
+        return rubro;
+    }
+
+    public void setRubro(Rubro rubro) {
+        this.rubro = rubro;
+    }
+
     @Override
     public boolean obtenerDisponibilidad(Calendar fecha) {
         // TODO Auto-generated method stub
@@ -24,7 +32,8 @@ public class LocalComercial extends PuntoDeInteres {
 
     @Override
     public boolean esCercano(Geolocalizacion geolocalizacion) {
-        return this.rubro.esCercano(geolocalizacion);
+        return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro()
+                .obtenerRadioCercania();
     }
 
     @Override

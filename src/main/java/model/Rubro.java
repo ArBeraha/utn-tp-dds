@@ -3,6 +3,7 @@ package model;
 public abstract class Rubro {
 
     private String nombre;
+    private int radioCercania;
 
     public String getNombre() {
         return nombre;
@@ -12,6 +13,12 @@ public abstract class Rubro {
         this.nombre = nombre;
     }
 
-    protected abstract boolean esCercano(Geolocalizacion geolocalizacion);
+    public int obtenerRadioCercania() {
+        return radioCercania;
+    }
+
+    public void setRadioCercania(int radioCercania) {
+        this.radioCercania = radioCercania;
+    }
 
 }

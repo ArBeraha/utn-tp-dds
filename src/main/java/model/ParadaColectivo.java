@@ -21,7 +21,7 @@ public class ParadaColectivo extends PuntoDeInteres {
 
     @Override
     public boolean esCercano(Geolocalizacion geolocalizacion) {
-        return this.geolocalizacion.calcularDistanciaEnCuadras(geolocalizacion) < 1;
+        return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < 1;
     }
 
     @Override

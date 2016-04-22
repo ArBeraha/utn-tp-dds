@@ -6,6 +6,15 @@ import java.util.Calendar;
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<Servicio> servicios;
+    private String comuna;
+
+    public String getComuna() {
+        return comuna;
+    }
+
+    public void setComuna(String comuna) {
+        this.comuna = comuna;
+    }
 
     public ArrayList<Servicio> getServicios() {
         return servicios;
@@ -27,12 +36,17 @@ public class CGP extends PuntoDeInteres {
 
     @Override
     protected boolean tienePalabra(String palabra) {
+        boolean retorno = false;
         for (Servicio servicio : servicios) {
             if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
-                return true;
+                retorno = true;
             }
         }
-        return false;
+        return retorno;
+    }
+
+    public boolean esCercano(CGP cgpTerminal) {
+        return this.getComuna().equals(cgpTerminal.getComuna());
     }
 
 }
