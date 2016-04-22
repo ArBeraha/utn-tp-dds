@@ -19,12 +19,16 @@ public class Geolocalizacion {
     }
 
     public double calcularDistanciaEnCuadras(Geolocalizacion geolocalizacion) {
-        double unidadCuadra = 100;
+        double unidadCuadraEnMetros = 100;
+        double gradoLatitudEnMetros = 111120;
+        double gradoLongitudEnMetros = 111320;
         double distanciaEntreLatitudes = Math.abs(geolocalizacion.getLatitud() - this.getLatitud());
         double distanciaEntreLongitudes = Math.abs(geolocalizacion.getLongitud() - this.getLongitud());
 
-        //TODO: Hay que pasar las latitudes y longitudes a metros antes del siguiente cálculo
-        double distanciaEnCuadras = (distanciaEntreLatitudes + distanciaEntreLongitudes) / unidadCuadra;
+        double distanciaEnMetros = ((distanciaEntreLatitudes * gradoLatitudEnMetros)
+                + (distanciaEntreLongitudes * gradoLongitudEnMetros));
+
+        double distanciaEnCuadras = distanciaEnMetros / unidadCuadraEnMetros;
 
         return distanciaEnCuadras;
     }
