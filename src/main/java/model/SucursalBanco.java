@@ -10,4 +10,10 @@ public class SucursalBanco extends PuntoDeInteres {
         return false;
     }
 
+    @Override
+    protected boolean tienePalabra(String palabra) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }
