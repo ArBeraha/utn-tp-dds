@@ -9,6 +9,8 @@ public abstract class PuntoDeInteres {
 
     protected abstract boolean obtenerDisponibilidad(Calendar fecha);
 
+    protected abstract boolean tienePalabra(String palabra);
+
     protected boolean esCercano(Geolocalizacion geolocalizacion) {
         return this.geolocalizacion.calcularDistanciaEnCuadras(geolocalizacion) < 5;
     }
