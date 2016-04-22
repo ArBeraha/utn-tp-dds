@@ -1,5 +1,7 @@
 package model;
 
-public class Rubro {
+public abstract class Rubro {
+
+	protected abstract boolean esCercano(Geolocalizacion geolocalizacion);
 
 }

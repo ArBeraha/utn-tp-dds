@@ -1,6 +1,7 @@
 package model;
 
 public class Geolocalizacion {
+
 	private double latitud;
 	private double longitud;
 	
@@ -22,7 +23,7 @@ public class Geolocalizacion {
 		double distanciaEntreLatitudes = Math.abs(geolocalizacion.getLatitud() - this.getLatitud());
 		double distanciaEntreLongitudes = Math.abs(geolocalizacion.getLongitud() - this.getLongitud());
 		
-		//TODO: Hay que pasar las latitudes y longitudes a metros antes del siguiente c·lculo
+		//TODO: Hay que pasar las latitudes y longitudes a metros antes del siguiente c√°lculo
 		double distanciaEnCuadras = (distanciaEntreLatitudes + distanciaEntreLongitudes)/unidadCuadra;
 		
 		return distanciaEnCuadras;
