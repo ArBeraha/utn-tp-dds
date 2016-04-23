@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Rubro {
+public class Rubro {
 
     private String nombre;
     private int radioCercania;

@@ -2,15 +2,15 @@ package model;
 
 import java.util.ArrayList;
 
-public class Direccion extends DireccionEstablecimiento{
+public class Direccion {
 
-    private String callePrincipal;
-    private ArrayList<String> callesEntre;
-    private int altura;
-    private String localidad;
-    private String barrio;
-    private String provincia;
-    private String pais;
+    protected String callePrincipal;
+    protected ArrayList<String> callesEntre;
+    protected int altura;
+    protected String localidad;
+    protected String barrio;
+    protected String provincia;
+    protected String pais;
 
     public String getCallePrincipal() {
         return callePrincipal;

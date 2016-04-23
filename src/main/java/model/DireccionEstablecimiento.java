@@ -1,6 +1,6 @@
 package model;
 
-public class DireccionEstablecimiento {
+public class DireccionEstablecimiento extends Direccion {
 
     private String departamento;
     private String unidad;
