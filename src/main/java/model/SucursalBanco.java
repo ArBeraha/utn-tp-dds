@@ -1,7 +1,6 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class SucursalBanco extends PuntoDeInteres {
