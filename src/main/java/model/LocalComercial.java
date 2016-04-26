@@ -1,7 +1,5 @@
 package model;
 
-import java.time.LocalDateTime;
-
 public class LocalComercial extends PuntoDeInteres {
 
     private String nombre;
@@ -25,14 +23,15 @@ public class LocalComercial extends PuntoDeInteres {
     }
 
     @Override
-    public boolean estaDisponible(LocalDateTime fechaHora) {
+    public boolean estaDisponible() {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean esCercano(Geolocalizacion geolocalizacion) {
-        return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro().obtenerRadioCercania();
+        return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro()
+                .obtenerRadioCercania();
     }
 
     @Override

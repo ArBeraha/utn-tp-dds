@@ -25,7 +25,7 @@ public class SucursalBanco extends PuntoDeInteres {
     }
 
     public boolean estaDisponible(LocalDateTime fechaHora, Servicio servicio) {
-        return this.estaDisponible(fechaHora) && servicio.estaDisponible(fechaHora);
+        return this.estaDisponible() && servicio.estaDisponible(fechaHora);
 
     }
 
@@ -42,6 +42,12 @@ public class SucursalBanco extends PuntoDeInteres {
                 return true;
             }
         }
+        return false;
+    }
+
+    @Override
+    protected boolean estaDisponible() {
+        // TODO Auto-generated method stub
         return false;
     }
 

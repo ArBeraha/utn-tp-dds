@@ -1,12 +1,14 @@
 package model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+
+import org.joda.time.DateTime;
 
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<Servicio> servicios;
     private String comuna;
+    private Horarios horarios;
 
     public String getComuna() {
         return comuna;
@@ -29,9 +31,9 @@ public class CGP extends PuntoDeInteres {
     }
 
     @Override
-    protected boolean estaDisponible(LocalDateTime fechaHora) {
-        // TODO Auto-generated method stub
-        return false;
+    protected boolean estaDisponible() {
+        DateTime fechaHoraActual = new DateTime();
+        return horarios.atiende(fechaHoraActual);
     }
 
     @Override
