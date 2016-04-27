@@ -12,7 +12,7 @@ public class Horarios {
     @SuppressWarnings("rawtypes")
     private Map rangosHorario = new HashMap<Integer, List<RangoHorario>>();
 
-    public boolean atiende(DateTime fechaHoraActual) {
+    public boolean atiende(final DateTime fechaHoraActual) {
         int diaSemana = fechaHoraActual.getDayOfWeek();
         LocalTime hora = fechaHoraActual.toLocalTime();
         @SuppressWarnings("unchecked")

@@ -16,7 +16,7 @@ public class Direccion {
         return callePrincipal;
     }
 
-    public void setCallePrincipal(String callePrincipal) {
+    public void setCallePrincipal(final String callePrincipal) {
         this.callePrincipal = callePrincipal;
     }
 
@@ -24,7 +24,7 @@ public class Direccion {
         return callesEntre;
     }
 
-    public void setCallesEntre(ArrayList<String> callesEntre) {
+    public void setCallesEntre(final ArrayList<String> callesEntre) {
         this.callesEntre = callesEntre;
     }
 
@@ -32,7 +32,7 @@ public class Direccion {
         return altura;
     }
 
-    public void setAltura(int altura) {
+    public void setAltura(final int altura) {
         this.altura = altura;
     }
 
@@ -40,7 +40,7 @@ public class Direccion {
         return localidad;
     }
 
-    public void setLocalidad(String localidad) {
+    public void setLocalidad(final String localidad) {
         this.localidad = localidad;
     }
 
@@ -48,7 +48,7 @@ public class Direccion {
         return barrio;
     }
 
-    public void setBarrio(String barrio) {
+    public void setBarrio(final String barrio) {
         this.barrio = barrio;
     }
 
@@ -56,7 +56,7 @@ public class Direccion {
         return provincia;
     }
 
-    public void setProvincia(String provincia) {
+    public void setProvincia(final String provincia) {
         this.provincia = provincia;
     }
 
@@ -64,7 +64,7 @@ public class Direccion {
         return pais;
     }
 
-    public void setPais(String pais) {
+    public void setPais(final String pais) {
         this.pais = pais;
     }
 

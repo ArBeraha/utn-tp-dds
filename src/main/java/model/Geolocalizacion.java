@@ -5,7 +5,7 @@ public class Geolocalizacion {
     private double latitud;
     private double longitud;
 
-    public Geolocalizacion(double unaLatitud, double unaLongitud) {
+    public Geolocalizacion(final double unaLatitud, final double unaLongitud) {
         latitud = unaLatitud;
         longitud = unaLongitud;
     }
@@ -18,7 +18,7 @@ public class Geolocalizacion {
         return longitud;
     }
 
-    public double calcularDistanciaEnCuadras(Geolocalizacion geolocalizacion) {
+    public double calcularDistanciaEnCuadras(final Geolocalizacion geolocalizacion) {
         double unidadCuadraEnMetros = 100;
         double gradoLatitudEnMetros = 111120;
         double gradoLongitudEnMetros = 111320;

@@ -10,7 +10,7 @@ public class DireccionEstablecimiento extends Direccion {
         return departamento;
     }
 
-    public void setDepartamento(String departamento) {
+    public void setDepartamento(final String departamento) {
         this.departamento = departamento;
     }
 
@@ -18,7 +18,7 @@ public class DireccionEstablecimiento extends Direccion {
         return unidad;
     }
 
-    public void setUnidad(String unidad) {
+    public void setUnidad(final String unidad) {
         this.unidad = unidad;
     }
 
@@ -26,7 +26,7 @@ public class DireccionEstablecimiento extends Direccion {
         return codigoPostal;
     }
 
-    public void setCodigoPostal(String codigoPostal) {
+    public void setCodigoPostal(final String codigoPostal) {
         this.codigoPostal = codigoPostal;
     }
 

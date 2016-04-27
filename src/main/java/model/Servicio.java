@@ -10,11 +10,11 @@ public class Servicio {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public void setNombre(final String nombre) {
         this.nombre = nombre;
     }
 
-    public boolean estaDisponible(LocalDateTime fechaHora) {
+    public boolean estaDisponible(final LocalDateTime fechaHora) {
         //TODO
         return false;
     }

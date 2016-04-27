@@ -10,7 +10,7 @@ public class LocalComercial extends PuntoDeInteres {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public void setNombre(final String nombre) {
         this.nombre = nombre;
     }
 
@@ -18,7 +18,7 @@ public class LocalComercial extends PuntoDeInteres {
         return rubro;
     }
 
-    public void setRubro(Rubro rubro) {
+    public void setRubro(final Rubro rubro) {
         this.rubro = rubro;
     }
 
@@ -29,13 +29,13 @@ public class LocalComercial extends PuntoDeInteres {
     }
 
     @Override
-    public boolean esCercano(Geolocalizacion geolocalizacion) {
+    public boolean esCercano(final Geolocalizacion geolocalizacion) {
         return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro()
                 .obtenerRadioCercania();
     }
 
     @Override
-    protected boolean tienePalabra(String palabra) {
+    protected boolean tienePalabra(final String palabra) {
         boolean condicion1 = nombre.toLowerCase().contains(palabra.toLowerCase());
         boolean condicion2 = rubro.getNombre().toLowerCase().contains(palabra.toLowerCase());
 

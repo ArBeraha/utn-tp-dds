@@ -14,7 +14,7 @@ public class CGP extends PuntoDeInteres {
         return comuna;
     }
 
-    public void setComuna(String comuna) {
+    public void setComuna(final String comuna) {
         this.comuna = comuna;
     }
 
@@ -22,11 +22,11 @@ public class CGP extends PuntoDeInteres {
         return servicios;
     }
 
-    public void setServicios(ArrayList<Servicio> servicios) {
+    public void setServicios(final ArrayList<Servicio> servicios) {
         this.servicios = servicios;
     }
 
-    public void agregarServicio(Servicio servicio) {
+    public void agregarServicio(final Servicio servicio) {
         this.servicios.add(servicio);
     }
 
@@ -37,7 +37,7 @@ public class CGP extends PuntoDeInteres {
     }
 
     @Override
-    protected boolean tienePalabra(String palabra) {
+    protected boolean tienePalabra(final String palabra) {
         for (Servicio servicio : servicios) {
             if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
                 return true;
@@ -46,7 +46,7 @@ public class CGP extends PuntoDeInteres {
         return false;
     }
 
-    public boolean esCercano(CGP cgpTerminal) {
+    public boolean esCercano(final CGP cgpTerminal) {
         return this.getComuna().equals(cgpTerminal.getComuna());
     }
 

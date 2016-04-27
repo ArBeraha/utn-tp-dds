@@ -9,7 +9,7 @@ public abstract class PuntoDeInteres {
         return direccion;
     }
 
-    public void setDireccion(Direccion direccion) {
+    public void setDireccion(final Direccion direccion) {
         this.direccion = direccion;
     }
 
@@ -17,16 +17,16 @@ public abstract class PuntoDeInteres {
         return geolocalizacion;
     }
 
-    public void setGeolocalizacion(Geolocalizacion geolocalizacion) {
+    public void setGeolocalizacion(final Geolocalizacion geolocalizacion) {
         this.geolocalizacion = geolocalizacion;
     }
 
     protected abstract boolean estaDisponible();
 
-    protected boolean esCercano(Geolocalizacion geolocalizacion) {
+    protected boolean esCercano(final Geolocalizacion geolocalizacion) {
         return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < 5;
     }
 
-    protected abstract boolean tienePalabra(String palabra);
+    protected abstract boolean tienePalabra(final String palabra);
 
 }
