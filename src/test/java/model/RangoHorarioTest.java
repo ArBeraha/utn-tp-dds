@@ -7,15 +7,12 @@ import junit.framework.Assert;
 
 public class RangoHorarioTest {
 
-    RangoHorario rangoHorario = new RangoHorario();
-
     @Test
     public void dadaUnaHoraDentroDeUnRangoDeberiaEstarIncluidaEnElRango() {
         LocalTime unaHora = new LocalTime(12, 30);
         LocalTime horaInicioRango = new LocalTime(12, 00);
         LocalTime horaFinRango = new LocalTime(13, 00);
-        rangoHorario.setHoraInicio(horaInicioRango);
-        rangoHorario.setHoraFin(horaFinRango);
+        RangoHorario rangoHorario = new RangoHorario(horaInicioRango, horaFinRango);
 
         Assert.assertTrue(rangoHorario.incluye(unaHora));
 
@@ -26,8 +23,7 @@ public class RangoHorarioTest {
         LocalTime unaHora = new LocalTime(11, 59);
         LocalTime horaInicioRango = new LocalTime(12, 00);
         LocalTime horaFinRango = new LocalTime(13, 00);
-        rangoHorario.setHoraInicio(horaInicioRango);
-        rangoHorario.setHoraFin(horaFinRango);
+        RangoHorario rangoHorario = new RangoHorario(horaInicioRango, horaFinRango);
 
         Assert.assertFalse(rangoHorario.incluye(unaHora));
 
