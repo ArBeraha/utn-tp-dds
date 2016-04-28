@@ -6,13 +6,19 @@ public class RangoHorario {
 
     private LocalTime horaInicio, horaFin;
 
-    RangoHorario(final LocalTime unaHoraInicio, final LocalTime unaHoraFin) {
+    public RangoHorario(final LocalTime unaHoraInicio, final LocalTime unaHoraFin) {
         if (unaHoraInicio.isBefore(unaHoraFin)) {
             horaInicio = unaHoraInicio;
             horaFin = unaHoraFin;
         } else {
             throw new IllegalArgumentException("Los valores ingresados no corresponden a un rango de tiempo");
         }
+    }
+
+    public RangoHorario(final int unaHoraInicio, final int unMinutoInicio, final int unaHoraFinal, final int unMinutoFinal) {
+        LocalTime horaInicio = new LocalTime(unaHoraInicio, unMinutoInicio);
+        LocalTime horaFin = new LocalTime(unaHoraFinal, unMinutoFinal);
+        new RangoHorario(horaInicio, horaFin);
     }
 
     public LocalTime getHoraInicio() {
