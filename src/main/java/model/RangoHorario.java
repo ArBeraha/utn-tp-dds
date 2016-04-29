@@ -11,14 +11,24 @@ public class RangoHorario {
             horaInicio = unaHoraInicio;
             horaFin = unaHoraFin;
         } else {
-            throw new IllegalArgumentException("Los valores ingresados no corresponden a un rango de tiempo");
+            throw new IllegalArgumentException("Los valores recibidos no corresponden a un rango de tiempo válido");
         }
     }
 
     public RangoHorario(final int unaHoraInicio, final int unMinutoInicio, final int unaHoraFinal, final int unMinutoFinal) {
-        LocalTime horaInicio = new LocalTime(unaHoraInicio, unMinutoInicio);
-        LocalTime horaFin = new LocalTime(unaHoraFinal, unMinutoFinal);
-        new RangoHorario(horaInicio, horaFin);
+        if ((unaHoraInicio <= 24 && unaHoraInicio >= 0) && (unaHoraFinal <= 24 && unaHoraFinal >= 0)
+                && (unMinutoInicio >= 0 && unMinutoInicio <= 59) && (unMinutoFinal >= 0 && unMinutoFinal <= 59)) {
+            LocalTime horaInicio = new LocalTime(unaHoraInicio, unMinutoInicio);
+            LocalTime horaFin = new LocalTime(unaHoraFinal, unMinutoFinal);
+            if (horaInicio.isBefore(horaFin)) {
+                this.horaInicio = horaInicio;
+                this.horaFin = horaFin;
+            } else {
+                throw new IllegalArgumentException("Los valores recibidos no corresponden a un rango de tiempo válido");
+            }
+        } else {
+            throw new IllegalAccessError("Los valores recibidos no corresponden a tiempos válidos");
+        }
     }
 
     public LocalTime getHoraInicio() {

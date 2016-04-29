@@ -28,4 +28,18 @@ public class RangoHorarioTest {
         Assert.assertFalse(rangoHorario.incluye(unaHora));
 
     }
+
+    @Test
+    public void devuelveTrueCuandoUnRangoSeSolapaConOtro() {
+        RangoHorario unRangoHorario = new RangoHorario(10, 0, 20, 0);
+        RangoHorario rangoQueSeSolapa = new RangoHorario(15, 30, 21, 0);
+        Assert.assertTrue(unRangoHorario.seSolapaCon(rangoQueSeSolapa));
+    }
+
+    @Test
+    public void devuelveFalseCuandoUnRangoNoSeSolapaConOtro() {
+        RangoHorario unRangoHorario = new RangoHorario(10, 0, 20, 0);
+        RangoHorario rangoQueSeSolapa = new RangoHorario(9, 00, 9, 59);
+        Assert.assertFalse(unRangoHorario.seSolapaCon(rangoQueSeSolapa));
+    }
 }
