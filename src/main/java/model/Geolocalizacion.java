@@ -1,5 +1,9 @@
 package model;
 
+import java.util.Properties;
+
+import util.PropertiesFactory;
+
 public class Geolocalizacion {
 
     private double latitud;
@@ -18,16 +22,17 @@ public class Geolocalizacion {
         return longitud;
     }
 
-    public double calcularDistanciaEnCuadras(final Geolocalizacion geolocalizacion) {
-        double unidadCuadraEnMetros = 100;
-        double gradoLatitudEnMetros = 111120;
-        double gradoLongitudEnMetros = 111320;
+    public double calcularDistanciaEnCuadras(Geolocalizacion geolocalizacion) {
+        Properties properties = PropertiesFactory.getProperties();
+
+        double unidadCuadraEnMetros = Double.parseDouble(properties.getProperty("unidadCuadraEnMetros"));
+        double gradoLatitudEnMetros = Double.parseDouble(properties.getProperty("gradoLatitudEnMetros"));
+        double gradoLongitudEnMetros = Double.parseDouble(properties.getProperty("gradoLongitudEnMetros"));
+
         double distanciaEntreLatitudes = Math.abs(geolocalizacion.getLatitud() - this.getLatitud());
         double distanciaEntreLongitudes = Math.abs(geolocalizacion.getLongitud() - this.getLongitud());
-
         double distanciaEnMetros = ((distanciaEntreLatitudes * gradoLatitudEnMetros)
                 + (distanciaEntreLongitudes * gradoLongitudEnMetros));
-
         double distanciaEnCuadras = distanciaEnMetros / unidadCuadraEnMetros;
 
         return distanciaEnCuadras;
