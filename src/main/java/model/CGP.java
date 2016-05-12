@@ -6,9 +6,8 @@ import org.joda.time.DateTime;
 
 public class CGP extends PuntoDeInteres {
 
-    private ArrayList<Servicio> servicios;
+    private ArrayList<ServicioCGP> servicios;
     private String comuna;
-    private Horarios horarios;
 
     public String getComuna() {
         return comuna;
@@ -18,27 +17,42 @@ public class CGP extends PuntoDeInteres {
         this.comuna = comuna;
     }
 
-    public ArrayList<Servicio> getServicios() {
+    public ArrayList<ServicioCGP> getServicios() {
         return servicios;
     }
 
-    public void setServicios(final ArrayList<Servicio> servicios) {
+    public void setServicios(final ArrayList<ServicioCGP> servicios) {
         this.servicios = servicios;
     }
 
-    public void agregarServicio(final Servicio servicio) {
+    public void agregarServicio(final ServicioCGP servicio) {
         this.servicios.add(servicio);
     }
 
     @Override
     protected boolean estaDisponible() {
         DateTime fechaHoraActual = new DateTime();
-        return horarios.atiende(fechaHoraActual);
+        for (ServicioCGP servicio : servicios) {
+            if (servicio.getHorarios().atiende(fechaHoraActual)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected boolean estaDisponible(String nombreServicioCGP) {
+        DateTime fechaHoraActual = new DateTime();
+        for (ServicioCGP servicio : servicios) {
+            if (servicio.getNombre().toLowerCase() == nombreServicioCGP.toLowerCase()) {
+                return servicio.getHorarios().atiende(fechaHoraActual);
+            }
+        }
+        return false;
     }
 
     @Override
     protected boolean tienePalabra(final String palabra) {
-        for (Servicio servicio : servicios) {
+        for (ServicioCGP servicio : servicios) {
             if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
                 return true;
             }

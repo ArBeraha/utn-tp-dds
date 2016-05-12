@@ -1,12 +1,14 @@
 package model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+
+import org.joda.time.DateTime;
 
 public class SucursalBanco extends PuntoDeInteres {
 
     private String banco;
-    private ArrayList<Servicio> servicios;
+    private ArrayList<ServicioBanco> servicios;
+    private Horarios horarios;
 
     public String getBanco() {
         return banco;
@@ -16,17 +18,27 @@ public class SucursalBanco extends PuntoDeInteres {
         this.banco = banco;
     }
 
-    public ArrayList<Servicio> getServicios() {
+    public ArrayList<ServicioBanco> getServicios() {
         return servicios;
     }
 
-    public void setServicios(final ArrayList<Servicio> servicios) {
+    public void setServicios(final ArrayList<ServicioBanco> servicios) {
         this.servicios = servicios;
     }
 
-    public boolean estaDisponible(final LocalDateTime fechaHora, final Servicio servicio) {
-        return this.estaDisponible() && servicio.estaDisponible(fechaHora);
+    @Override
+    protected boolean estaDisponible() {
+        DateTime fechaHoraActual = new DateTime();
+        return horarios.atiende(fechaHoraActual);
+    }
 
+    public boolean estaDisponible(final String nombreServicioBanco) {
+        for (ServicioBanco servicio : servicios) {
+            if (servicio.getNombre() == nombreServicioBanco) {
+                return servicio.estaDisponible() && this.estaDisponible();
+            }
+        }
+        return false;
     }
 
     @Override
@@ -37,17 +49,11 @@ public class SucursalBanco extends PuntoDeInteres {
     }
 
     private boolean serviciosTienenPalabra(final String palabra) {
-        for (Servicio servicio : servicios) {
+        for (ServicioBanco servicio : servicios) {
             if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
                 return true;
             }
         }
-        return false;
-    }
-
-    @Override
-    protected boolean estaDisponible() {
-        // TODO Auto-generated method stub
         return false;
     }
 
