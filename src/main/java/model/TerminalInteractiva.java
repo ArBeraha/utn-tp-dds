@@ -43,12 +43,11 @@ public class TerminalInteractiva {
     }
 
     public boolean esCercano(final PuntoDeInteres poi) {
-        return poi.esCercano(poi.getGeolocalizacion());
+        return poi.esCercano(this.getGeolocalizacion());
     }
 
     public boolean estaDisponible(final PuntoDeInteres poi) {
-        //TODO
-        return false;
+        return poi.estaDisponible();
     }
 
 }
