@@ -7,13 +7,13 @@ import org.joda.time.DateTime;
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<ServicioCGP> servicios;
-    private String comuna;
+    private Comuna comuna;
 
-    public String getComuna() {
+    public Comuna getComuna() {
         return comuna;
     }
 
-    public void setComuna(final String comuna) {
+    public void setComuna(final Comuna comuna) {
         this.comuna = comuna;
     }
 
@@ -60,8 +60,9 @@ public class CGP extends PuntoDeInteres {
         return false;
     }
 
-    public boolean esCercano(final CGP cgpTerminal) {
-        return this.getComuna().equals(cgpTerminal.getComuna());
+    @Override
+    public boolean esCercano(final Geolocalizacion geolocalizacion) {
+        return this.getComuna().incluyeGeolocalizacion(geolocalizacion);
     }
 
 }
