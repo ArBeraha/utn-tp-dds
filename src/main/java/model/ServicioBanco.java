@@ -11,7 +11,7 @@ public class ServicioBanco {
         return nombre;
     }
 
-    public void servicioBanco(final String nombre) {
+    public void setNombre(final String nombre) {
         this.nombre = nombre;
     }
 

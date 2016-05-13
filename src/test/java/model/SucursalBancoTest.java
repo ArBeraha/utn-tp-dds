@@ -29,7 +29,7 @@ public class SucursalBancoTest {
         sucursal = new SucursalBanco();
         sucursal.setBanco("Nacion");
         ServicioBanco servicio = new ServicioBanco();
-        servicio.servicioBanco("Asesoramiento");
+        servicio.setNombre("Asesoramiento");
         geolocalizacionSucursal = new Geolocalizacion(12, 28);
         sucursal.setGeolocalizacion(geolocalizacionSucursal);
         ArrayList<ServicioBanco> servicios = new ArrayList<ServicioBanco>();
