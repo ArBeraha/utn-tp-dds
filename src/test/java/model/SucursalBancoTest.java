@@ -34,6 +34,13 @@ public class SucursalBancoTest {
         sucursal.setGeolocalizacion(geolocalizacionSucursal);
         ArrayList<ServicioBanco> servicios = new ArrayList<ServicioBanco>();
         servicios.add(servicio);
+        Horarios horarioServicio = new Horarios();
+        LocalTime horaInicio = new LocalTime(12, 0);
+        LocalTime horaFin = new LocalTime(16, 0);
+        RangoHorario tardeLunesYMartes = new RangoHorario(horaInicio, horaFin);
+        horarioServicio.agregarRangoHorario(1, tardeLunesYMartes);
+        horarioServicio.agregarRangoHorario(2, tardeLunesYMartes);
+        servicio.setHorarios(horarioServicio);
         sucursal.setServicios(servicios);
     }
 
