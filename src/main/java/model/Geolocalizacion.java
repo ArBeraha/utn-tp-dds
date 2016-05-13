@@ -9,7 +9,7 @@ public class Geolocalizacion {
     private double latitud;
     private double longitud;
 
-    public Geolocalizacion(double unaLatitud, double unaLongitud) {
+    public Geolocalizacion(final double unaLatitud, final double unaLongitud) {
         latitud = unaLatitud;
         longitud = unaLongitud;
     }

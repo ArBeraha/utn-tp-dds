@@ -13,5 +13,7 @@ hs_err_pid*
 
 /target
 *.ldb
-/.settings
-/bin
+.settings/
+.classpath
+.project
+/bin/

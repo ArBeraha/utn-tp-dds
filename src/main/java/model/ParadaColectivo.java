@@ -1,13 +1,6 @@
 package model;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-
 public class ParadaColectivo extends PuntoDeInteres {
-
-    public ParadaColectivo() {
-        Arrays.fill(this.getDiasAtencion(), true);
-    }
 
     private String linea;
 
@@ -15,22 +8,22 @@ public class ParadaColectivo extends PuntoDeInteres {
         return linea;
     }
 
-    public void setLinea(String linea) {
+    public void setLinea(final String linea) {
         this.linea = linea;
     }
 
     @Override
-    public boolean estaDisponible(LocalDateTime fechaHora) {
+    public boolean estaDisponible() {
         return true;
     }
 
     @Override
-    public boolean esCercano(Geolocalizacion geolocalizacion) {
+    public boolean esCercano(final Geolocalizacion geolocalizacion) {
         return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < 1;
     }
 
     @Override
-    protected boolean tienePalabra(String palabra) {
+    protected boolean tienePalabra(final String palabra) {
         return linea.contains(palabra);
     }
 

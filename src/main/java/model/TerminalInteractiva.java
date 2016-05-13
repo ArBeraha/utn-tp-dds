@@ -12,7 +12,7 @@ public class TerminalInteractiva {
         return cgpComunaTerminal;
     }
 
-    public void setCgpComunaTerminal(CGP cgpComunaTerminal) {
+    public void setCgpComunaTerminal(final CGP cgpComunaTerminal) {
         this.cgpComunaTerminal = cgpComunaTerminal;
     }
 
@@ -20,7 +20,7 @@ public class TerminalInteractiva {
         return geolocalizacion;
     }
 
-    public void setGeolocalizacion(Geolocalizacion geolocalizacion) {
+    public void setGeolocalizacion(final Geolocalizacion geolocalizacion) {
         this.geolocalizacion = geolocalizacion;
     }
 
@@ -28,11 +28,11 @@ public class TerminalInteractiva {
         return puntosDeInteres;
     }
 
-    public void setPuntosDeInteres(ArrayList<PuntoDeInteres> puntosDeInteres) {
+    public void setPuntosDeInteres(final ArrayList<PuntoDeInteres> puntosDeInteres) {
         this.puntosDeInteres = puntosDeInteres;
     }
 
-    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(String palabra) {
+    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
         ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
@@ -41,14 +41,13 @@ public class TerminalInteractiva {
         }
         return resultadoBusqueda;
     }
-    
-    public boolean esCercano(PuntoDeInteres poi){
-        return poi.esCercano(poi.getGeolocalizacion());
+
+    public boolean esCercano(final PuntoDeInteres poi) {
+        return poi.esCercano(this.getGeolocalizacion());
     }
-    
-    public boolean estaDisponible(PuntoDeInteres poi){
-        //TODO
-        return false;
+
+    public boolean estaDisponible(final PuntoDeInteres poi) {
+        return poi.estaDisponible();
     }
 
 }
