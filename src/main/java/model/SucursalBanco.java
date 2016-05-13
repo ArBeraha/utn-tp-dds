@@ -3,12 +3,25 @@ package model;
 import java.util.ArrayList;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 public class SucursalBanco extends PuntoDeInteres {
 
     private String banco;
     private ArrayList<ServicioBanco> servicios;
     private Horarios horarios;
+    
+    public SucursalBanco(){
+        this.horarios = new Horarios();
+        LocalTime horaInicioLunesAViernes = new LocalTime(10, 0);
+        LocalTime horaFinLunesAViernes = new LocalTime(15, 0);
+        RangoHorario manianaLunesAViernes = new RangoHorario(horaInicioLunesAViernes, horaFinLunesAViernes);
+        horarios.agregarRangoHorario(1, manianaLunesAViernes);
+        horarios.agregarRangoHorario(2, manianaLunesAViernes);
+        horarios.agregarRangoHorario(3, manianaLunesAViernes);
+        horarios.agregarRangoHorario(4, manianaLunesAViernes);
+        horarios.agregarRangoHorario(5, manianaLunesAViernes);
+    }
 
     public String getBanco() {
         return banco;
@@ -25,7 +38,7 @@ public class SucursalBanco extends PuntoDeInteres {
     public void setServicios(final ArrayList<ServicioBanco> servicios) {
         this.servicios = servicios;
     }
-
+    
     @Override
     protected boolean estaDisponible() {
         DateTime fechaHoraActual = new DateTime();
