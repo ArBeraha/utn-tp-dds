@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -58,6 +60,10 @@ public class LocalComercialTest {
 		local.setGeolocalizacion(geolocalizacionLocal);
 		//setUp para tienePalabra()
 		local.setNombre("Regla y compás");
+		
+        ArrayList<String> palabras = new ArrayList<String>();
+        palabras.add("Negocio");
+        local.setPalabrasClave(palabras);
 	}
 
 	@After
@@ -94,6 +100,11 @@ public class LocalComercialTest {
 	public void tienePalabraCoincideNombreRubro() {
 		Assert.assertTrue(local.tienePalabra("breRIA"));
 	}
+	
+	   @Test
+	    public void tienePalabraCoincidePalabraClave() {
+	        Assert.assertTrue(local.tienePalabra("negocio"));
+	    }
 	
 	@Test
 	public void noTienePalabra() {

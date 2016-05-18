@@ -58,7 +58,8 @@ public class SucursalBanco extends PuntoDeInteres {
     protected boolean tienePalabra(final String palabra) {
         boolean condicion1 = this.getBanco().toLowerCase().contains(palabra.toLowerCase());
         boolean condicion2 = serviciosTienenPalabra(palabra);
-        return (condicion1 || condicion2);
+        boolean condicion3 = this.esPalabraClave(palabra);
+        return (condicion1 || condicion2 || condicion3);
     }
 
     private boolean serviciosTienenPalabra(final String palabra) {

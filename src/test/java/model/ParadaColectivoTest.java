@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -26,6 +28,9 @@ public class ParadaColectivoTest {
         //setUp
         parada = new ParadaColectivo();
         parada.setLinea("103");
+        ArrayList<String> palabras = new ArrayList<String>();
+        palabras.add("Colectivo");
+        parada.setPalabrasClave(palabras);
         geolocalizacionParada = new Geolocalizacion(12, 28);
         parada.setGeolocalizacion(geolocalizacionParada);
     }
@@ -47,13 +52,17 @@ public class ParadaColectivoTest {
     }
     
     @Test
-    public void tienePalabra() {
+    public void tienePalabraIgualASuLinea() {
         Assert.assertTrue(parada.tienePalabra("103"));
     }
     
     @Test
-    public void noTienePalabra() {
+    public void tienePalabraPalabraClave() {
+        Assert.assertTrue(parada.tienePalabra("Colectivo"));
+    }
+    
+    @Test
+    public void noTienePalabraCualquiera() {
         Assert.assertFalse(parada.tienePalabra("132"));
     }
-
 }

@@ -42,6 +42,10 @@ public class SucursalBancoTest {
         horarioServicio.agregarRangoHorario(2, tardeLunesYMartes);
         servicio.setHorarios(horarioServicio);
         sucursal.setServicios(servicios);
+        
+        ArrayList<String> palabras = new ArrayList<String>();
+        palabras.add("Banco");
+        sucursal.setPalabrasClave(palabras);
     }
 
     @After
@@ -69,6 +73,11 @@ public class SucursalBancoTest {
     @Test
     public void tienePalabraCoincideServicio() {
         Assert.assertTrue(sucursal.tienePalabra("asesoramiento"));
+    }
+    
+    @Test
+    public void tienePalabraCoincidePalabraClave() {
+        Assert.assertTrue(sucursal.tienePalabra("banco"));
     }
     
     @Test

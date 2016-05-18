@@ -37,6 +37,10 @@ public class CGPTest {
         servicios.add(servicioRentas);
         cgp.setServicios(servicios);
         
+        ArrayList<String> palabras = new ArrayList<String>();
+        palabras.add("CGP");
+        cgp.setPalabrasClave(palabras);
+        
         
     }
 
@@ -58,12 +62,17 @@ public class CGPTest {
     }
     
     @Test
-    public void tienePalabraServicioTest() {
+    public void tienePalabraCoincideServicio() {
         Assert.assertTrue(cgp.tienePalabra("rentas"));
     }
     
     @Test
-    public void noTienePalabraTest() {
+    public void tienePalabraCoincidePalabraClave() {
+        Assert.assertTrue(cgp.tienePalabra("cgp"));
+    }
+    
+    @Test
+    public void noTienePalabraCualquiera() {
         Assert.assertFalse(cgp.tienePalabra("futbol"));
     }
 

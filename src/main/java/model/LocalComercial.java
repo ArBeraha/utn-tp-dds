@@ -54,8 +54,9 @@ public class LocalComercial extends PuntoDeInteres {
 	protected boolean tienePalabra(final String palabra) {
 		boolean condicion1 = nombre.toLowerCase().contains(palabra.toLowerCase());
 		boolean condicion2 = rubro.getNombre().toLowerCase().contains(palabra.toLowerCase());
+		boolean condicion3 = this.esPalabraClave(palabra);
 
-		return (condicion1 || condicion2);
+		return (condicion1 || condicion2 || condicion3);
 	}
 
 }
