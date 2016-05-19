@@ -80,23 +80,23 @@ public class LocalComercialTest {
 	}
 	
 	@Test
-	public void esCercanoLibreriaEscolarTest() {
+	public void dadaUnaGeolocalizacionLibreriaEscolarEsCercanoTrue() {
 		Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11.999991, 28.000001);
 		Assert.assertTrue(local.esCercano(unaGeolocalizacion));
 	}
 	
 	@Test
-	public void tienePalabraCoincideNombreLocal() {
+	public void dadaUnaPalabraLibreriaEscolarTienePalabraCoincideConNombre() {
 		Assert.assertTrue(local.tienePalabra("reGla"));
 	}
 	
 	@Test
-	public void tienePalabraCoincideNombreRubro() {
+	public void dadaUnaPalabraLibreriaEscolarTienePalabraCoincideNombreRubro() {
 		Assert.assertTrue(local.tienePalabra("breRIA"));
 	}
 	
 	@Test
-	public void noTienePalabra() {
+	public void dadaUnaPalabraLibreriaEscolarTienePalabraFalse() {
 		Assert.assertFalse(local.tienePalabra("futbol"));
 	}
 

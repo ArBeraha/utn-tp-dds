@@ -2,12 +2,19 @@ package model;
 
 import org.joda.time.DateTime;
 
+import util.DateTimeProvider;
+
 public class LocalComercial extends PuntoDeInteres {
 
 	private String nombre;
 	private Horarios horarios;
 	private Rubro rubro;
+	private final DateTimeProvider dateTimeProvider;
 
+	public LocalComercial (DateTimeProvider dateTimeProviderImpl){
+	    dateTimeProvider = dateTimeProviderImpl;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -38,7 +45,7 @@ public class LocalComercial extends PuntoDeInteres {
 
 	@Override
     protected boolean estaDisponible() {
-        DateTime fechaHoraActual = new DateTime();
+        DateTime fechaHoraActual = dateTimeProvider.getDateTime();
         return horarios.atiende(fechaHoraActual);
     }
 	
