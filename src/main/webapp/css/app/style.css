@@ -1,5 +1,8 @@
-#background {
+body {
     background-color: #FFD300;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #logo {
@@ -12,9 +15,15 @@
 
 .centrar-texto {
     text-align: center;
+    position: relative;
 }
 
 .opcion-btn {
+    margin-bottom: 20px;
+    min-height: 190px;
+}
+
+.img-btn {
     background-color: cadetblue;
     display: block;
     margin-left: auto;
@@ -29,8 +38,4 @@
     margin-right: auto;
     text-align: center;
     width: 150px;
-}
-
-.btn-buscar-poi {
-
 }
