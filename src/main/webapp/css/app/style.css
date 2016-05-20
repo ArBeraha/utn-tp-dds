@@ -1,0 +1,36 @@
+#background {
+    background-color: #FFD300;
+}
+
+#logo {
+    display: block;
+    margin-top: 15px;
+    margin-left: 1%;
+    width: 250px;
+    height: 44.219px;
+}
+
+.centrar-texto {
+    text-align: center;
+}
+
+.opcion-btn {
+    background-color: cadetblue;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 150px;
+    width: 150px;
+}
+
+.opcion-descripcion {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 150px;
+}
+
+.btn-buscar-poi {
+
+}
