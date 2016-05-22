@@ -1,4 +1,4 @@
-package util;
+package util.time;
 
 import org.joda.time.DateTime;
 

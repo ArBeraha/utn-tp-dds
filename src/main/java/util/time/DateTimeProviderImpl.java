@@ -1,9 +1,9 @@
-package util;
+package util.time;
 
 import org.joda.time.DateTime;
 
 
-public class DateTimeProviderFakeImpl implements DateTimeProvider {
+public class DateTimeProviderImpl implements DateTimeProvider {
     
     public DateTime fechaHora;
 
@@ -12,7 +12,7 @@ public class DateTimeProviderFakeImpl implements DateTimeProvider {
         return fechaHora;
     }
     
-    public DateTimeProviderFakeImpl(DateTime unaFechaHora){
+    public DateTimeProviderImpl(DateTime unaFechaHora){
         this.fechaHora = unaFechaHora;
     }
 

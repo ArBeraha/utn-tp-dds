@@ -1,9 +1,12 @@
 package model;
 
+import util.time.DateTimeProvider;
+
 public abstract class PuntoDeInteres {
 
     protected Direccion direccion;
     protected Geolocalizacion geolocalizacion;
+    protected DateTimeProvider dateTimeProvider;
 
     public Direccion getDireccion() {
         return direccion;
