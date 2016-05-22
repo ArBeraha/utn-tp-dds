@@ -10,8 +10,8 @@ public class SucursalBanco extends PuntoDeInteres {
     private String banco;
     private ArrayList<ServicioBanco> servicios;
     private Horarios horarios;
-    
-    public SucursalBanco(){
+
+    public SucursalBanco() {
         this.horarios = new Horarios();
         LocalTime horaInicioLunesAViernes = new LocalTime(10, 0);
         LocalTime horaFinLunesAViernes = new LocalTime(15, 0);
@@ -38,7 +38,7 @@ public class SucursalBanco extends PuntoDeInteres {
     public void setServicios(final ArrayList<ServicioBanco> servicios) {
         this.servicios = servicios;
     }
-    
+
     @Override
     protected boolean estaDisponible() {
         DateTime fechaHoraActual = new DateTime();
@@ -46,12 +46,12 @@ public class SucursalBanco extends PuntoDeInteres {
     }
 
     public boolean estaDisponible(final String nombreServicioBanco) {
-        for (ServicioBanco servicio : servicios) {
-            if (servicio.getNombre() == nombreServicioBanco) {
-                return servicio.estaDisponible() && this.estaDisponible();
-            }
-        }
-        return false;
+        return this.servicios.stream()
+                .filter(servicio -> servicio.getNombre().toLowerCase().equals(nombreServicioBanco.toLowerCase()))
+                .findFirst()
+                .map(ServicioBanco::estaDisponible)
+                .isPresent()
+            && this.estaDisponible();
     }
 
     @Override
@@ -63,12 +63,7 @@ public class SucursalBanco extends PuntoDeInteres {
     }
 
     private boolean serviciosTienenPalabra(final String palabra) {
-        for (ServicioBanco servicio : servicios) {
-            if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
+        return servicios.stream().anyMatch(servicio -> servicio.getNombre().toLowerCase().contains(palabra.toLowerCase()));
     }
 
 }

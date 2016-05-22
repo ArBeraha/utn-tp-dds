@@ -32,22 +32,17 @@ public class CGP extends PuntoDeInteres {
     @Override
     protected boolean estaDisponible() {
         DateTime fechaHoraActual = new DateTime();
-        for (ServicioCGP servicio : servicios) {
-            if (servicio.getHorarios().atiende(fechaHoraActual)) {
-                return true;
-            }
-        }
-        return false;
+        return servicios.stream().filter(servicio -> servicio.getHorarios().atiende(fechaHoraActual))
+                .findFirst()
+                .isPresent();
     }
 
     protected boolean estaDisponible(String nombreServicioCGP) {
-        DateTime fechaHoraActual = new DateTime();
-        for (ServicioCGP servicio : servicios) {
-            if (servicio.getNombre().toLowerCase() == nombreServicioCGP.toLowerCase()) {
-                return servicio.getHorarios().atiende(fechaHoraActual);
-            }
-        }
-        return false;
+        return this.servicios.stream()
+                .filter(servicio -> servicio.getNombre().toLowerCase().equals(nombreServicioCGP.toLowerCase()))
+                .findFirst()
+                .map(ServicioCGP::estaDisponible)
+                .isPresent();
     }
 
     @Override
@@ -56,14 +51,9 @@ public class CGP extends PuntoDeInteres {
         boolean condicion2 = this.esPalabraClave(palabra);
         return (condicion1 || condicion2);
     }
-    
-    private boolean serviciosTienenPalabra(final String palabra){
-        for (ServicioCGP servicio : servicios) {
-            if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
+
+    private boolean serviciosTienenPalabra(final String palabra) {
+        return servicios.stream().anyMatch(servicio -> servicio.getNombre().toLowerCase().contains(palabra.toLowerCase()));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class TerminalInteractiva {
 
@@ -33,13 +34,8 @@ public class TerminalInteractiva {
     }
 
     public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
-        ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
-        for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
-            if (puntoDeInteres.tienePalabra(palabra)) {
-                resultadoBusqueda.add(puntoDeInteres);
-            }
-        }
-        return resultadoBusqueda;
+        return (ArrayList<PuntoDeInteres>) puntosDeInteres.stream().filter(poi -> poi.tienePalabra(palabra))
+                                                                   .collect(Collectors.toList());
     }
 
     public boolean esCercano(final PuntoDeInteres poi) {

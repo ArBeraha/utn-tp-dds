@@ -38,19 +38,6 @@ public class Horarios {
                             + unRangoHorario.getHoraFin().toString("HH:mm") + "] se superpone con el rango existente: ["
                             + r.getHoraInicio().toString("HH:mm") + "; " + r.getHoraFin().toString("HH:mm") + "]");
                 });
-                /*
-                 * Esta era la implementación anterior, con for e if, para que la vean también
-                 */
-                //                for (RangoHorario rango : listaDeRangos) {
-                //                    if (rango.seSolapaCon(unRangoHorario)) {
-                //                        throw new IllegalArgumentException("El rango ingresado: ["
-                //                                + unRangoHorario.getHoraInicio().toString("HH:mm") + "; "
-                //                                + unRangoHorario.getHoraFin().toString("HH:mm") + "] se superpone con el rango existente: ["
-                //                                + rango.getHoraInicio().toString("HH:mm") + "; " + rango.getHoraFin().toString("HH:mm")
-                //                                + "]");
-                //                    }
-                //                }
-
                 listaDeRangos.add(unRangoHorario);
 
             }
