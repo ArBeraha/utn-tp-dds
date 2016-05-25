@@ -50,29 +50,29 @@ public class CGPTest {
 
     
     @Test
-    public void noEsCercanoTest() {
+    public void dadaUnaGeolocalizacionFueraDelRangoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(15, 15);
         Assert.assertFalse(cgp.esCercano(unaGeolocalizacion));
     }
     
     @Test
-    public void esCercanoTest() {
+    public void dadaUnaGeolocalizacionDentroDelRangoDebeDevolverTrue() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(8, 8);
         Assert.assertTrue(cgp.esCercano(unaGeolocalizacion));
     }
     
     @Test
-    public void tienePalabraCoincideServicio() {
+    public void dadaUnaPalabraCoincidenteConUnServicioDebeDevolverTrue() {
         Assert.assertTrue(cgp.tienePalabra("rentas"));
     }
     
     @Test
-    public void tienePalabraCoincidePalabraClave() {
+    public void dadaUnaPalabraIncluidaEnPalabrasClaveDebeDevolverTrue() {
         Assert.assertTrue(cgp.tienePalabra("cgp"));
     }
     
     @Test
-    public void noTienePalabraCualquiera() {
+    public void dadaUnaPalabraCualquieraDebeDevolverFalse() {
         Assert.assertFalse(cgp.tienePalabra("futbol"));
     }
 

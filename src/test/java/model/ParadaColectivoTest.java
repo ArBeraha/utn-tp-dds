@@ -40,29 +40,29 @@ public class ParadaColectivoTest {
     }
 
     @Test
-    public void noEsCercanaParadaTest() {
+    public void dadaUnaGeolocalizacionFueraDelRangoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(12+1, 28+1);
         Assert.assertFalse(parada.esCercano(unaGeolocalizacion));
     }
     
     @Test
-    public void esCercanaParadaTest() {
+    public void  dadaUnaGeolocalizacionDentroDelRangoDebeDevolverTrue() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(12, 28);
         Assert.assertTrue(parada.esCercano(unaGeolocalizacion));
     }
     
     @Test
-    public void tienePalabraIgualASuLinea() {
+    public void dadaUnaPalabraIgualASuLineaDebeDevolverTrue() {
         Assert.assertTrue(parada.tienePalabra("103"));
     }
     
     @Test
-    public void tienePalabraIgualAPalabraClave() {
+    public void dadaUnaPalabraClaveExistenteTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(parada.tienePalabra("Colectivo"));
     }
     
     @Test
-    public void noTienePalabraCualquiera() {
+    public void dadaUnaPalabraCualquieraNoIncluidaEnNingunConjuntoDebeDevolverFalse() {
         Assert.assertFalse(parada.tienePalabra("132"));
     }
 }
