@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -26,6 +28,9 @@ public class ParadaColectivoTest {
         //setUp
         parada = new ParadaColectivo();
         parada.setLinea("103");
+        ArrayList<String> palabras = new ArrayList<String>();
+        palabras.add("Colectivo");
+        parada.setPalabrasClave(palabras);
         geolocalizacionParada = new Geolocalizacion(12, 28);
         parada.setGeolocalizacion(geolocalizacionParada);
     }
@@ -35,25 +40,29 @@ public class ParadaColectivoTest {
     }
 
     @Test
-    public void noEsCercanaParadaTest() {
+    public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(12+1, 28+1);
         Assert.assertFalse(parada.esCercano(unaGeolocalizacion));
     }
     
     @Test
-    public void esCercanaParadaTest() {
+    public void  dadaUnaGeolocalizacionDentroDelRangoEsCercanoDebeDevolverTrue() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(12, 28);
         Assert.assertTrue(parada.esCercano(unaGeolocalizacion));
     }
     
     @Test
-    public void tienePalabra() {
+    public void dadaUnaPalabraIgualASuLineaTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(parada.tienePalabra("103"));
     }
     
     @Test
-    public void noTienePalabra() {
+    public void dadaUnaPalabraClaveExistenteTienePalabraDebeDevolverTrue() {
+        Assert.assertTrue(parada.tienePalabra("Colectivo"));
+    }
+    
+    @Test
+    public void dadaUnaPalabraCualquieraNoIncluidaEnNingunConjuntoTienePalabraDebeDevolverFalse() {
         Assert.assertFalse(parada.tienePalabra("132"));
     }
-
 }
