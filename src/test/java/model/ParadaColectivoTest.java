@@ -57,7 +57,7 @@ public class ParadaColectivoTest {
     }
     
     @Test
-    public void tienePalabraPalabraClave() {
+    public void tienePalabraIgualAPalabraClave() {
         Assert.assertTrue(parada.tienePalabra("Colectivo"));
     }
     
