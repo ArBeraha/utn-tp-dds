@@ -54,34 +54,34 @@ public class SucursalBancoTest {
 
     //Da alrededor de 3000 cuadras de distancia. No es Cercano.
     @Test
-    public void dadaUnaGeolocalizacionFueraDelRangoDebeDevolverFalse() {
+    public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11, 30);
         Assert.assertFalse(sucursal.esCercano(unaGeolocalizacion));
     }
     
     @Test
-    public void dadaUnaGeolocalizacionDentroDelRangoDebeDevolverTrue() {
+    public void dadaUnaGeolocalizacionDentroDelRangoEsCercanoDebeDevolverTrue() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11.999991, 28.000001);
         Assert.assertTrue(sucursal.esCercano(unaGeolocalizacion));
     }
     
     @Test
-    public void dadaUnaPalabraCoincidenteConElBancoDebeDevolverTrue() {
+    public void dadaUnaPalabraCoincidenteConElBancoTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(sucursal.tienePalabra("nacion"));
     }
     
     @Test
-    public void dadaUnaPalabraCoincidenteConUnServicioDebeDevolverTrue() {
+    public void dadaUnaPalabraCoincidenteConUnServicioTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(sucursal.tienePalabra("asesoramiento"));
     }
     
     @Test
-    public void dadaUnaPalabraIncluidaEnPalabrasClaveDebeDevolverTrue() {
+    public void dadaUnaPalabraIncluidaEnPalabrasClaveTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(sucursal.tienePalabra("banco"));
     }
     
     @Test
-    public void dadaUnaPalabraCualquieraDebeDevolverFalse() {
+    public void dadaUnaPalabraCualquieraTienePalabraDebeDevolverFalse() {
         Assert.assertFalse(sucursal.tienePalabra("futbol"));
     }
 }

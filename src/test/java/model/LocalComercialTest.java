@@ -81,13 +81,13 @@ public class LocalComercialTest {
 
     //Da alrededor de 3000 cuadras de distancia. No es Cercano.
     @Test
-    public void dadaUnaGeolocalizacionFueraDelRangoDebeDevolverFalse() {
+    public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11, 30);
         Assert.assertFalse(local.esCercano(unaGeolocalizacion));
     }
 
     @Test
-    public void dadaUnaGeolocalizacionDentroDelRangoDebeDevolverFalse() {
+    public void dadaUnaGeolocalizacionDentroDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11.999991, 28.000001);
         Assert.assertTrue(local.esCercano(unaGeolocalizacion));
     }
@@ -98,17 +98,17 @@ public class LocalComercialTest {
     }
 
     @Test
-    public void dadaPalabraCoincidenteConElRubroDebeDevolverTrue() {
+    public void dadaPalabraCoincidenteConElRubroTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(local.tienePalabra("breRIA"));
     }
 
     @Test
-    public void dadaUnaPalabraIncluidaEnPalabrasClaveDebeDevolverTrue() {
+    public void dadaUnaPalabraIncluidaEnPalabrasClaveTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(local.tienePalabra("negocio"));
     }
 
     @Test
-    public void dadaUnaPalabraCualquieraDebeDevolverFalse() {
+    public void dadaUnaPalabraCualquieraTienePalabraDebeDevolverFalse() {
         Assert.assertFalse(local.tienePalabra("futbol"));
     }
 
