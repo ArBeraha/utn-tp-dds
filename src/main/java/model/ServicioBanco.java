@@ -6,6 +6,11 @@ public class ServicioBanco {
 
     private String nombre;
     private Horarios horarios;
+    private HorariosEspeciales horariosEspeciales;
+
+    public ServicioBanco() {
+        horariosEspeciales = new HorariosEspeciales();
+    }
 
     public String getNombre() {
         return nombre;
@@ -14,7 +19,7 @@ public class ServicioBanco {
     public void setNombre(final String nombre) {
         this.nombre = nombre;
     }
-    
+
     public void setHorarios(Horarios horarios) {
         this.horarios = horarios;
     }
@@ -25,6 +30,10 @@ public class ServicioBanco {
 
     protected boolean estaDisponible() {
         DateTime fechaHoraActual = new DateTime();
-        return horarios.atiende(fechaHoraActual);
+        if (horariosEspeciales.contiene(fechaHoraActual)) {
+            return horariosEspeciales.atiende(fechaHoraActual);
+        } else {
+            return horarios.atiende(fechaHoraActual);
+        }
     }
 }
