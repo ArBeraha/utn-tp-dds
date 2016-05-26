@@ -1,9 +1,14 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public abstract class PuntoDeInteres {
 
     protected Direccion direccion;
     protected Geolocalizacion geolocalizacion;
+    protected ArrayList<String> palabrasClave;
 
     public Direccion getDireccion() {
         return direccion;
@@ -28,5 +33,20 @@ public abstract class PuntoDeInteres {
     }
 
     protected abstract boolean tienePalabra(final String palabra);
+    
+    public void setPalabrasClave(ArrayList<String> palabrasClave){
+        this.palabrasClave = palabrasClave;
+    }
+    
+    public ArrayList<String> getPalabrasClave(){
+        return this.palabrasClave;
+    }
+    
+    protected boolean esPalabraClave(final String palabra){
+        List<String> result = getPalabrasClave().stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+        return result.contains(palabra.toLowerCase());
+    }
 
 }

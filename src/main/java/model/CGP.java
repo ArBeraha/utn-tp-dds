@@ -52,6 +52,12 @@ public class CGP extends PuntoDeInteres {
 
     @Override
     protected boolean tienePalabra(final String palabra) {
+        boolean servicioTienePalabra = serviciosTienenPalabra(palabra);
+        boolean esPalabraClave = this.esPalabraClave(palabra);
+        return (servicioTienePalabra || esPalabraClave);
+    }
+    
+    private boolean serviciosTienenPalabra(final String palabra){
         for (ServicioCGP servicio : servicios) {
             if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
                 return true;
