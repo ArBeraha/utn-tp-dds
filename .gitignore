@@ -15,4 +15,5 @@ hs_err_pid*
 *.ldb
 .settings/
 .classpath
+.project
 /bin/
