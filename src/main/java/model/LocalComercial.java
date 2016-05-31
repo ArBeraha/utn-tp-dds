@@ -1,7 +1,8 @@
 package model;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+
+import util.time.DateTimeProvider;
 
 public class LocalComercial extends PuntoDeInteres {
 
@@ -10,7 +11,8 @@ public class LocalComercial extends PuntoDeInteres {
     private Rubro rubro;
     private HorariosEspeciales horariosEspeciales;
 
-    public LocalComercial() {
+    public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
+        this.dateTimeProvider = dateTimeProviderImpl;
         horariosEspeciales = new HorariosEspeciales();
     }
 
@@ -34,12 +36,12 @@ public class LocalComercial extends PuntoDeInteres {
         return horarios;
     }
 
-    public HorariosEspeciales getHorariosEspeciales() {
-        return horariosEspeciales;
-    }
-
     public void setHorarios(Horarios horarios) {
         this.horarios = horarios;
+    }
+
+    public HorariosEspeciales getHorariosEspeciales() {
+        return horariosEspeciales;
     }
 
     public void setHorariosEpeciales(HorariosEspeciales horariosEspeciales) {
@@ -50,18 +52,10 @@ public class LocalComercial extends PuntoDeInteres {
         this.horarios.agregarRangoHorario(unDia, unRangoHorario);
     }
 
-    public void agregarRangoHorarioEspecial(LocalDate unaFecha, RangoHorario unRangoHorario) {
-        this.horariosEspeciales.agregarRangoHorario(unaFecha, unRangoHorario);
-    }
-
     @Override
     protected boolean estaDisponible() {
-        DateTime fechaHoraActual = new DateTime();
-        if (horariosEspeciales.contiene(fechaHoraActual)) {
-            return horariosEspeciales.atiende(fechaHoraActual);
-        } else {
-            return horarios.atiende(fechaHoraActual);
-        }
+        DateTime fechaHoraActual = dateTimeProvider.getDateTime();
+        return horarios.atiende(fechaHoraActual);
     }
 
     @Override

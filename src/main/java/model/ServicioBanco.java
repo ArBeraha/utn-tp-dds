@@ -28,12 +28,11 @@ public class ServicioBanco {
         return horarios;
     }
 
-    protected boolean estaDisponible() {
-        DateTime fechaHoraActual = new DateTime();
-        if (horariosEspeciales.contiene(fechaHoraActual)) {
-            return horariosEspeciales.atiende(fechaHoraActual);
+    protected boolean estaDisponible(DateTime unaFechaHora) {
+        if (horariosEspeciales.contiene(unaFechaHora)) {
+            return horariosEspeciales.atiende(unaFechaHora);
         } else {
-            return horarios.atiende(fechaHoraActual);
+            return horarios.atiende(unaFechaHora);
         }
     }
 }
