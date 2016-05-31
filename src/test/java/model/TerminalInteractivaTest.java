@@ -32,6 +32,9 @@ public class TerminalInteractivaTest {
         ArrayList<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
         pois.add(local);
         terminal.setPuntosDeInteres(pois);
+        ArrayList<String> palabras = new ArrayList<String>();
+        palabras.add("Local");
+        local.setPalabrasClave(palabras);
     }
 
     @After
@@ -41,6 +44,11 @@ public class TerminalInteractivaTest {
     @Test
     public void BuscarYEncontrarPOIKiosco() {
         ArrayList<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("kiosko");
+        Assert.assertTrue(resultado.contains(local));
+    }
+
+    public void BuscarYEncontrarPOIKioscoPorPalabraClave() {
+        ArrayList<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("loCal");
         Assert.assertTrue(resultado.contains(local));
     }
 

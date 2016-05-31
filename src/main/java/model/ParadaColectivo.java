@@ -24,7 +24,9 @@ public class ParadaColectivo extends PuntoDeInteres {
 
     @Override
     protected boolean tienePalabra(final String palabra) {
-        return linea.contains(palabra);
+        boolean lineaTienePalabra = linea.contains(palabra);
+        boolean esPalabraClave = this.esPalabraClave(palabra);
+        return (lineaTienePalabra || esPalabraClave);
     }
 
 }

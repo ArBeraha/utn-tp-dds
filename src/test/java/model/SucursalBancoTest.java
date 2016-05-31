@@ -51,6 +51,10 @@ public class SucursalBancoTest {
         horarioServicio.agregarRangoHorario(2, tardeLunesYMartes);
         servicio.setHorarios(horarioServicio);
         sucursal.setServicios(servicios);
+        
+        ArrayList<String> palabras = new ArrayList<String>();
+        palabras.add("Banco");
+        sucursal.setPalabrasClave(palabras);
     }
 
     @After
@@ -59,29 +63,34 @@ public class SucursalBancoTest {
 
     //Da alrededor de 3000 cuadras de distancia. No es Cercano.
     @Test
-    public void noEsCercanoTest() {
+    public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11, 30);
         Assert.assertFalse(sucursal.esCercano(unaGeolocalizacion));
     }
 
     @Test
-    public void esCercanoTest() {
+    public void dadaUnaGeolocalizacionDentroDelRangoEsCercanoDebeDevolverTrue() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11.999991, 28.000001);
         Assert.assertTrue(sucursal.esCercano(unaGeolocalizacion));
     }
 
     @Test
-    public void tienePalabraCoincideNombre() {
+    public void dadaUnaPalabraCoincidenteConElBancoTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(sucursal.tienePalabra("nacion"));
     }
 
     @Test
-    public void tienePalabraCoincideServicio() {
+    public void dadaUnaPalabraCoincidenteConUnServicioTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(sucursal.tienePalabra("asesoramiento"));
     }
 
     @Test
-    public void noTienePalabra() {
+    public void dadaUnaPalabraIncluidaEnPalabrasClaveTienePalabraDebeDevolverTrue() {
+        Assert.assertTrue(sucursal.tienePalabra("banco"));
+    }
+    
+    @Test
+    public void dadaUnaPalabraCualquieraTienePalabraDebeDevolverFalse() {
         Assert.assertFalse(sucursal.tienePalabra("futbol"));
     }
 }
