@@ -35,7 +35,7 @@ public class HorariosEspeciales {
     public void agregarRangoHorario(LocalDate unaFecha, RangoHorario unRangoHorario) {
         Fecha fecha = new Fecha();
         fecha.setFecha(unaFecha);
-        this.agregarRangoHorario(fecha, unRangoHorario);
+        agregarRangoHorario(fecha, unRangoHorario);
     }
 
     public boolean contiene(final DateTime fechaHora) {
