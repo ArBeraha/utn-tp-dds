@@ -23,8 +23,7 @@ public class ServicioBanco {
         return horarios;
     }
 
-    protected boolean estaDisponible() {
-        DateTime fechaHoraActual = new DateTime();
-        return horarios.atiende(fechaHoraActual);
+    protected boolean estaDisponible(DateTime unaFechaHora) {
+        return horarios.atiende(unaFechaHora);
     }
 }
