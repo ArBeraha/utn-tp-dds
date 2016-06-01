@@ -32,6 +32,14 @@ public class TerminalInteractiva {
         this.puntosDeInteres = puntosDeInteres;
     }
 
+    public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
+        puntosDeInteres.add(pdi);
+    }
+
+    public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
+        puntosDeInteres.remove(pdi);
+    };
+
     public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
         ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
