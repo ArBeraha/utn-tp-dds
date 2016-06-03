@@ -40,6 +40,12 @@ public class TerminalInteractiva {
         puntosDeInteres.remove(pdi);
     };
 
+    public void modificarPuntoDeInteres(PuntoDeInteres pdi, PuntoDeInteres pdiNuevo) {
+        pdi.setDireccion(pdiNuevo.getDireccion());
+        pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
+        pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
+    }
+
     public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
         ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
