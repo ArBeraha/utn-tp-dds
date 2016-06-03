@@ -37,8 +37,19 @@ public class TerminalInteractiva {
         this.puntosDeInteres = puntosDeInteres;
     }
 
-    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        this.agregarSucursalesBancoExternas();
+    public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
+        puntosDeInteres.add(pdi);
+    }
+
+    public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
+        puntosDeInteres.remove(pdi);
+    };
+
+    public void modificarPuntoDeInteres(PuntoDeInteres pdi, PuntoDeInteres pdiNuevo) {
+        pdi.setDireccion(pdiNuevo.getDireccion());
+        pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
+        pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
+    }
         ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import util.time.DateTimeProvider;
+
 public class SucursalBanco extends PuntoDeInteres {
 
     private String banco;
@@ -12,8 +14,9 @@ public class SucursalBanco extends PuntoDeInteres {
     private String gerente;
     private ArrayList<ServicioBanco> servicios;
     private Horarios horarios;
-
-    public SucursalBanco() {
+    
+    public SucursalBanco(DateTimeProvider dateTimeProviderImpl){
+    	this.dateTimeProvider = dateTimeProviderImpl;
         this.horarios = new Horarios();
         LocalTime horaInicioLunesAViernes = new LocalTime(10, 0);
         LocalTime horaFinLunesAViernes = new LocalTime(15, 0);
@@ -59,14 +62,14 @@ public class SucursalBanco extends PuntoDeInteres {
 
     @Override
     protected boolean estaDisponible() {
-        DateTime fechaHoraActual = new DateTime();
+        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
         return horarios.atiende(fechaHoraActual);
     }
 
     public boolean estaDisponible(final String nombreServicioBanco) {
         for (ServicioBanco servicio : servicios) {
             if (servicio.getNombre() == nombreServicioBanco) {
-                return servicio.estaDisponible() && this.estaDisponible();
+                return servicio.estaDisponible(this.dateTimeProvider.getDateTime()) && this.estaDisponible();
             }
         }
         return false;
