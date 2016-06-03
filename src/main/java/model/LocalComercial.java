@@ -9,9 +9,11 @@ public class LocalComercial extends PuntoDeInteres {
     private String nombre;
     private Horarios horarios;
     private Rubro rubro;
+    private HorariosEspeciales horariosEspeciales;
 
     public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
+        horariosEspeciales = new HorariosEspeciales();
     }
 
     public String getNombre() {
@@ -36,6 +38,14 @@ public class LocalComercial extends PuntoDeInteres {
 
     public void setHorarios(Horarios horarios) {
         this.horarios = horarios;
+    }
+
+    public HorariosEspeciales getHorariosEspeciales() {
+        return horariosEspeciales;
+    }
+
+    public void setHorariosEpeciales(HorariosEspeciales horariosEspeciales) {
+        this.horariosEspeciales = horariosEspeciales;
     }
 
     public void agregarRangoHorario(int unDia, RangoHorario unRangoHorario) {
