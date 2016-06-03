@@ -51,7 +51,8 @@ public class TerminalInteractiva {
         pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
     };
     
-    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
+    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
+        this.agregarSucursalesBancoExternas();
         ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
