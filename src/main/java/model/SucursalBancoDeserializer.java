@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import util.time.DateTimeProviderImpl;
 
 public class SucursalBancoDeserializer extends JsonDeserializer<List<SucursalBanco>> {
 
@@ -34,7 +38,7 @@ public class SucursalBancoDeserializer extends JsonDeserializer<List<SucursalBan
         while (nodeIterator.hasNext()) {
             node = nodeIterator.next();
             //El constructor por defecto setea el horario por defecto de los bancos (10 a 15 de L a V)
-            sucursalBanco = new SucursalBanco();
+            sucursalBanco = new SucursalBanco(new DateTimeProviderImpl(new DateTime()));
             servicios = new ArrayList<>();
             banco = node.get("banco").asText();
             sucursal = node.get("sucursal").asText();
