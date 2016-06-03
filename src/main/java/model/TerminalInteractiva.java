@@ -1,6 +1,11 @@
 package model;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class TerminalInteractiva {
 
@@ -45,8 +50,6 @@ public class TerminalInteractiva {
         pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
         pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
     }
-
-    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
         ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
@@ -62,6 +65,14 @@ public class TerminalInteractiva {
 
     public boolean estaDisponible(final PuntoDeInteres poi) {
         return poi.estaDisponible();
+    }
+
+    private void agregarSucursalesBancoExternas()
+            throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
+        ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
+        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos()) {
+            puntosDeInteres.add(sucursalBancoExterna);
+        }
     }
 
 }
