@@ -37,4 +37,12 @@ public class Geolocalizacion {
 
         return distanciaEnCuadras;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder ret = new StringBuilder();
+        ret.append("Latitud=").append(latitud);
+        ret.append(". Longitud=").append(longitud);
+        return ret.toString();
+    }
 }

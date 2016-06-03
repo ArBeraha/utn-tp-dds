@@ -1,40 +1,48 @@
 package model;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.glassfish.jersey.client.ClientConfig;
-import org.json.JSONObject;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import util.PropertiesFactory;
 
 public class ServicioConsultaBancoImpl implements ServicioConsultaBanco {
 
     @Override
-    public List<SucursalBanco> getBancosExternos() {
+    public List<SucursalBanco> getBancosExternos() throws JsonParseException, JsonMappingException, IOException, UnknownHostException {
         Properties properties = PropertiesFactory.getProperties();
-        ClientConfig config = new ClientConfig();
-        Client client = ClientBuilder.newClient(config);
-        WebTarget webTarget = client.target(properties.getProperty("url.servicio.bancos"));//.queryParam("idTarjeta", nroTarjeta);
+        Client client = ClientBuilder.newClient();
+        WebTarget webTarget = client.target(properties.getProperty("url.servicio.bancos"));
         Invocation.Builder invocationBuilder = webTarget.path("banks").request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.get(Response.class);
-        String jsonResponse=null;
+        List<SucursalBanco> sucursales = new ArrayList<>();
+        String jsonResponse = null;
+        // 200 = OK
         if (response.getStatus() == 200) {
-            jsonResponse = invocationBuilder.accept(MediaType.APPLICATION_JSON).get(String.class);
-            JSONObject jsonObject = new JSONObject(jsonResponse);
-            System.out.println("Imprimiendo JSONObject: ");
-            System.out.println(jsonObject);
+            jsonResponse = response.readEntity(String.class);
+            ObjectMapper mapper = new ObjectMapper();
+            SimpleModule module = new SimpleModule();
+            module.addDeserializer(List.class, new SucursalBancoDeserializer());
+            mapper.registerModule(module);
+            sucursales = mapper.readValue(jsonResponse, new TypeReference<List<SucursalBanco>>() {
+            });
         }
-        System.out.println(jsonResponse);
-        return null;
+        //TODO: Implementar manejo de errores en el response del servicio
+        return sucursales;
     }
 
 }

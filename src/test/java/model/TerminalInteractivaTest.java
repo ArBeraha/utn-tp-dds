@@ -1,10 +1,15 @@
 package model;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class TerminalInteractivaTest {
 
@@ -15,7 +20,6 @@ public class TerminalInteractivaTest {
     public void setUp() throws Exception {
         //setUp para estaDisponible
         terminal = new TerminalInteractiva();
-
         local = new LocalComercial();
         local.setNombre("25horas");
         Rubro rubro = new Rubro();
@@ -34,18 +38,18 @@ public class TerminalInteractivaTest {
     }
 
     @Test
-    public void BuscarYEncontrarPOIKiosco() {
+    public void BuscarYEncontrarPOIKiosco() throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         ArrayList<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("kiosko");
         Assert.assertTrue(resultado.contains(local));
     }
     
-    public void BuscarYEncontrarPOIKioscoPorPalabraClave() {
+    public void BuscarYEncontrarPOIKioscoPorPalabraClave() throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         ArrayList<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("loCal");
         Assert.assertTrue(resultado.contains(local));
     }
     
     @Test
-    public void BuscarYNoEncontrarNingunPOI() {
+    public void BuscarYNoEncontrarNingunPOI() throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         ArrayList<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("futbol");
         Assert.assertTrue(resultado.size()==0);
     }
