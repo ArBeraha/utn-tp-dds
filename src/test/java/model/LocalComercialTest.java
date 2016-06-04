@@ -56,6 +56,17 @@ public class LocalComercialTest {
 
     @Test
     public void siendoUnaFechaFueraDelHorarioDeAtencionDeUnLocalNoDebeEstarDisponible() {
+        LocalTime horaInicio = new LocalTime().withHourOfDay(13).withMinuteOfHour(15);
+        LocalTime horaFin = new LocalTime().withHourOfDay(14);
+        RangoHorario rangoHorario = new RangoHorario(horaInicio, horaFin);
+        Horarios horario = new Horarios();
+        horario.agregarRangoHorario(6, rangoHorario);
+        this.local.setHorarios(horario);
+        Assert.assertFalse(this.local.estaDisponible());
+    }
+
+    @Test
+    public void siendoUnaFechadentroDelHorarioDeAtencionDeUnLocalDebeEstarDisponible() {
         this.local.setHorarios(this.horarios);
         Assert.assertFalse(this.local.estaDisponible());
     }

@@ -10,16 +10,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class TerminalInteractiva {
 
     private ArrayList<PuntoDeInteres> puntosDeInteres;
-    private CGP cgpComunaTerminal;
     private Geolocalizacion geolocalizacion;
-
-    public CGP getCgpComunaTerminal() {
-        return cgpComunaTerminal;
-    }
-
-    public void setCgpComunaTerminal(final CGP cgpComunaTerminal) {
-        this.cgpComunaTerminal = cgpComunaTerminal;
-    }
 
     public Geolocalizacion getGeolocalizacion() {
         return geolocalizacion;
@@ -50,8 +41,9 @@ public class TerminalInteractiva {
         pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
         pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
     };
-    
-    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
+
+    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra)
+            throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         this.agregarSucursalesBancoExternas();
         ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
