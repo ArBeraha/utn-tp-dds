@@ -60,9 +60,10 @@ public class CGPTest {
         Assert.assertTrue(cgp.estaDisponible());
     }
     
+    @Test
     public void dadoHorarioNoIncluidoEstaDisponibleDebeDevolverFalse() {
         cgp.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 05, 20, 20, 30, 0));
-        Assert.assertTrue(cgp.estaDisponible());
+        Assert.assertFalse(cgp.estaDisponible());
     }
     
     

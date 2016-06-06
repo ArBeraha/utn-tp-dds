@@ -67,11 +67,13 @@ public class SucursalBancoTest {
         Assert.assertTrue(this.sucursal.estaDisponible());
     }
     
+    @Test
     public void dadoHorarioSoloDeServicioEstaDisponibleDebeDevolverTrue(){
-        sucursal.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 05, 20, 15, 30, 0));
+        sucursal.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 06, 06, 15, 30, 0));
         Assert.assertTrue(this.sucursal.estaDisponible());
     }
     
+    @Test
     public void dadoHorarioNoIncluidoEstaDisponibleDebeDevolverFalse(){
         sucursal.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 05, 20, 20, 00, 0));
         Assert.assertFalse(this.sucursal.estaDisponible());
