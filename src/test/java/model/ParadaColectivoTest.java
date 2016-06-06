@@ -40,6 +40,11 @@ public class ParadaColectivoTest {
     }
 
     @Test
+    public void dadoCualquierHorarioEstaDisponibleDebeDarTrue() {
+        Assert.assertTrue(parada.estaDisponible());
+    }
+    
+    @Test
     public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(12+1, 28+1);
         Assert.assertFalse(parada.esCercano(unaGeolocalizacion));

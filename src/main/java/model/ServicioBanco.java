@@ -6,6 +6,7 @@ public class ServicioBanco {
 
     private String nombre;
     private Horarios horarios;
+    
     private HorariosEspeciales horariosEspeciales;
 
     public ServicioBanco() {
