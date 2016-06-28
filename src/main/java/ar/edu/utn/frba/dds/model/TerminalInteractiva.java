@@ -1,8 +1,19 @@
 package ar.edu.utn.frba.dds.model;
 
 import java.awt.Polygon;
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import ar.edu.utn.frba.dds.services.ServicioConsultaBanco;
+import ar.edu.utn.frba.dds.services.ServicioConsultaBancoImpl;
+import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class TerminalInteractiva {
 
@@ -11,10 +22,11 @@ public class TerminalInteractiva {
     private Geolocalizacion geolocalizacion;
     private static TerminalInteractiva instance;
 
+    //Constructor privado por el Singleton
     private TerminalInteractiva() {
-
     };
 
+    //Singleton
     public static TerminalInteractiva getInstance() {
         if (instance == null) {
             instance = new TerminalInteractiva();
@@ -46,8 +58,22 @@ public class TerminalInteractiva {
         this.puntosDeInteres = puntosDeInteres;
     }
 
-    public ArrayList<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
-        ArrayList<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
+    public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
+        puntosDeInteres.add(pdi);
+    }
+
+    public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
+        puntosDeInteres.remove(pdi);
+    };
+
+    public void modificarPuntoDeInteres(PuntoDeInteres pdi, PuntoDeInteres pdiNuevo) {
+        pdi.setDireccion(pdiNuevo.getDireccion());
+        pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
+        pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
+    };
+
+    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
+        List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
                 resultadoBusqueda.add(puntoDeInteres);
@@ -71,8 +97,8 @@ public class TerminalInteractiva {
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs
     public static List<PuntoDeInteres> populateDummyPOIs() {
         List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
-        LocalComercial local = new LocalComercial();
-        CGP cgp = new CGP();
+        LocalComercial local = new LocalComercial(new DateTimeProviderImpl(new DateTime()));
+        CGP cgp = new CGP(new DateTimeProviderImpl(new DateTime()));
         Comuna comuna = new Comuna();
         Polygon superficie = new Polygon();
 
@@ -98,6 +124,14 @@ public class TerminalInteractiva {
         pois.add(cgp);
 
         return pois;
+    }
+
+    private void agregarSucursalesBancoExternas()
+            throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
+        ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
+        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos()) {
+            puntosDeInteres.add(sucursalBancoExterna);
+        }
     }
 
 }

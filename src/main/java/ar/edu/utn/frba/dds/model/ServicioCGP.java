@@ -6,6 +6,7 @@ public class ServicioCGP {
 
     private String nombre;
     private Horarios horarios;
+    private HorariosEspeciales horariosEspeciales;
 
     public String getNombre() {
         return nombre;
@@ -21,7 +22,11 @@ public class ServicioCGP {
 
     protected boolean estaDisponible() {
         DateTime fechaHoraActual = new DateTime();
-        return horarios.atiende(fechaHoraActual);
+        if (horariosEspeciales.contiene(fechaHoraActual)) {
+            return horariosEspeciales.atiende(fechaHoraActual);
+        } else {
+            return horarios.atiende(fechaHoraActual);
+        }
     }
 
 }

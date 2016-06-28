@@ -5,13 +5,18 @@ import java.util.ArrayList;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
+
 public class SucursalBanco extends PuntoDeInteres {
 
     private String banco;
+    private String sucursal;
+    private String gerente;
     private ArrayList<ServicioBanco> servicios;
     private Horarios horarios;
     
-    public SucursalBanco(){
+    public SucursalBanco(DateTimeProvider dateTimeProviderImpl){
+    	this.dateTimeProvider = dateTimeProviderImpl;
         this.horarios = new Horarios();
         LocalTime horaInicioLunesAViernes = new LocalTime(10, 0);
         LocalTime horaFinLunesAViernes = new LocalTime(15, 0);
@@ -31,6 +36,22 @@ public class SucursalBanco extends PuntoDeInteres {
         this.banco = banco;
     }
 
+    public String getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(String sucursal) {
+        this.sucursal = sucursal;
+    }
+
+    public String getGerente() {
+        return gerente;
+    }
+
+    public void setGerente(String gerente) {
+        this.gerente = gerente;
+    }
+
     public ArrayList<ServicioBanco> getServicios() {
         return servicios;
     }
@@ -38,17 +59,17 @@ public class SucursalBanco extends PuntoDeInteres {
     public void setServicios(final ArrayList<ServicioBanco> servicios) {
         this.servicios = servicios;
     }
-    
+
     @Override
-    protected boolean estaDisponible() {
-        DateTime fechaHoraActual = new DateTime();
+    public boolean estaDisponible() {
+        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
         return horarios.atiende(fechaHoraActual);
     }
 
     public boolean estaDisponible(final String nombreServicioBanco) {
         for (ServicioBanco servicio : servicios) {
             if (servicio.getNombre() == nombreServicioBanco) {
-                return servicio.estaDisponible() && this.estaDisponible();
+                return servicio.estaDisponible(this.dateTimeProvider.getDateTime()) && this.estaDisponible();
             }
         }
         return false;
@@ -71,4 +92,18 @@ public class SucursalBanco extends PuntoDeInteres {
         return false;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder ret = new StringBuilder();
+        ret.append("Banco: ").append(banco);
+        ret.append(". Sucursal: ").append(sucursal);
+        ret.append(". Gerente: ").append(gerente);
+        ret.append(". Geolocalizacion: ").append(geolocalizacion.toString());
+        ret.append(". Servicios: ");
+        for (ServicioBanco servicio : servicios) {
+            ret.append(servicio.getNombre()).append(", ");
+        }
+        ret.delete(ret.length() - 2, ret.length());
+        return ret.toString();
+    }
 }

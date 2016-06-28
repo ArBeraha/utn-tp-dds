@@ -4,11 +4,17 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
+import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
+
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<ServicioCGP> servicios;
     private Comuna comuna;
 
+	public CGP (DateTimeProvider dateTimeProviderImpl){
+	    this.dateTimeProvider = dateTimeProviderImpl;
+	}
+    
     public Comuna getComuna() {
         return comuna;
     }
@@ -30,8 +36,8 @@ public class CGP extends PuntoDeInteres {
     }
 
     @Override
-    protected boolean estaDisponible() {
-        DateTime fechaHoraActual = new DateTime();
+    public boolean estaDisponible() {
+        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
         for (ServicioCGP servicio : servicios) {
             if (servicio.getHorarios().atiende(fechaHoraActual)) {
                 return true;
@@ -41,7 +47,7 @@ public class CGP extends PuntoDeInteres {
     }
 
     protected boolean estaDisponible(String nombreServicioCGP) {
-        DateTime fechaHoraActual = new DateTime();
+        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
         for (ServicioCGP servicio : servicios) {
             if (servicio.getNombre().toLowerCase() == nombreServicioCGP.toLowerCase()) {
                 return servicio.getHorarios().atiende(fechaHoraActual);

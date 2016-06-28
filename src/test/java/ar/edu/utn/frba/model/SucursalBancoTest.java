@@ -2,6 +2,7 @@ package ar.edu.utn.frba.model;
 
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -15,8 +16,10 @@ import ar.edu.utn.frba.dds.model.Horarios;
 import ar.edu.utn.frba.dds.model.RangoHorario;
 import ar.edu.utn.frba.dds.model.ServicioBanco;
 import ar.edu.utn.frba.dds.model.SucursalBanco;
+import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class SucursalBancoTest {
+
     private SucursalBanco sucursal;
     private Geolocalizacion geolocalizacionSucursal;
 
@@ -32,7 +35,12 @@ public class SucursalBancoTest {
     @Before
     public void setUp() throws Exception {
         //setUp para estaDisponible
-        sucursal = new SucursalBanco();
+        /*
+         * Si se llega a precisar pasar una hora específica se tendrá que
+         * reestructurar para crear la sucursal con la hora esperada en el test
+         * que lo necesite
+         */
+        sucursal = new SucursalBanco(new DateTimeProviderImpl(new DateTime()));
         sucursal.setBanco("Nacion");
         ServicioBanco servicio = new ServicioBanco();
         servicio.setNombre("Asesoramiento");
@@ -64,23 +72,23 @@ public class SucursalBancoTest {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11, 30);
         Assert.assertFalse(sucursal.esCercano(unaGeolocalizacion));
     }
-    
+
     @Test
     public void dadaUnaGeolocalizacionDentroDelRangoEsCercanoDebeDevolverTrue() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(11.999991, 28.000001);
         Assert.assertTrue(sucursal.esCercano(unaGeolocalizacion));
     }
-    
+
     @Test
     public void dadaUnaPalabraCoincidenteConElBancoTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(sucursal.tienePalabra("nacion"));
     }
-    
+
     @Test
     public void dadaUnaPalabraCoincidenteConUnServicioTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(sucursal.tienePalabra("asesoramiento"));
     }
-    
+
     @Test
     public void dadaUnaPalabraIncluidaEnPalabrasClaveTienePalabraDebeDevolverTrue() {
         Assert.assertTrue(sucursal.tienePalabra("banco"));
