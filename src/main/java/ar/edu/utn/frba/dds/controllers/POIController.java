@@ -28,9 +28,23 @@ public class POIController {
 
         //        List<Employee> employees = service.findAllEmployees();
         //        model.addAttribute("employees", employees);
-        
+
         System.out.println("fui a buscar poi");
         List<PuntoDeInteres> pois = terminalInteractivaService.findAllPOIs();
+        return new ResponseEntity<List<PuntoDeInteres>>(terminalInteractivaService.findAllPOIs(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = { "/allPois" }, method = RequestMethod.GET)
+    public ResponseEntity<List<PuntoDeInteres>> getAllPois() {
+
+        //        List<Employee> employees = service.findAllEmployees();
+        //        model.addAttribute("employees", employees);
+
+        System.out.println("fui a buscar poi");
+        List<PuntoDeInteres> pois = terminalInteractivaService.findAllPOIs();
+        for (PuntoDeInteres poi : pois){
+            System.out.println(poi.toString());
+        }
         return new ResponseEntity<List<PuntoDeInteres>>(terminalInteractivaService.findAllPOIs(), HttpStatus.OK);
     }
 }

@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/")
 public class IndexController {
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String getIndexPage() {
         System.out.println("Entrando al index");
-        return "index";
+        return "static/index.html";
     }
 
 }
