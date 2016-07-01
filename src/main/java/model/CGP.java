@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
+import model.Comuna;
+import model.Geolocalizacion;
+import model.PuntoDeInteres;
+import model.ServicioCGP;
 import util.time.DateTimeProvider;
 
 public class CGP extends PuntoDeInteres {
@@ -11,10 +15,10 @@ public class CGP extends PuntoDeInteres {
     private ArrayList<ServicioCGP> servicios;
     private Comuna comuna;
 
-	public CGP (DateTimeProvider dateTimeProviderImpl){
-	    this.dateTimeProvider = dateTimeProviderImpl;
-	}
-    
+    public CGP(DateTimeProvider dateTimeProviderImpl) {
+        this.dateTimeProvider = dateTimeProviderImpl;
+    }
+
     public Comuna getComuna() {
         return comuna;
     }
@@ -62,8 +66,8 @@ public class CGP extends PuntoDeInteres {
         boolean esPalabraClave = this.esPalabraClave(palabra);
         return (servicioTienePalabra || esPalabraClave);
     }
-    
-    private boolean serviciosTienenPalabra(final String palabra){
+
+    private boolean serviciosTienenPalabra(final String palabra) {
         for (ServicioCGP servicio : servicios) {
             if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
                 return true;
