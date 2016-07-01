@@ -61,6 +61,24 @@ public class SucursalBancoTest {
     public void tearDown() throws Exception {
     }
 
+    @Test
+    public void dadoHorarioBancarioEstaDisponibleDebeDevolverTrue(){
+        sucursal.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 05, 20, 10, 30, 0));
+        Assert.assertTrue(this.sucursal.estaDisponible());
+    }
+    
+    @Test
+    public void dadoHorarioSoloDeServicioEstaDisponibleDebeDevolverTrue(){
+        sucursal.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 06, 06, 15, 30, 0));
+        Assert.assertTrue(this.sucursal.estaDisponible());
+    }
+    
+    @Test
+    public void dadoHorarioNoIncluidoEstaDisponibleDebeDevolverFalse(){
+        sucursal.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 05, 20, 20, 00, 0));
+        Assert.assertFalse(this.sucursal.estaDisponible());
+    }
+    
     //Da alrededor de 3000 cuadras de distancia. No es Cercano.
     @Test
     public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {

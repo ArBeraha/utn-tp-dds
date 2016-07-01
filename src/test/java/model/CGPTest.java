@@ -39,6 +39,9 @@ public class CGPTest {
         cgp.setGeolocalizacion(geolocalizacionCGP);
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
+        Horarios horario = new Horarios();
+        horario.agregarRangoHorario(6, new RangoHorario(10,0,18,0));
+        servicioRentas.setHorarios(horario);
         ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
         servicios.add(servicioRentas);
         cgp.setServicios(servicios);
@@ -50,7 +53,20 @@ public class CGPTest {
     @After
     public void tearDown() throws Exception {
     }
-
+    
+    @Test
+    public void dadoHorarioDeServicioEstaDisponibleDebeDevolverTrue() {
+        cgp.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 06, 25, 15, 30, 0));
+        Assert.assertTrue(cgp.estaDisponible());
+    }
+    
+    @Test
+    public void dadoHorarioNoIncluidoEstaDisponibleDebeDevolverFalse() {
+        cgp.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 05, 20, 20, 30, 0));
+        Assert.assertFalse(cgp.estaDisponible());
+    }
+    
+    
     @Test
     public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(15, 15);
