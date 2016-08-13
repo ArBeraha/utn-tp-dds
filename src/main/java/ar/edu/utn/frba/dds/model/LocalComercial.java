@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.model;
 
+import java.util.ArrayList;
+
 import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
@@ -14,6 +16,7 @@ public class LocalComercial extends PuntoDeInteres {
     public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
         horariosEspeciales = new HorariosEspeciales();
+        palabrasClave = new ArrayList<>();
     }
 
     public String getNombre() {

@@ -1,7 +1,13 @@
 package ar.edu.utn.frba.dds.model;
 
+import java.util.ArrayList;
+
 public class ParadaColectivo extends PuntoDeInteres {
 
+    public ParadaColectivo(){
+        palabrasClave = new ArrayList<>();
+    }
+    
     private String linea;
 
     public String getLinea() {
