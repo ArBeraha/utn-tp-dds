@@ -24,30 +24,28 @@ public class POIController {
     @Autowired
     TerminalInteractivaService terminalInteractivaService;
 
-    @RequestMapping(value = { "/allPois" }, method = RequestMethod.POST)
+    @RequestMapping(value = { "/pois" }, method = RequestMethod.POST)
     public ResponseEntity<List<PuntoDeInteres>> allPois() {
 
-        System.out.println("fui a buscar poi");
-        List<PuntoDeInteres> pois = terminalInteractivaService.findAllPOIs();
-        return new ResponseEntity<List<PuntoDeInteres>>(terminalInteractivaService.findAllPOIs(), HttpStatus.OK);
+        List<PuntoDeInteres> pois = terminalInteractivaService.getPois();
+        return new ResponseEntity<List<PuntoDeInteres>>(terminalInteractivaService.getPois(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = { "/allPois" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/pois" }, method = RequestMethod.GET)
     public @ResponseBody List<PuntoDeInteres> getAllPois() {
 
         //        List<Employee> employees = service.findAllEmployees();
         //        model.addAttribute("employees", employees);
 
-
         System.out.println("fui a buscar poi");
-        List<PuntoDeInteres> pois = terminalInteractivaService.findAllPOIs();
+        List<PuntoDeInteres> pois = terminalInteractivaService.getPois();
         for (PuntoDeInteres poi : pois) {
             System.out.println(poi.toString());
         }
 
-        return terminalInteractivaService.findAllPOIs();
+        return terminalInteractivaService.getPois();
     }
-    
+
     @RequestMapping(value = { "/pois/{textoBusqueda}" }, method = RequestMethod.GET)
     public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda) {
 
@@ -55,7 +53,7 @@ public class POIController {
         //        model.addAttribute("employees", employees);
 
         System.out.println("fui a buscar poi");
-        List<PuntoDeInteres> pois = terminalInteractivaService.findPOIs(textoBusqueda);
+        List<PuntoDeInteres> pois = terminalInteractivaService.getPois(textoBusqueda);
         for (PuntoDeInteres poi : pois) {
             System.out.println(poi.toString());
         }

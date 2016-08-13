@@ -20,12 +20,12 @@ public class TerminalInteractivaServiceImpl implements TerminalInteractivaServic
     }
     
     @Override
-    public List<PuntoDeInteres> findAllPOIs() {
+    public List<PuntoDeInteres> getPois() {
         return terminal.getPuntosDeInteres();
     }
     
     @Override
-    public List<PuntoDeInteres> findPOIs(String palabra) {
+    public List<PuntoDeInteres> getPois(String palabra) {
         return terminal.buscarPuntoDeInteres(palabra);
     }
 
