@@ -11,5 +11,5 @@ import ar.edu.utn.frba.dds.model.SucursalBanco;
 
 public interface ServicioConsultaBanco {
 
-    public List<SucursalBanco> getBancosExternos() throws JsonParseException, JsonMappingException, IOException, UnknownHostException;
+    public List<SucursalBanco> getBancosExternos(String banco, String servicio) throws JsonParseException, JsonMappingException, IOException, UnknownHostException;
 }

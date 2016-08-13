@@ -12,6 +12,8 @@ import org.joda.time.LocalTime;
 
 public class HorariosEspeciales {
 
+    private Map<Fecha, List<RangoHorario>> rangosHorario = new HashMap<Fecha, List<RangoHorario>>();
+
     public Map<Fecha, List<RangoHorario>> getRangosHorario() {
         return rangosHorario;
     }
@@ -19,8 +21,6 @@ public class HorariosEspeciales {
     public void setRangosHorario(Map<Fecha, List<RangoHorario>> rangosHorario) {
         this.rangosHorario = rangosHorario;
     }
-
-    private Map<Fecha, List<RangoHorario>> rangosHorario = new HashMap<Fecha, List<RangoHorario>>();
 
     public void agregarRangoHorario(Fecha unaFecha, RangoHorario unRangoHorario) {
         List<RangoHorario> listaDeRangos = rangosHorario.get(unaFecha);

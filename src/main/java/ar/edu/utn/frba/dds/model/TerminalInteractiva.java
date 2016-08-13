@@ -112,7 +112,7 @@ public class TerminalInteractiva {
         superficie.addPoint(10, 0);
         superficie.addPoint(10, 10);
         comuna.setSuperficie(superficie);
-        cgp.setComuna(comuna);
+//        cgp.setComuna(comuna);
         cgp.setGeolocalizacion(geolocalizacionCGP);
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
@@ -129,7 +129,7 @@ public class TerminalInteractiva {
     private void agregarSucursalesBancoExternas()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
-        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos()) {
+        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("","")) {
             puntosDeInteres.add(sucursalBancoExterna);
         }
     }

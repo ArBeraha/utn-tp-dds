@@ -25,12 +25,16 @@ import ar.edu.utn.frba.dds.util.PropertiesFactory;
 public class ServicioConsultaBancoImpl implements ServicioConsultaBanco {
 
     @Override
-    public List<SucursalBanco> getBancosExternos()
+    public List<SucursalBanco> getBancosExternos(String banco, String servicio)
             throws JsonParseException, JsonMappingException, IOException, UnknownHostException {
         Properties properties = PropertiesFactory.getProperties();
         Client client = ClientBuilder.newClient();
+        //Obtenemos url del servicio
         WebTarget webTarget = client.target(properties.getProperty("url.servicio.bancos"));
-        Invocation.Builder invocationBuilder = webTarget.path("banks").request(MediaType.APPLICATION_JSON);
+        //Agregamos los parametros(Si viene un blanco -""- toma como si no existiera el parametro. Si existen, hace un AND.
+        webTarget = webTarget.queryParam("banco", banco).queryParam("servicio", servicio);
+        //Hacemos el request
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.get(Response.class);
         List<SucursalBanco> sucursales = new ArrayList<>();
         String jsonResponse = null;

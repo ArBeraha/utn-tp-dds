@@ -26,9 +26,6 @@ public class POIController {
     @RequestMapping(value = { "/allPois" }, method = RequestMethod.POST)
     public ResponseEntity<List<PuntoDeInteres>> allPois() {
 
-        //        List<Employee> employees = service.findAllEmployees();
-        //        model.addAttribute("employees", employees);
-
         System.out.println("fui a buscar poi");
         List<PuntoDeInteres> pois = terminalInteractivaService.findAllPOIs();
         return new ResponseEntity<List<PuntoDeInteres>>(terminalInteractivaService.findAllPOIs(), HttpStatus.OK);
@@ -40,11 +37,13 @@ public class POIController {
         //        List<Employee> employees = service.findAllEmployees();
         //        model.addAttribute("employees", employees);
 
+
         System.out.println("fui a buscar poi");
         List<PuntoDeInteres> pois = terminalInteractivaService.findAllPOIs();
         for (PuntoDeInteres poi : pois) {
             System.out.println(poi.toString());
         }
+
         return terminalInteractivaService.findAllPOIs();
     }
 }
