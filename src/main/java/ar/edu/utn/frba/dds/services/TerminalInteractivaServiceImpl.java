@@ -12,11 +12,21 @@ import ar.edu.utn.frba.dds.model.TerminalInteractiva;
 @Transactional
 public class TerminalInteractivaServiceImpl implements TerminalInteractivaService {
 
+    TerminalInteractiva terminal;
+    
+    public TerminalInteractivaServiceImpl(){
+        terminal = TerminalInteractiva.getInstance();
+        terminal.setPuntosDeInteres(TerminalInteractiva.populateDummyPOIs());
+    }
+    
     @Override
     public List<PuntoDeInteres> findAllPOIs() {
-        TerminalInteractiva terminal = TerminalInteractiva.getInstance();
-        terminal.setPuntosDeInteres(TerminalInteractiva.populateDummyPOIs());
         return terminal.getPuntosDeInteres();
+    }
+    
+    @Override
+    public List<PuntoDeInteres> findPOIs(String palabra) {
+        return terminal.buscarPuntoDeInteres(palabra);
     }
 
 }
