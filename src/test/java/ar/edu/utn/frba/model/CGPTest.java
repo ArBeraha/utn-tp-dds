@@ -15,7 +15,7 @@ import ar.edu.utn.frba.dds.model.Comuna;
 import ar.edu.utn.frba.dds.model.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.ServicioCGP;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
-@Ignore
+
 public class CGPTest {
 
     private CGP cgp;
@@ -36,10 +36,10 @@ public class CGPTest {
         superficie = new Polygon();
         superficie.addPoint(0, 0);
         superficie.addPoint(0, 10);
-        superficie.addPoint(10, 0);
         superficie.addPoint(10, 10);
+        superficie.addPoint(10, 0);
         comuna.setSuperficie(superficie);
-//        cgp.setComuna(comuna);
+        cgp.setComuna(comuna);
         geolocalizacionCGP = new Geolocalizacion(5, 5);
         cgp.setGeolocalizacion(geolocalizacionCGP);
         ServicioCGP servicioRentas = new ServicioCGP();

@@ -9,7 +9,7 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<ServicioCGP> servicios;
-//    private Comuna comuna;
+    private Comuna comuna;
 
 	public CGP (DateTimeProvider dateTimeProviderImpl){
 	    this.dateTimeProvider = dateTimeProviderImpl;
@@ -17,13 +17,13 @@ public class CGP extends PuntoDeInteres {
 	    palabrasClave = new ArrayList<>();
 	}
     
-//    public Comuna getComuna() {
-//        return comuna;
-//    }
-//
-//    public void setComuna(final Comuna comuna) {
-//        this.comuna = comuna;
-//    }
+    public Comuna getComuna() {
+        return comuna;
+    }
+
+    public void setComuna(final Comuna comuna) {
+        this.comuna = comuna;
+    }
 
     public ArrayList<ServicioCGP> getServicios() {
         return servicios;
@@ -74,9 +74,9 @@ public class CGP extends PuntoDeInteres {
         return false;
     }
 
-//    @Override
-//    public boolean esCercano(final Geolocalizacion geolocalizacion) {
-//        return this.getComuna().incluyeGeolocalizacion(geolocalizacion);
-//    }
+    @Override
+    public boolean esCercano(final Geolocalizacion geolocalizacion) {
+        return this.getComuna().incluyeGeolocalizacion(geolocalizacion);
+    }
 
 }
