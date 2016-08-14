@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.model;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,9 @@ import java.util.Optional;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({ "rangosHorario" })
 public class Horarios {
 
     private Map<Integer, List<RangoHorario>> rangosHorario = new HashMap<Integer, List<RangoHorario>>();
