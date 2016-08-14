@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 
@@ -24,6 +25,7 @@ public class TerminalInteractiva {
 
     //Constructor privado por el Singleton
     private TerminalInteractiva() {
+        puntosDeInteres = populateDummyPOIs();
     };
 
     //Singleton
@@ -81,6 +83,15 @@ public class TerminalInteractiva {
         }
         return resultadoBusqueda;
     }
+    
+    public PuntoDeInteres buscarPuntoDeInteres(final int idPoi) {
+        for (PuntoDeInteres poi : puntosDeInteres){
+            System.out.println("Id del punto de interes de la Terminal: " + poi.getId());
+        }
+        List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi==unPoi.getId()).collect(Collectors.toList());
+        System.out.println("Cantidad pois encontrados: " + pois.size());
+        return pois.get(0);
+    }
 
     public List<PuntoDeInteres> allPOIs() {
         return puntosDeInteres;
@@ -89,9 +100,19 @@ public class TerminalInteractiva {
     public boolean esCercano(final PuntoDeInteres poi) {
         return poi.esCercano(this.getGeolocalizacion());
     }
+    
+    public boolean esCercano(final int idPoi){
+        PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
+        return esCercano(poi);
+    }
 
     public boolean estaDisponible(final PuntoDeInteres poi) {
         return poi.estaDisponible();
+    }
+    
+    public boolean estaDisponible(final int idPoi){
+        PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
+        return estaDisponible(poi);
     }
 
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs

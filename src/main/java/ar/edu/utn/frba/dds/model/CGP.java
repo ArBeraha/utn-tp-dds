@@ -13,6 +13,7 @@ public class CGP extends PuntoDeInteres {
 
 	public CGP (DateTimeProvider dateTimeProviderImpl){
 	    this.dateTimeProvider = dateTimeProviderImpl;
+	    id = contador.incrementAndGet();
 	    palabrasClave = new ArrayList<>();
 	}
     

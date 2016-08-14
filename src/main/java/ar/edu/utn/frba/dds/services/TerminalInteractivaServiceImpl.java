@@ -16,7 +16,6 @@ public class TerminalInteractivaServiceImpl implements TerminalInteractivaServic
     
     public TerminalInteractivaServiceImpl(){
         terminal = TerminalInteractiva.getInstance();
-        terminal.setPuntosDeInteres(TerminalInteractiva.populateDummyPOIs());
     }
     
     @Override

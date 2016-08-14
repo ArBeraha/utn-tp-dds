@@ -6,8 +6,9 @@ public class ParadaColectivo extends PuntoDeInteres {
 
     public ParadaColectivo(){
         palabrasClave = new ArrayList<>();
+        id = contador.incrementAndGet();
     }
-    
+
     private String linea;
 
     public String getLinea() {

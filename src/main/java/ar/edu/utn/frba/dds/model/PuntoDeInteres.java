@@ -2,16 +2,28 @@ package ar.edu.utn.frba.dds.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
 public abstract class PuntoDeInteres {
 
+    protected static final AtomicInteger contador = new AtomicInteger(0);
+    //TODO Este id es temporal para simular un ID de la base de datos, hasta que implementemos la misma
+    protected int id;
     protected Direccion direccion;
     protected Geolocalizacion geolocalizacion;
     protected DateTimeProvider dateTimeProvider;
     protected ArrayList<String> palabrasClave;
+
+    public static AtomicInteger getContador() {
+        return contador;
+    }
+    
+    public int getId() {
+        return id;
+    }
 
     public Direccion getDireccion() {
         return direccion;

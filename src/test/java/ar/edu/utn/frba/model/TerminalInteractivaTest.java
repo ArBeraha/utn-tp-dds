@@ -54,22 +54,23 @@ public class TerminalInteractivaTest {
     }
 
     @Test
-    public void BuscarYEncontrarPOIKiosco()
+    public void buscarYEncontrarPOIKiosco()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("kiosko");
         Assert.assertTrue(resultado.contains(local));
     }
 
-    public void BuscarYEncontrarPOIKioscoPorPalabraClave()
+    public void buscarYEncontrarPOIKioscoPorPalabraClave()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("loCal");
         Assert.assertTrue(resultado.contains(local));
     }
 
     @Test
-    public void BuscarYNoEncontrarNingunPOI()
+    public void buscarYNoEncontrarNingunPOI()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("futbol");
         Assert.assertTrue(resultado.size() == 0);
     }
+    
 }
