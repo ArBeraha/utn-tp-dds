@@ -85,11 +85,7 @@ public class TerminalInteractiva {
     }
     
     public PuntoDeInteres buscarPuntoDeInteres(final int idPoi) {
-        for (PuntoDeInteres poi : puntosDeInteres){
-            System.out.println("Id del punto de interes de la Terminal: " + poi.getId());
-        }
         List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi==unPoi.getId()).collect(Collectors.toList());
-        System.out.println("Cantidad pois encontrados: " + pois.size());
         return pois.get(0);
     }
 

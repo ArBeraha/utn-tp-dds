@@ -18,7 +18,6 @@ public class LocalComercial extends PuntoDeInteres {
         horariosEspeciales = new HorariosEspeciales();
         palabrasClave = new ArrayList<>();
         id = contador.incrementAndGet();
-        System.out.println("El numero de id del Local instanciado es: " + id);
     }
 
     public int getId() {

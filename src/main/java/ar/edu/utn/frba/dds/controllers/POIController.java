@@ -33,30 +33,11 @@ public class POIController {
 
     @RequestMapping(value = { "/pois" }, method = RequestMethod.GET)
     public @ResponseBody List<PuntoDeInteres> getAllPois() {
-
-        //        List<Employee> employees = service.findAllEmployees();
-        //        model.addAttribute("employees", employees);
-
-        System.out.println("fui a buscar poi");
-        List<PuntoDeInteres> pois = terminalInteractivaService.getPois();
-        for (PuntoDeInteres poi : pois) {
-            System.out.println(poi.toString());
-        }
-
         return terminalInteractivaService.getPois();
     }
 
     @RequestMapping(value = { "/pois/{textoBusqueda}" }, method = RequestMethod.GET)
     public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda) {
-
-        //        List<Employee> employees = service.findAllEmployees();
-        //        model.addAttribute("employees", employees);
-
-        System.out.println("fui a buscar poi");
-        List<PuntoDeInteres> pois = terminalInteractivaService.getPois(textoBusqueda);
-        for (PuntoDeInteres poi : pois) {
-            System.out.println(poi.toString());
-        }
-        return pois;
+        return terminalInteractivaService.getPois(textoBusqueda);
     }
 }
