@@ -27,5 +27,17 @@ public class TerminalInteractivaServiceImpl implements TerminalInteractivaServic
     public List<PuntoDeInteres> getPois(String palabra) {
         return terminal.buscarPuntoDeInteres(palabra);
     }
+    @Override
+    public PuntoDeInteres poi(int idPoi){
+        return terminal.buscarPuntoDeInteres(idPoi);
+    }
+    @Override
+    public boolean esCercano(int idPoi){
+        return terminal.esCercano(idPoi);
+    }
+    @Override
+    public boolean estaDisponible(int idPoi){
+        return terminal.estaDisponible(idPoi);
+    }
 
 }

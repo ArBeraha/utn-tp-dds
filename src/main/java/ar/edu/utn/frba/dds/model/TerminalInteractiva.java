@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -25,6 +26,7 @@ public class TerminalInteractiva {
 
     //Constructor privado por el Singleton
     private TerminalInteractiva() {
+        setGeolocalizacion(new Geolocalizacion(11.999991, 28.000001));
         puntosDeInteres = populateDummyPOIs();
     };
 
@@ -114,32 +116,77 @@ public class TerminalInteractiva {
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs
     public static List<PuntoDeInteres> populateDummyPOIs() {
         List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
-        LocalComercial local = new LocalComercial(new DateTimeProviderImpl(new DateTime()));
-        CGP cgp = new CGP(new DateTimeProviderImpl(new DateTime()));
-        Comuna comuna = new Comuna();
-        Polygon superficie = new Polygon();
-
-        Geolocalizacion geolocalizacionCGP = new Geolocalizacion(5, 5);
-        local.setNombre("25horas");
-        Rubro rubro = new Rubro();
-        rubro.setNombre("Kiosko");
-        local.setRubro(rubro);
+        System.out.println("Poblando");
+        
+        LocalComercial local;
+        Horarios horarios = new Horarios();
+        Rubro rubroLibreria;
+        Geolocalizacion geolocalizacionLocal;
+        LocalTime horaInicioLunesAViernes = new LocalTime(9, 0);
+        LocalTime horaFinLunesAViernes = new LocalTime(13, 0);
+        LocalTime horaInicioLunesAViernes2 = new LocalTime(15, 0);
+        LocalTime horaFinLunesAViernes2 = new LocalTime(18, 30);
+        LocalTime horaInicioSabado = new LocalTime(10, 0);
+        LocalTime horaFinSabado = new LocalTime(13, 30);
+        RangoHorario manianaLunesAViernes = new RangoHorario(horaInicioLunesAViernes, horaFinLunesAViernes);
+        RangoHorario tardeLunesAViernes = new RangoHorario(horaInicioLunesAViernes2, horaFinLunesAViernes2);
+        RangoHorario horarioSabado = new RangoHorario(horaInicioSabado, horaFinSabado);
+        horarios.agregarRangoHorario(1, manianaLunesAViernes);
+        horarios.agregarRangoHorario(2, manianaLunesAViernes);
+        horarios.agregarRangoHorario(3, manianaLunesAViernes);
+        horarios.agregarRangoHorario(4, manianaLunesAViernes);
+        horarios.agregarRangoHorario(5, manianaLunesAViernes);
+        horarios.agregarRangoHorario(1, tardeLunesAViernes);
+        horarios.agregarRangoHorario(2, tardeLunesAViernes);
+        horarios.agregarRangoHorario(3, tardeLunesAViernes);
+        horarios.agregarRangoHorario(4, tardeLunesAViernes);
+        horarios.agregarRangoHorario(5, tardeLunesAViernes);
+        horarios.agregarRangoHorario(6, horarioSabado);
+        local = new LocalComercial(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 13, 30, 0)));
+        // setUp para esCercano
+        rubroLibreria = new Rubro();
+        geolocalizacionLocal = new Geolocalizacion(12, 28);
+        rubroLibreria.setNombre("Libreria Escolar");
+        rubroLibreria.setRadioCercania(5);
+        local.setGeolocalizacion(geolocalizacionLocal);
+        local.setNombre("Regla y compás");
+        local.setRubro(rubroLibreria);
+        ArrayList<String> palabrasClave = new ArrayList<String>();
+        palabrasClave.add("Tienda");
+        local.setPalabrasClave(palabrasClave);  
+        local.setHorarios(horarios);
+        
+        CGP cgp;
+        Comuna comuna;
+        Polygon superficie;
+        Geolocalizacion geolocalizacionCGP;
+        cgp = new CGP(new DateTimeProviderImpl(new DateTime()));
+        comuna = new Comuna();
+        superficie = new Polygon();
         superficie.addPoint(0, 0);
         superficie.addPoint(0, 10);
-        superficie.addPoint(10, 0);
         superficie.addPoint(10, 10);
+        superficie.addPoint(10, 0);
         comuna.setSuperficie(superficie);
         cgp.setComuna(comuna);
+        geolocalizacionCGP = new Geolocalizacion(5, 5);
         cgp.setGeolocalizacion(geolocalizacionCGP);
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
+        Horarios horario = new Horarios();
+        horario.agregarRangoHorario(6, new RangoHorario(10,0,18,0));
+        servicioRentas.setHorarios(horario);
         ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
         servicios.add(servicioRentas);
         cgp.setServicios(servicios);
-
+        ArrayList<String> palabras = new ArrayList<String>();
+        palabras.add("CGP");
+        cgp.setPalabrasClave(palabras);
+        
+        
         pois.add(local);
         pois.add(cgp);
-
+        
         return pois;
     }
 

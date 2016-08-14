@@ -33,4 +33,19 @@ public class POIController {
     public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda) {
         return terminalInteractivaService.getPois(textoBusqueda);
     }
+    
+    @RequestMapping(value = { "/poi/{id}" }, method = RequestMethod.GET)
+    public @ResponseBody PuntoDeInteres poi(@PathVariable("id") int idPoi) {
+        return terminalInteractivaService.poi(idPoi);
+    }
+    
+    @RequestMapping(value = { "/poi/{id}/cercano" }, method = RequestMethod.GET)
+    public @ResponseBody boolean esCercano(@PathVariable("id") int idPoi) {
+        return terminalInteractivaService.esCercano(idPoi);
+    }
+    
+    @RequestMapping(value = { "/poi/{id}/disponible" }, method = RequestMethod.GET)
+    public @ResponseBody boolean estaDisponible(@PathVariable("id") int idPoi) {
+        return terminalInteractivaService.estaDisponible(idPoi);
+    }
 }
