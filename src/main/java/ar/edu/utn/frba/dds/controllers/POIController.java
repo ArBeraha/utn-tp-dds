@@ -24,13 +24,6 @@ public class POIController {
     @Autowired
     TerminalInteractivaService terminalInteractivaService;
 
-    @RequestMapping(value = { "/pois" }, method = RequestMethod.POST)
-    public ResponseEntity<List<PuntoDeInteres>> allPois() {
-
-        List<PuntoDeInteres> pois = terminalInteractivaService.getPois();
-        return new ResponseEntity<List<PuntoDeInteres>>(terminalInteractivaService.getPois(), HttpStatus.OK);
-    }
-
     @RequestMapping(value = { "/pois" }, method = RequestMethod.GET)
     public @ResponseBody List<PuntoDeInteres> getAllPois() {
         return terminalInteractivaService.getPois();

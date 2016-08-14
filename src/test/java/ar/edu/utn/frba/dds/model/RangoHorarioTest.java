@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.model;
+package ar.edu.utn.frba.dds.model;
 
 import org.joda.time.LocalTime;
 import org.junit.Test;

@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
+
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<ServicioCGP> servicios;
@@ -16,7 +17,6 @@ public class CGP extends PuntoDeInteres {
 	    id = contador.incrementAndGet();
 	    palabrasClave = new ArrayList<>();
 	}
-    
     public Comuna getComuna() {
         return comuna;
     }
@@ -64,8 +64,8 @@ public class CGP extends PuntoDeInteres {
         boolean esPalabraClave = this.esPalabraClave(palabra);
         return (servicioTienePalabra || esPalabraClave);
     }
-    
-    private boolean serviciosTienenPalabra(final String palabra){
+
+    private boolean serviciosTienenPalabra(final String palabra) {
         for (ServicioCGP servicio : servicios) {
             if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
                 return true;

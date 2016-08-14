@@ -63,7 +63,11 @@ public class LocalComercial extends PuntoDeInteres {
     @Override
     public boolean estaDisponible() {
         DateTime fechaHoraActual = dateTimeProvider.getDateTime();
-        return horarios.atiende(fechaHoraActual);
+        if (horariosEspeciales.contiene(fechaHoraActual)) {
+            return horariosEspeciales.atiende(fechaHoraActual);
+        } else {
+            return horarios.atiende(fechaHoraActual);
+        }
     }
 
     @Override

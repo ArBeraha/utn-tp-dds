@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.model;
+package ar.edu.utn.frba.dds.model;
 
 import java.io.IOException;
 import java.net.UnknownHostException;

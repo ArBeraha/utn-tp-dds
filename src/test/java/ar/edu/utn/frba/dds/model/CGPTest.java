@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.model;
+package ar.edu.utn.frba.dds.model;
 
 import java.awt.Polygon;
 import java.util.ArrayList;
@@ -7,12 +7,13 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ar.edu.utn.frba.dds.model.CGP;
 import ar.edu.utn.frba.dds.model.Comuna;
 import ar.edu.utn.frba.dds.model.Geolocalizacion;
+import ar.edu.utn.frba.dds.model.Horarios;
+import ar.edu.utn.frba.dds.model.RangoHorario;
 import ar.edu.utn.frba.dds.model.ServicioCGP;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
@@ -44,6 +45,9 @@ public class CGPTest {
         cgp.setGeolocalizacion(geolocalizacionCGP);
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
+        Horarios horario = new Horarios();
+        horario.agregarRangoHorario(6, new RangoHorario(10,0,18,0));
+        servicioRentas.setHorarios(horario);
         ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
         servicios.add(servicioRentas);
         cgp.setServicios(servicios);
@@ -55,7 +59,20 @@ public class CGPTest {
     @After
     public void tearDown() throws Exception {
     }
-
+    
+    @Test
+    public void dadoHorarioDeServicioEstaDisponibleDebeDevolverTrue() {
+        cgp.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 06, 25, 15, 30, 0));
+        Assert.assertTrue(cgp.estaDisponible());
+    }
+    
+    @Test
+    public void dadoHorarioNoIncluidoEstaDisponibleDebeDevolverFalse() {
+        cgp.dateTimeProvider = new DateTimeProviderImpl(new DateTime(2016, 05, 20, 20, 30, 0));
+        Assert.assertFalse(cgp.estaDisponible());
+    }
+    
+    
     @Test
     public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(15, 15);

@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.model;
+package ar.edu.utn.frba.dds.model;
 
 import java.util.ArrayList;
 
@@ -42,6 +42,11 @@ public class ParadaColectivoTest {
     public void tearDown() throws Exception {
     }
 
+    @Test
+    public void dadoCualquierHorarioEstaDisponibleDebeDarTrue() {
+        Assert.assertTrue(parada.estaDisponible());
+    }
+    
     @Test
     public void dadaUnaGeolocalizacionFueraDelRangoEsCercanoDebeDevolverFalse() {
         Geolocalizacion unaGeolocalizacion = new Geolocalizacion(12+1, 28+1);

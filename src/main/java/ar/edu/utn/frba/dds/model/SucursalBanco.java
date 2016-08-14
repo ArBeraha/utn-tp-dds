@@ -65,9 +65,14 @@ public class SucursalBanco extends PuntoDeInteres {
     @Override
     public boolean estaDisponible() {
         DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
+        for (ServicioBanco servicio : servicios) {
+            if (servicio.getHorarios().atiende(fechaHoraActual)) {
+                return true;
+            }
+        }
         return horarios.atiende(fechaHoraActual);
     }
-
+    
     public boolean estaDisponible(final String nombreServicioBanco) {
         for (ServicioBanco servicio : servicios) {
             if (servicio.getNombre() == nombreServicioBanco) {
