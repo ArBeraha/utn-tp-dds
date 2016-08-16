@@ -3,6 +3,8 @@ package ar.edu.utn.frba.dds.model;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import org.joda.time.DateTime;
+import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 
@@ -11,9 +13,11 @@ public class Busqueda {
     private String fraseBuscada;
     private long tiempoInicial;
     private long tiempo;
+    private DateTime fecha;
     
     public Busqueda(String fraseBuscada){
-        tiempoInicial = System.currentTimeMillis();  
+        tiempoInicial = System.currentTimeMillis();
+        fecha = new DateTime();
         this.fraseBuscada = fraseBuscada; 
     }
     
@@ -25,7 +29,7 @@ public class Busqueda {
         //if (TimeUnit.MILLISECONDS.toSeconds(tiempo) > Double.parseDouble(properties.getProperty("demoraBusquedaEnSegundos"))){
             //Notificar
         }
-        System.out.println("La busqueda de:'"+ fraseBuscada + "' devolvio: "+ cantidadResultados + " resultados en: "+ TimeUnit.MILLISECONDS.toSeconds(tiempo) 
+        System.out.println(fecha + ": La busqueda de:'"+ fraseBuscada + "' devolvio: "+ cantidadResultados + " resultados en: "+ TimeUnit.MILLISECONDS.toSeconds(tiempo) 
                + " segundos.");
     }
     
