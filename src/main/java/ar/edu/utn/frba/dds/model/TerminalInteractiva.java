@@ -20,6 +20,7 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 public class TerminalInteractiva {
 
     private List<PuntoDeInteres> puntosDeInteres;
+    private List<Busqueda> busquedas;
     private CGP cgpComunaTerminal;
     private Geolocalizacion geolocalizacion;
     private static TerminalInteractiva instance;
@@ -28,6 +29,7 @@ public class TerminalInteractiva {
     private TerminalInteractiva() {
         setGeolocalizacion(new Geolocalizacion(11.999991, 28.000001));
         puntosDeInteres = populateDummyPOIs();
+        busquedas = new ArrayList<Busqueda>();
     };
 
     //Singleton
@@ -77,12 +79,15 @@ public class TerminalInteractiva {
     };
 
     public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
+        Busqueda nuevaBusqueda = new Busqueda(palabra);
         List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
                 resultadoBusqueda.add(puntoDeInteres);
             }
         }
+        nuevaBusqueda.setResultados(resultadoBusqueda.size());
+        busquedas.add(nuevaBusqueda);
         return resultadoBusqueda;
     }
     
