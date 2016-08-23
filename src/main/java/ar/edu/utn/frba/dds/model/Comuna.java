@@ -7,7 +7,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties({ "superficie" })
 public class Comuna {
 
+    private int numeroComuna;
     private Polygon superficie;
+
+    public int getNumeroComuna() {
+        return numeroComuna;
+    }
+
+    public void setNumeroComuna(int numeroComuna) {
+        this.numeroComuna = numeroComuna;
+    }
 
     public void setSuperficie(Polygon superficie) {
         this.superficie = superficie;

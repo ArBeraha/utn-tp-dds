@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,12 @@ public class POIController {
     }
 
     @RequestMapping(value = { "/pois/{textoBusqueda}" }, method = RequestMethod.GET)
-    public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda) {
-        return terminalInteractivaService.getPois(textoBusqueda);
+    public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda) throws Exception {
+        try {
+            return terminalInteractivaService.getPois(textoBusqueda);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Exception("Error interno al obtener los pois");
+        }
     }
 }

@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import ar.edu.utn.frba.dds.services.ServicioConsultaBanco;
 import ar.edu.utn.frba.dds.services.ServicioConsultaBancoImpl;
+import ar.edu.utn.frba.dds.services.ServicioConsultaCGP;
+import ar.edu.utn.frba.dds.services.ServicioConsultaCGPImpl;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class TerminalInteractiva {
@@ -74,7 +76,10 @@ public class TerminalInteractiva {
         pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
     };
 
-    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
+    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra)
+            throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
+        this.agregarSucursalesBancoExternas();
+        this.agregarCGPExternos();
         List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
@@ -83,9 +88,9 @@ public class TerminalInteractiva {
         }
         return resultadoBusqueda;
     }
-    
+
     public PuntoDeInteres buscarPuntoDeInteres(final int idPoi) {
-        List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi==unPoi.getId()).collect(Collectors.toList());
+        List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi == unPoi.getId()).collect(Collectors.toList());
         return pois.get(0);
     }
 
@@ -96,8 +101,8 @@ public class TerminalInteractiva {
     public boolean esCercano(final PuntoDeInteres poi) {
         return poi.esCercano(this.getGeolocalizacion());
     }
-    
-    public boolean esCercano(final int idPoi){
+
+    public boolean esCercano(final int idPoi) {
         PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
         return esCercano(poi);
     }
@@ -105,8 +110,8 @@ public class TerminalInteractiva {
     public boolean estaDisponible(final PuntoDeInteres poi) {
         return poi.estaDisponible();
     }
-    
-    public boolean estaDisponible(final int idPoi){
+
+    public boolean estaDisponible(final int idPoi) {
         PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
         return estaDisponible(poi);
     }
@@ -146,8 +151,15 @@ public class TerminalInteractiva {
     private void agregarSucursalesBancoExternas()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
-        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("","")) {
+        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
             puntosDeInteres.add(sucursalBancoExterna);
+        }
+    }
+    
+    private void agregarCGPExternos() throws JsonParseException, JsonMappingException, IOException{
+        ServicioConsultaCGP servicioCGP = new ServicioConsultaCGPImpl();
+        for (CGP cgpExterno : servicioCGP.getCentrosExternos("")){
+            puntosDeInteres.add(cgpExterno);
         }
     }
 
