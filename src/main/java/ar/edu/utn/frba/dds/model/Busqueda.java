@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds.model;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import org.joda.time.DateTime;
+
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
@@ -35,6 +37,10 @@ public class Busqueda {
     
     public int getCantidadResultados(){
         return cantidadResultados;
+    }
+    
+    public Date getFecha(){
+        return fecha.toDate();
     }
     
     public long getTiempo(){

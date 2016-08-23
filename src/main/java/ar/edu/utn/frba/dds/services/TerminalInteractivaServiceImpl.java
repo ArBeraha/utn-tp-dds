@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,5 +40,11 @@ public class TerminalInteractivaServiceImpl implements TerminalInteractivaServic
     public boolean estaDisponible(int idPoi){
         return terminal.estaDisponible(idPoi);
     }
+    
+    @Override
+    public Map<String,Long> generarReporte(){
+        return terminal.generarReporteBusquedasPorFecha();
+    }
+
 
 }

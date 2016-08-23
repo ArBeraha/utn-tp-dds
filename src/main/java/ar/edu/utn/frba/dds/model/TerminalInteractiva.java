@@ -3,12 +3,16 @@ package ar.edu.utn.frba.dds.model;
 import java.awt.Polygon;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
+import org.joda.time.YearMonthDay;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -117,7 +121,14 @@ public class TerminalInteractiva {
         PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
         return estaDisponible(poi);
     }
-
+    
+    public Map<String,Long> generarReporteBusquedasPorFecha(){
+        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
+        System.out.println("Generando de Busquedas Reporte:");
+        Map<String,Long> reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> dt1.format(busqueda.getFecha()) , Collectors.counting()));
+        reporte.forEach((fecha,cantidad)->System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
+        return reporte;
+    }
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs
     public static List<PuntoDeInteres> populateDummyPOIs() {
         List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();

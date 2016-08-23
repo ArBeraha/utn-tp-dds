@@ -1,7 +1,10 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import org.joda.time.YearMonthDay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +50,10 @@ public class POIController {
     @RequestMapping(value = { "/poi/{id}/disponible" }, method = RequestMethod.GET)
     public @ResponseBody boolean estaDisponible(@PathVariable("id") int idPoi) {
         return terminalInteractivaService.estaDisponible(idPoi);
+    }
+    
+    @RequestMapping(value = { "/reporte" }, method = RequestMethod.GET)
+    public @ResponseBody Map<String,Long> generarReporte() {
+        return terminalInteractivaService.generarReporte();
     }
 }
