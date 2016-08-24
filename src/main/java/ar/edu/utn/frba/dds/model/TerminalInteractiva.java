@@ -5,20 +5,20 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
-import org.joda.time.YearMonthDay;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import ar.edu.utn.frba.dds.services.ServicioConsultaBanco;
 import ar.edu.utn.frba.dds.services.ServicioConsultaBancoImpl;
+import ar.edu.utn.frba.dds.services.ServicioConsultaCGP;
+import ar.edu.utn.frba.dds.services.ServicioConsultaCGPImpl;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class TerminalInteractiva {
@@ -82,8 +82,11 @@ public class TerminalInteractiva {
         pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
     };
 
-    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
+    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra)
+            throws JsonParseException, JsonMappingException, IOException {
         Busqueda nuevaBusqueda = new Busqueda(palabra);
+        this.agregarSucursalesBancoExternas();
+        this.agregarCGPExternos();
         List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
@@ -94,9 +97,10 @@ public class TerminalInteractiva {
         busquedas.add(nuevaBusqueda);
         return resultadoBusqueda;
     }
-    
+
     public PuntoDeInteres buscarPuntoDeInteres(final int idPoi) {
-        List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi==unPoi.getId()).collect(Collectors.toList());
+        List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi == unPoi.getId())
+                .collect(Collectors.toList());
         return pois.get(0);
     }
 
@@ -107,8 +111,8 @@ public class TerminalInteractiva {
     public boolean esCercano(final PuntoDeInteres poi) {
         return poi.esCercano(this.getGeolocalizacion());
     }
-    
-    public boolean esCercano(final int idPoi){
+
+    public boolean esCercano(final int idPoi) {
         PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
         return esCercano(poi);
     }
@@ -116,24 +120,26 @@ public class TerminalInteractiva {
     public boolean estaDisponible(final PuntoDeInteres poi) {
         return poi.estaDisponible();
     }
-    
-    public boolean estaDisponible(final int idPoi){
+
+    public boolean estaDisponible(final int idPoi) {
         PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
         return estaDisponible(poi);
     }
-    
-    public Map<String,Long> generarReporteBusquedasPorFecha(){
+
+    public Map<String, Long> generarReporteBusquedasPorFecha() {
         SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
         System.out.println("Generando de Busquedas Reporte:");
-        Map<String,Long> reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> dt1.format(busqueda.getFecha()) , Collectors.counting()));
-        reporte.forEach((fecha,cantidad)->System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
+        Map<String, Long> reporte = busquedas.stream()
+                .collect(Collectors.groupingBy(busqueda -> dt1.format(busqueda.getFecha()), Collectors.counting()));
+        reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
         return reporte;
     }
+
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs
     public static List<PuntoDeInteres> populateDummyPOIs() {
         List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
         System.out.println("Poblando");
-        
+
         LocalComercial local;
         Horarios horarios = new Horarios();
         Rubro rubroLibreria;
@@ -169,9 +175,9 @@ public class TerminalInteractiva {
         local.setRubro(rubroLibreria);
         ArrayList<String> palabrasClave = new ArrayList<String>();
         palabrasClave.add("Tienda");
-        local.setPalabrasClave(palabrasClave);  
+        local.setPalabrasClave(palabrasClave);
         local.setHorarios(horarios);
-        
+
         CGP cgp;
         Comuna comuna;
         Polygon superficie;
@@ -190,7 +196,7 @@ public class TerminalInteractiva {
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
         Horarios horario = new Horarios();
-        horario.agregarRangoHorario(6, new RangoHorario(10,0,18,0));
+        horario.agregarRangoHorario(6, new RangoHorario(10, 0, 18, 0));
         servicioRentas.setHorarios(horario);
         ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
         servicios.add(servicioRentas);
@@ -198,19 +204,25 @@ public class TerminalInteractiva {
         ArrayList<String> palabras = new ArrayList<String>();
         palabras.add("CGP");
         cgp.setPalabrasClave(palabras);
-        
-        
+
         pois.add(local);
         pois.add(cgp);
-        
+
         return pois;
     }
 
     private void agregarSucursalesBancoExternas()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
         ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
-        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("","")) {
+        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
             puntosDeInteres.add(sucursalBancoExterna);
+        }
+    }
+
+    private void agregarCGPExternos() throws JsonParseException, JsonMappingException, IOException {
+        ServicioConsultaCGP servicioCGP = new ServicioConsultaCGPImpl();
+        for (CGP cgpExterno : servicioCGP.getCentrosExternos("")) {
+            puntosDeInteres.add(cgpExterno);
         }
     }
 

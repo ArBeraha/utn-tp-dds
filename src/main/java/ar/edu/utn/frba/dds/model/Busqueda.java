@@ -11,40 +11,41 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 
 public class Busqueda {
+
     private int cantidadResultados;
     private String fraseBuscada;
     private long tiempoInicial;
     private long tiempo;
     private DateTime fecha;
-    
-    public Busqueda(String fraseBuscada){
+
+    public Busqueda(String fraseBuscada) {
         tiempoInicial = System.currentTimeMillis();
         fecha = new DateTime();
-        this.fraseBuscada = fraseBuscada; 
+        this.fraseBuscada = fraseBuscada;
     }
-    
-    public void setResultados(int resultados){
+
+    public void setResultados(int resultados) {
         Properties properties = PropertiesFactory.getProperties();
         this.cantidadResultados = resultados;
-        tiempo = System.currentTimeMillis() - tiempoInicial;  
-        if (TimeUnit.MILLISECONDS.toSeconds(tiempo) > 999){ // No me funcionan las properties
-        //if (TimeUnit.MILLISECONDS.toSeconds(tiempo) > Double.parseDouble(properties.getProperty("demoraBusquedaEnSegundos"))){
+        tiempo = System.currentTimeMillis() - tiempoInicial;
+        if (TimeUnit.MILLISECONDS.toSeconds(tiempo) > 999) { // No me funcionan las properties
+            //if (TimeUnit.MILLISECONDS.toSeconds(tiempo) > Double.parseDouble(properties.getProperty("demoraBusquedaEnSegundos"))){
             //Notificar
         }
-        System.out.println(fecha + ": La busqueda de:'"+ fraseBuscada + "' devolvio: "+ cantidadResultados + " resultados en: "+ TimeUnit.MILLISECONDS.toSeconds(tiempo) 
-               + " segundos.");
+        System.out.println(fecha + ": La busqueda de:'" + fraseBuscada + "' devolvio: " + cantidadResultados
+                + " resultados en: " + TimeUnit.MILLISECONDS.toSeconds(tiempo) + " segundos.");
     }
-    
-    public int getCantidadResultados(){
+
+    public int getCantidadResultados() {
         return cantidadResultados;
     }
-    
-    public Date getFecha(){
+
+    public Date getFecha() {
         return fecha.toDate();
     }
-    
-    public long getTiempo(){
+
+    public long getTiempo() {
         return tiempo;
     }
-    
+
 }

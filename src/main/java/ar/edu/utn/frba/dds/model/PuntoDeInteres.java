@@ -20,7 +20,7 @@ public abstract class PuntoDeInteres {
     public static AtomicInteger getContador() {
         return contador;
     }
-    
+
     public int getId() {
         return id;
     }

@@ -1,22 +1,26 @@
 package ar.edu.utn.frba.dds.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
-
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<ServicioCGP> servicios;
     private Comuna comuna;
+    private List<String> zonas;
+    private String nombreDirector;
+    private String telefono;
 
-	public CGP (DateTimeProvider dateTimeProviderImpl){
-	    this.dateTimeProvider = dateTimeProviderImpl;
-	    id = contador.incrementAndGet();
-	    palabrasClave = new ArrayList<>();
-	}
+    public CGP(DateTimeProvider dateTimeProviderImpl) {
+        this.dateTimeProvider = dateTimeProviderImpl;
+        id = contador.incrementAndGet();
+        palabrasClave = new ArrayList<>();
+    }
+
     public Comuna getComuna() {
         return comuna;
     }
@@ -35,6 +39,30 @@ public class CGP extends PuntoDeInteres {
 
     public void agregarServicio(final ServicioCGP servicio) {
         this.servicios.add(servicio);
+    }
+
+    public List<String> getZonas() {
+        return zonas;
+    }
+
+    public void setZonas(List<String> zonas) {
+        this.zonas = zonas;
+    }
+
+    public String getNombreDirector() {
+        return nombreDirector;
+    }
+    
+    public void setNombreDirector(String nombreDirector) {
+        this.nombreDirector = nombreDirector;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     @Override
