@@ -20,6 +20,7 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 public class TerminalInteractiva {
 
     private List<PuntoDeInteres> puntosDeInteres;
+	private List<Proceso> procesos;
     private CGP cgpComunaTerminal;
     private Geolocalizacion geolocalizacion;
     private static TerminalInteractiva instance;
