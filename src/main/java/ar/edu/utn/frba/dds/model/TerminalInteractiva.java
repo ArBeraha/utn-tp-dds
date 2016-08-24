@@ -33,6 +33,8 @@ public class TerminalInteractiva {
     private TerminalInteractiva() {
         setGeolocalizacion(new Geolocalizacion(11.999991, 28.000001));
         puntosDeInteres = populateDummyPOIs();
+        this.agregarSucursalesBancoExternas();
+        this.agregarCGPExternos();
         busquedas = new ArrayList<Busqueda>();
     };
 
@@ -85,8 +87,6 @@ public class TerminalInteractiva {
     public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra)
             throws JsonParseException, JsonMappingException, IOException {
         Busqueda nuevaBusqueda = new Busqueda(palabra);
-        this.agregarSucursalesBancoExternas();
-        this.agregarCGPExternos();
         List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
@@ -211,18 +211,27 @@ public class TerminalInteractiva {
         return pois;
     }
 
-    private void agregarSucursalesBancoExternas()
-            throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
+    private void agregarSucursalesBancoExternas() {
         ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
-        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
-            puntosDeInteres.add(sucursalBancoExterna);
+        try {
+            for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
+                puntosDeInteres.add(sucursalBancoExterna);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
-    private void agregarCGPExternos() throws JsonParseException, JsonMappingException, IOException {
+    private void agregarCGPExternos() {
         ServicioConsultaCGP servicioCGP = new ServicioConsultaCGPImpl();
-        for (CGP cgpExterno : servicioCGP.getCentrosExternos("")) {
-            puntosDeInteres.add(cgpExterno);
+        try {
+            for (CGP cgpExterno : servicioCGP.getCentrosExternos("")) {
+                puntosDeInteres.add(cgpExterno);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.joda.time.DateTime;

@@ -1,12 +1,11 @@
 package ar.edu.utn.frba.dds.model;
 
+import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import org.joda.time.DateTime;
 
-import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
+import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 

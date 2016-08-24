@@ -1,10 +1,11 @@
 package ar.edu.utn.frba.dds.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ParadaColectivo extends PuntoDeInteres {
 
-    public ParadaColectivo(){
+    public ParadaColectivo() {
         palabrasClave = new ArrayList<>();
         id = contador.incrementAndGet();
     }
