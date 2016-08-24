@@ -11,12 +11,6 @@ public class PropertiesFactory {
 
     public static synchronized Properties getProperties() {
         if (properties == null) {
-            //            try {
-            //                properties = new Properties();
-            //                properties.load(new FileInputStream("./src/main/resources/application.properties"));
-            //            } catch (Exception e) {
-            //                System.out.println(e.getMessage());
-            //            }
             try (final InputStream stream = PropertiesFactory.class.getClassLoader()
                     .getResourceAsStream("application.properties")) {
                 properties = new Properties();
