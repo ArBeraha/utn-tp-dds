@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class POIController {
     public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda)
             throws Exception {
         try {
-            return terminalInteractivaService.getPois(textoBusqueda);
+            return terminalInteractivaService.getPois(textoBusqueda, new DateTime());
         } catch (IOException e) {
             e.printStackTrace();
             throw new Exception("Error interno al obtener los pois");

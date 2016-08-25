@@ -29,7 +29,7 @@ public class ServicioConsultaCGPImpl implements ServicioConsultaCGP {
     public List<CGP> getCentrosExternos(String zona) throws JsonParseException, JsonMappingException, IOException {
         List<CGP> centros = new ArrayList<>();
         try {
-            Properties properties = PropertiesFactory.getProperties();
+            Properties properties = PropertiesFactory.getAppProperties();
             Client client = ClientBuilder.newClient();
             //Obtenemos url del servicio
             WebTarget webTarget = client.target(properties.getProperty("url.servicio.cgp"));

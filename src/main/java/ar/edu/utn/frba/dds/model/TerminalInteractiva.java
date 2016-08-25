@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.model;
 
 import java.awt.Polygon;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,9 +83,9 @@ public class TerminalInteractiva {
         pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
     };
 
-    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra)
+    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra, final DateTime fechaHoraInicio)
             throws JsonParseException, JsonMappingException, IOException {
-        Busqueda nuevaBusqueda = new Busqueda(palabra);
+        Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio);
         List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
@@ -138,7 +137,6 @@ public class TerminalInteractiva {
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs
     public static List<PuntoDeInteres> populateDummyPOIs() {
         List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
-        System.out.println("Poblando");
 
         LocalComercial local;
         Horarios horarios = new Horarios();

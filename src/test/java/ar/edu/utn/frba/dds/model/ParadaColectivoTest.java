@@ -9,9 +9,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ar.edu.utn.frba.dds.model.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.ParadaColectivo;
-
 public class ParadaColectivoTest {
     
     private ParadaColectivo parada;

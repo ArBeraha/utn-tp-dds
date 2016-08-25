@@ -1,11 +1,8 @@
 package ar.edu.utn.frba.dds.model;
 
 import org.joda.time.LocalTime;
-import org.junit.Test;
-
-import ar.edu.utn.frba.dds.model.RangoHorario;
-
 import org.junit.Assert;
+import org.junit.Test;
 
 public class RangoHorarioTest {
 

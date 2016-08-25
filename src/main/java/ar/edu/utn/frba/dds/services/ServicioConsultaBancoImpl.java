@@ -12,6 +12,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -29,7 +30,7 @@ public class ServicioConsultaBancoImpl implements ServicioConsultaBanco {
             throws JsonParseException, JsonMappingException, IOException {
         List<SucursalBanco> sucursales = new ArrayList<>();
         try {
-            Properties properties = PropertiesFactory.getProperties();
+            Properties properties = PropertiesFactory.getAppProperties();
             Client client = ClientBuilder.newClient();
             //Obtenemos url del servicio
             WebTarget webTarget = client.target(properties.getProperty("url.servicio.bancos"));
