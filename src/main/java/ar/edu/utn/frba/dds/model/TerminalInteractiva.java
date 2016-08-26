@@ -28,8 +28,6 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 public class TerminalInteractiva {
 
     private List<PuntoDeInteres> puntosDeInteres;
-    private List<Busqueda> busquedas;
-    private CGP cgpComunaTerminal;
     private Geolocalizacion geolocalizacion;
     private static TerminalInteractiva instance;
 
@@ -39,7 +37,6 @@ public class TerminalInteractiva {
         puntosDeInteres = populateDummyPOIs();
         this.agregarSucursalesBancoExternas();
         this.agregarCGPExternos();
-        busquedas = new ArrayList<Busqueda>();
     };
 
     //Singleton
@@ -48,14 +45,6 @@ public class TerminalInteractiva {
             instance = new TerminalInteractiva();
         }
         return instance;
-    }
-
-    public CGP getCgpComunaTerminal() {
-        return cgpComunaTerminal;
-    }
-
-    public void setCgpComunaTerminal(final CGP cgpComunaTerminal) {
-        this.cgpComunaTerminal = cgpComunaTerminal;
     }
 
     public Geolocalizacion getGeolocalizacion() {
@@ -98,7 +87,6 @@ public class TerminalInteractiva {
             }
         }
         nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
-        busquedas.add(nuevaBusqueda);
         return resultadoBusqueda;
     }
 
