@@ -1,9 +1,11 @@
 package ar.edu.utn.frba.dds.model;
 
 import java.awt.Polygon;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,12 +14,15 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ar.edu.utn.frba.dds.services.ServicioConsultaBanco;
 import ar.edu.utn.frba.dds.services.ServicioConsultaBancoImpl;
 import ar.edu.utn.frba.dds.services.ServicioConsultaCGP;
 import ar.edu.utn.frba.dds.services.ServicioConsultaCGPImpl;
+import ar.edu.utn.frba.dds.util.file.FileUtils;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class TerminalInteractiva {
@@ -92,7 +97,7 @@ public class TerminalInteractiva {
                 resultadoBusqueda.add(puntoDeInteres);
             }
         }
-        nuevaBusqueda.setResultados(resultadoBusqueda.size());
+        nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
         busquedas.add(nuevaBusqueda);
         return resultadoBusqueda;
     }
@@ -126,11 +131,21 @@ public class TerminalInteractiva {
     }
 
     public Map<String, Long> generarReporteBusquedasPorFecha() {
-        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
-        System.out.println("Generando de Busquedas Reporte:");
-        Map<String, Long> reporte = busquedas.stream()
-                .collect(Collectors.groupingBy(busqueda -> dt1.format(busqueda.getFecha()), Collectors.counting()));
-        reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
+        Map<String, Long> reporte = new HashMap<>();
+        try {
+            System.out.println("Generando de Busquedas Reporte:");
+            File file = FileUtils.obtenerArchivoBusquedas();
+            ObjectMapper mapper = new ObjectMapper();
+            List<Busqueda> busquedas = new ArrayList<>();
+            if (file.length() > 0) {
+                busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
+                });
+            }
+            reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
+            reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return reporte;
     }
 
