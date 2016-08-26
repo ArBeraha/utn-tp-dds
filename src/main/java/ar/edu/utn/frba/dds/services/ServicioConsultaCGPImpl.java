@@ -19,23 +19,22 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import ar.edu.utn.frba.dds.model.SucursalBanco;
-import ar.edu.utn.frba.dds.model.SucursalBancoDeserializer;
+import ar.edu.utn.frba.dds.model.CGP;
+import ar.edu.utn.frba.dds.model.CentroDeserializer;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 
-public class ServicioConsultaBancoImpl implements ServicioConsultaBanco {
+public class ServicioConsultaCGPImpl implements ServicioConsultaCGP {
 
     @Override
-    public List<SucursalBanco> getBancosExternos(String banco, String servicio)
-            throws JsonParseException, JsonMappingException, IOException {
-        List<SucursalBanco> sucursales = new ArrayList<>();
+    public List<CGP> getCentrosExternos(String zona) throws JsonParseException, JsonMappingException, IOException {
+        List<CGP> centros = new ArrayList<>();
         try {
             Properties properties = PropertiesFactory.getAppProperties();
             Client client = ClientBuilder.newClient();
             //Obtenemos url del servicio
-            WebTarget webTarget = client.target(properties.getProperty("url.servicio.bancos"));
-            //Agregamos los parametros(Si viene un blanco -""- toma como si no existiera el parametro. Si existen, hace un AND.
-            webTarget = webTarget.queryParam("banco", banco).queryParam("servicio", servicio);
+            WebTarget webTarget = client.target(properties.getProperty("url.servicio.cgp"));
+            //Agregamos el parámetro(Si viene un blanco -""- toma como si no existiera el parametro. Si existe, hace un AND).
+            webTarget = webTarget.queryParam("zona", zona);
             //Hacemos el request
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.get(Response.class);
@@ -46,9 +45,9 @@ public class ServicioConsultaBancoImpl implements ServicioConsultaBanco {
                 jsonResponse = response.readEntity(String.class);
                 ObjectMapper mapper = new ObjectMapper();
                 SimpleModule module = new SimpleModule();
-                module.addDeserializer(List.class, new SucursalBancoDeserializer());
+                module.addDeserializer(List.class, new CentroDeserializer());
                 mapper.registerModule(module);
-                sucursales = mapper.readValue(jsonResponse, new TypeReference<List<SucursalBanco>>() {
+                centros = mapper.readValue(jsonResponse, new TypeReference<List<CGP>>() {
                 });
             }
         } catch (UnknownHostException uhe) {
@@ -57,7 +56,7 @@ public class ServicioConsultaBancoImpl implements ServicioConsultaBanco {
             uhe.printStackTrace();
         }
 
-        return sucursales;
+        return centros;
     }
 
 }

@@ -18,7 +18,8 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 public class SucursalBancoDeserializer extends JsonDeserializer<List<SucursalBanco>> {
 
     @Override
-    public List<SucursalBanco> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public List<SucursalBanco> deserialize(JsonParser jp, DeserializationContext ctxt)
+            throws IOException, JsonProcessingException {
         JsonNode nodeElements = jp.getCodec().readTree(jp);
         Iterator<JsonNode> nodeIterator = nodeElements.elements();
         JsonNode node;

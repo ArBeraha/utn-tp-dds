@@ -1,26 +1,33 @@
 package ar.edu.utn.frba.dds.model;
 
 import java.awt.Polygon;
+import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ar.edu.utn.frba.dds.services.ServicioConsultaBanco;
 import ar.edu.utn.frba.dds.services.ServicioConsultaBancoImpl;
+import ar.edu.utn.frba.dds.services.ServicioConsultaCGP;
+import ar.edu.utn.frba.dds.services.ServicioConsultaCGPImpl;
+import ar.edu.utn.frba.dds.util.file.FileUtils;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class TerminalInteractiva {
 
     private List<PuntoDeInteres> puntosDeInteres;
-    private CGP cgpComunaTerminal;
     private Geolocalizacion geolocalizacion;
     private static TerminalInteractiva instance;
 
@@ -28,6 +35,8 @@ public class TerminalInteractiva {
     private TerminalInteractiva() {
         setGeolocalizacion(new Geolocalizacion(11.999991, 28.000001));
         puntosDeInteres = populateDummyPOIs();
+        this.agregarSucursalesBancoExternas();
+        this.agregarCGPExternos();
     };
 
     //Singleton
@@ -36,14 +45,6 @@ public class TerminalInteractiva {
             instance = new TerminalInteractiva();
         }
         return instance;
-    }
-
-    public CGP getCgpComunaTerminal() {
-        return cgpComunaTerminal;
-    }
-
-    public void setCgpComunaTerminal(final CGP cgpComunaTerminal) {
-        this.cgpComunaTerminal = cgpComunaTerminal;
     }
 
     public Geolocalizacion getGeolocalizacion() {
@@ -76,18 +77,22 @@ public class TerminalInteractiva {
         pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
     };
 
-    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra) {
+    public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra, final DateTime fechaHoraInicio)
+            throws JsonParseException, JsonMappingException, IOException {
+        Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio);
         List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
                 resultadoBusqueda.add(puntoDeInteres);
             }
         }
+        nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
         return resultadoBusqueda;
     }
-    
+
     public PuntoDeInteres buscarPuntoDeInteres(final int idPoi) {
-        List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi==unPoi.getId()).collect(Collectors.toList());
+        List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi == unPoi.getId())
+                .collect(Collectors.toList());
         return pois.get(0);
     }
 
@@ -98,8 +103,8 @@ public class TerminalInteractiva {
     public boolean esCercano(final PuntoDeInteres poi) {
         return poi.esCercano(this.getGeolocalizacion());
     }
-    
-    public boolean esCercano(final int idPoi){
+
+    public boolean esCercano(final int idPoi) {
         PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
         return esCercano(poi);
     }
@@ -107,17 +112,35 @@ public class TerminalInteractiva {
     public boolean estaDisponible(final PuntoDeInteres poi) {
         return poi.estaDisponible();
     }
-    
-    public boolean estaDisponible(final int idPoi){
+
+    public boolean estaDisponible(final int idPoi) {
         PuntoDeInteres poi = buscarPuntoDeInteres(idPoi);
         return estaDisponible(poi);
+    }
+
+    public Map<String, Long> generarReporteBusquedasPorFecha() {
+        Map<String, Long> reporte = new HashMap<>();
+        try {
+            System.out.println("Generando de Busquedas Reporte:");
+            File file = FileUtils.obtenerArchivoBusquedas();
+            ObjectMapper mapper = new ObjectMapper();
+            List<Busqueda> busquedas = new ArrayList<>();
+            if (file.length() > 0) {
+                busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
+                });
+            }
+            reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
+            reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reporte;
     }
 
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs
     public static List<PuntoDeInteres> populateDummyPOIs() {
         List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
-        System.out.println("Poblando");
-        
+
         LocalComercial local;
         Horarios horarios = new Horarios();
         Rubro rubroLibreria;
@@ -153,9 +176,9 @@ public class TerminalInteractiva {
         local.setRubro(rubroLibreria);
         ArrayList<String> palabrasClave = new ArrayList<String>();
         palabrasClave.add("Tienda");
-        local.setPalabrasClave(palabrasClave);  
+        local.setPalabrasClave(palabrasClave);
         local.setHorarios(horarios);
-        
+
         CGP cgp;
         Comuna comuna;
         Polygon superficie;
@@ -174,7 +197,7 @@ public class TerminalInteractiva {
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
         Horarios horario = new Horarios();
-        horario.agregarRangoHorario(6, new RangoHorario(10,0,18,0));
+        horario.agregarRangoHorario(6, new RangoHorario(10, 0, 18, 0));
         servicioRentas.setHorarios(horario);
         ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
         servicios.add(servicioRentas);
@@ -182,19 +205,34 @@ public class TerminalInteractiva {
         ArrayList<String> palabras = new ArrayList<String>();
         palabras.add("CGP");
         cgp.setPalabrasClave(palabras);
-        
-        
+
         pois.add(local);
         pois.add(cgp);
-        
+
         return pois;
     }
 
-    private void agregarSucursalesBancoExternas()
-            throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
+    private void agregarSucursalesBancoExternas() {
         ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
-        for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("","")) {
-            puntosDeInteres.add(sucursalBancoExterna);
+        try {
+            for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
+                puntosDeInteres.add(sucursalBancoExterna);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private void agregarCGPExternos() {
+        ServicioConsultaCGP servicioCGP = new ServicioConsultaCGPImpl();
+        try {
+            for (CGP cgpExterno : servicioCGP.getCentrosExternos("")) {
+                puntosDeInteres.add(cgpExterno);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 

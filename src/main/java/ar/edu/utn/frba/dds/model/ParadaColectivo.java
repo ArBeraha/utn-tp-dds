@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ParadaColectivo extends PuntoDeInteres {
 
-    public ParadaColectivo(){
+    public ParadaColectivo() {
         palabrasClave = new ArrayList<>();
         id = contador.incrementAndGet();
     }

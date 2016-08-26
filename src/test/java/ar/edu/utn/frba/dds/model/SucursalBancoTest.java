@@ -11,11 +11,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ar.edu.utn.frba.dds.model.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.Horarios;
-import ar.edu.utn.frba.dds.model.RangoHorario;
-import ar.edu.utn.frba.dds.model.ServicioBanco;
-import ar.edu.utn.frba.dds.model.SucursalBanco;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class SucursalBancoTest {

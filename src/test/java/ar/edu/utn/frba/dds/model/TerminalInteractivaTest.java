@@ -11,14 +11,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ar.edu.utn.frba.dds.model.LocalComercial;
-import ar.edu.utn.frba.dds.model.PuntoDeInteres;
-import ar.edu.utn.frba.dds.model.Rubro;
-import ar.edu.utn.frba.dds.model.TerminalInteractiva;
-import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
+import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class TerminalInteractivaTest {
 
@@ -56,20 +52,20 @@ public class TerminalInteractivaTest {
     @Test
     public void buscarYEncontrarPOIKiosco()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("kiosko");
+        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("kiosko", new DateTime());
         Assert.assertTrue(resultado.contains(local));
     }
 
     public void buscarYEncontrarPOIKioscoPorPalabraClave()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("loCal");
+        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("loCal", new DateTime());
         Assert.assertTrue(resultado.contains(local));
     }
 
     @Test
     public void buscarYNoEncontrarNingunPOI()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("futbol");
+        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("futbol", new DateTime());
         Assert.assertTrue(resultado.size() == 0);
     }
     
