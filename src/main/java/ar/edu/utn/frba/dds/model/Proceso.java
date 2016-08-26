@@ -12,9 +12,9 @@ public class Proceso {
 	private String mensajeError;
 	
 	public proceso(String nombreProceso, String tipoUsuario) {
-		setFechaInicio(new DateTime);
-		setNombre(nombreProceso);
-		setUsuario(tipoUsuario);
+		this.setFechaInicio(new DateTime);
+		this.setNombre(nombreProceso);
+		this.setUsuario(tipoUsuario);
 	}
 	
 	public void setFechaInicio(DateTime fecha) {
