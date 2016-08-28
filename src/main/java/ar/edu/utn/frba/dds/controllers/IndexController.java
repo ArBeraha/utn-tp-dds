@@ -10,7 +10,7 @@ public class IndexController {
 
     @RequestMapping(method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String getIndexPage() {
-        return "static/index.html";
+        return "index.html";
     }
 
 }
