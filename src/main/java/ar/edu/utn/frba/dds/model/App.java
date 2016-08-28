@@ -27,8 +27,8 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 public class App {
 
     private static App instance;
-    private List<PuntoDeInteres> puntosDeInteres;
-    private List<TerminalInteractiva> terminales;
+    private static List<PuntoDeInteres> puntosDeInteres;
+    private static List<TerminalInteractiva> terminales;
     
     //Singleton
     public static App getInstance() {
@@ -40,6 +40,7 @@ public class App {
     
   //Constructor privado por el Singleton
     public App(){
+        terminales = new ArrayList<>();
         puntosDeInteres = populateDummyPOIs();
         this.agregarSucursalesBancoExternas();
         this.agregarCGPExternos();
@@ -57,8 +58,8 @@ public class App {
         this.puntosDeInteres = puntosDeInteres;
     }
 
-    public int agregarTerminal(PuntoDeInteres pdi) {
-        TerminalInteractiva terminal = new TerminalInteractiva();
+    public static int agregarTerminal(Geolocalizacion geolocalizacion) {
+        TerminalInteractiva terminal = new TerminalInteractiva(geolocalizacion);
         terminales.add(terminal);
         return terminal.getId();
     }
@@ -117,7 +118,10 @@ public class App {
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs
     public static List<PuntoDeInteres> populateDummyPOIs() {
         List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
-
+        
+        agregarTerminal(new Geolocalizacion(9, 9)); // ID 1 Cercano al CGP
+        agregarTerminal(new Geolocalizacion(12, 28)); // ID 2 Cercano al Local
+        
         LocalComercial local;
         Horarios horarios = new Horarios();
         Rubro rubroLibreria;

@@ -32,8 +32,8 @@ public class TerminalInteractiva {
     protected int id;
     private Geolocalizacion geolocalizacion;
 
-    public TerminalInteractiva() {
-        setGeolocalizacion(new Geolocalizacion(11.999991, 28.000001));
+    public TerminalInteractiva(Geolocalizacion geolocalizacion) {
+        setGeolocalizacion(geolocalizacion);
         id = contador.incrementAndGet();
     }
     

@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.utn.frba.dds.model.App;
 import ar.edu.utn.frba.dds.model.PuntoDeInteres;
 
+@Service("appService")
+@Transactional
 public class AppServiceImpl implements AppService {
     
     App app;
