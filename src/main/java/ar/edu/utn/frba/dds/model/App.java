@@ -104,7 +104,7 @@ public class App {
     public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra, final DateTime fechaHoraInicio, int idTerminal)
             throws JsonParseException, JsonMappingException, IOException {
         // TODO: Registrar la busqueda como hecha por idTerminal
-        Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio);
+        Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio, idTerminal);
         List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {

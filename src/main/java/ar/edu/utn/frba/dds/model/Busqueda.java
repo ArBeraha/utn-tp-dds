@@ -41,10 +41,12 @@ public class Busqueda {
     private String fechaFormateada;
     private final String SUBJECT = "Terminal interactiva: Demora excesiva en búsqueda de Punto de Interés";
     private String body;
+    private int terminal;
 
-    public Busqueda(String unaFraseBuscada, DateTime fechaHoraInicio) {
+    public Busqueda(String unaFraseBuscada, DateTime fechaHoraInicio, int idTerminal) {
         fecha = fechaHoraInicio;
         fraseBuscada = unaFraseBuscada;
+        terminal = idTerminal;
         fechaFormateada = fecha.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
     }
 
@@ -106,6 +108,17 @@ public class Busqueda {
             System.out.println("E-Mail enviado con éxito");
         }
         writeToFile();
+    }
+
+    
+    
+    public int getTerminal() {
+        return terminal;
+    }
+
+    
+    public void setTerminal(int terminal) {
+        this.terminal = terminal;
     }
 
     private void writeToFile() {
