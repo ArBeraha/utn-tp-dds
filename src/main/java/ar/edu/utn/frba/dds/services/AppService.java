@@ -11,6 +11,8 @@ import ar.edu.utn.frba.dds.model.PuntoDeInteres;
 public interface AppService {
 
     public Map<String, Long> generarReporteBusquedasPorFecha();
+    public Map<Integer, Long> generarReporteBusquedasPorTerminal();
+    public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal);
     public List<PuntoDeInteres> getPois();
     public boolean estaDisponible(int idPoi);
     public List<PuntoDeInteres> getPois(String palabra, DateTime fecha, int idTerminal) throws IOException;

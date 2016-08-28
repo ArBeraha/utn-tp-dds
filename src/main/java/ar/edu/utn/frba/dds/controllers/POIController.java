@@ -64,4 +64,14 @@ public class POIController {
     public @ResponseBody Map<String, Long> generarReporte() {
         return appService.generarReporteBusquedasPorFecha();
     }
+    
+    @RequestMapping(value = { "/reporteTerminal" }, method = RequestMethod.GET)
+    public @ResponseBody Map<Integer, Long> generarReportePorTerminal() {
+        return appService.generarReporteBusquedasPorTerminal();
+    }
+    
+    @RequestMapping(value = { "/reporte/{idTerminal}" }, method = RequestMethod.GET)
+    public @ResponseBody Map<String, Long> generarReporteDeTerminal(@PathVariable("idTerminal") int idTerminal) {
+        return appService.generarReporteBusquedasDeTerminal(idTerminal);
+    }
 }

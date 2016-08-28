@@ -236,4 +236,43 @@ public class App {
         return reporte;
     }
     
+    public Map<Integer, Long> generarReporteBusquedasPorTerminal() {
+        Map<Integer, Long> reporte = new HashMap<>();
+        try {
+            System.out.println("Generando Reporte de Busquedas por terminal:");
+            File file = FileUtils.obtenerArchivoBusquedas();
+            ObjectMapper mapper = new ObjectMapper();
+            List<Busqueda> busquedas = new ArrayList<>();
+            if (file.length() > 0) {
+                busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
+                });
+            }
+            reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> busqueda.getTerminal(), Collectors.counting()));
+            reporte.forEach((terminal, cantidad) -> System.out.println("Terminal : " + terminal + " Cantidad : " + cantidad));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reporte;
+    }
+
+    public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal) {
+        Map<String, Long> reporte = new HashMap<>();
+        try {
+            System.out.println("Generando Reporte de Busquedas de Terminal "+idTerminal + ": ");
+            File file = FileUtils.obtenerArchivoBusquedas();
+            ObjectMapper mapper = new ObjectMapper();
+            List<Busqueda> busquedas = new ArrayList<>();
+            if (file.length() > 0) {
+                busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
+                });
+            }
+           reporte = busquedas.stream().filter( busqueda -> busqueda.getTerminal() == idTerminal)
+           .collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
+            reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reporte;
+    }
+    
 }

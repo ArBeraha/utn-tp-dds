@@ -56,4 +56,14 @@ public class AppServiceImpl implements AppService {
     public PuntoDeInteres poi(int idPoi) {
         return app.buscarPuntoDeInteresPorId(idPoi);
     }
+    
+    @Override
+    public Map<Integer, Long> generarReporteBusquedasPorTerminal(){
+        return app.generarReporteBusquedasPorTerminal();
+    }
+    
+    @Override
+    public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal){
+        return app.generarReporteBusquedasDeTerminal(idTerminal);
+    }
 }
