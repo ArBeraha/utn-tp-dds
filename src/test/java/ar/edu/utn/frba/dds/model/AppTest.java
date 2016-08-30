@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-public class TerminalInteractivaTest {
+public class AppTest {
 
     private App app;
     private LocalComercial local;
