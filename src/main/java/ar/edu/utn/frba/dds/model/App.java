@@ -29,7 +29,7 @@ public class App {
     private static App instance;
     private static List<PuntoDeInteres> puntosDeInteres;
     private static List<TerminalInteractiva> terminales;
-    
+
     //Singleton
     public static App getInstance() {
         if (instance == null) {
@@ -37,25 +37,25 @@ public class App {
         }
         return instance;
     }
-    
-  //Constructor privado por el Singleton
-    public App(){
+
+    //Constructor privado por el Singleton
+    private App() {
         terminales = new ArrayList<>();
         puntosDeInteres = populateDummyPOIs();
         this.agregarSucursalesBancoExternas();
         this.agregarCGPExternos();
     }
-    
+
     public List<PuntoDeInteres> allPOIs() {
         return puntosDeInteres;
     }
-    
+
     public List<PuntoDeInteres> getPuntosDeInteres() {
         return puntosDeInteres;
     }
 
-    public void setPuntosDeInteres(final List<PuntoDeInteres> puntosDeInteres) {
-        this.puntosDeInteres = puntosDeInteres;
+    public void setPuntosDeInteres(final List<PuntoDeInteres> unosPuntosDeInteres) {
+        puntosDeInteres = unosPuntosDeInteres;
     }
 
     public static int agregarTerminal(Geolocalizacion geolocalizacion) {
@@ -63,7 +63,7 @@ public class App {
         terminales.add(terminal);
         return terminal.getId();
     }
-    
+
     public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
         puntosDeInteres.add(pdi);
     }
@@ -71,25 +71,25 @@ public class App {
     public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
         puntosDeInteres.remove(pdi);
     }
-    
+
     public void modificarPuntoDeInteres(PuntoDeInteres pdi, PuntoDeInteres pdiNuevo) {
         pdi.setDireccion(pdiNuevo.getDireccion());
         pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
         pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
     }
-    
+
     public PuntoDeInteres buscarPuntoDeInteresPorId(final int idPoi) {
         List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi == unPoi.getId())
                 .collect(Collectors.toList());
         return pois.get(0);
     }
-    
+
     public TerminalInteractiva buscarTerminalPorId(final int idTerminal) {
         List<TerminalInteractiva> terminal = terminales.stream().filter(unaTerminal -> idTerminal == unaTerminal.getId())
                 .collect(Collectors.toList());
         return terminal.get(0);
     }
-    
+
     public boolean esCercano(int idPoi, int idTerminal) {
         PuntoDeInteres poi = buscarPuntoDeInteresPorId(idPoi);
         TerminalInteractiva terminal = buscarTerminalPorId(idTerminal);
@@ -100,7 +100,7 @@ public class App {
         PuntoDeInteres poi = buscarPuntoDeInteresPorId(idPoi);
         return poi.estaDisponible();
     }
-    
+
     public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra, final DateTime fechaHoraInicio, int idTerminal)
             throws JsonParseException, JsonMappingException, IOException {
         // TODO: Registrar la busqueda como hecha por idTerminal
@@ -114,14 +114,14 @@ public class App {
         nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
         return resultadoBusqueda;
     }
-    
+
     //TODO Esto queda public hasta que se implemente base de datos donde estén guardados los POIs
     public static List<PuntoDeInteres> populateDummyPOIs() {
         List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
-        
+
         agregarTerminal(new Geolocalizacion(9, 9)); // ID 1 Cercano al CGP
         agregarTerminal(new Geolocalizacion(12, 28)); // ID 2 Cercano al Local
-        
+
         LocalComercial local;
         Horarios horarios = new Horarios();
         Rubro rubroLibreria;
@@ -216,7 +216,7 @@ public class App {
             e.printStackTrace();
         }
     }
-    
+
     public Map<String, Long> generarReporteBusquedasPorFecha() {
         Map<String, Long> reporte = new HashMap<>();
         try {
@@ -228,14 +228,15 @@ public class App {
                 busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
                 });
             }
-            reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
+            reporte = busquedas.stream()
+                    .collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
             reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return reporte;
     }
-    
+
     public Map<Integer, Long> generarReporteBusquedasPorTerminal() {
         Map<Integer, Long> reporte = new HashMap<>();
         try {
@@ -247,8 +248,10 @@ public class App {
                 busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
                 });
             }
-            reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> busqueda.getTerminal(), Collectors.counting()));
-            reporte.forEach((terminal, cantidad) -> System.out.println("Terminal : " + terminal + " Cantidad : " + cantidad));
+            reporte = busquedas.stream()
+                    .collect(Collectors.groupingBy(busqueda -> busqueda.getTerminal(), Collectors.counting()));
+            reporte.forEach(
+                    (terminal, cantidad) -> System.out.println("Terminal : " + terminal + " Cantidad : " + cantidad));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -258,7 +261,7 @@ public class App {
     public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal) {
         Map<String, Long> reporte = new HashMap<>();
         try {
-            System.out.println("Generando Reporte de Busquedas de Terminal "+idTerminal + ": ");
+            System.out.println("Generando Reporte de Busquedas de Terminal " + idTerminal + ": ");
             File file = FileUtils.obtenerArchivoBusquedas();
             ObjectMapper mapper = new ObjectMapper();
             List<Busqueda> busquedas = new ArrayList<>();
@@ -266,13 +269,13 @@ public class App {
                 busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
                 });
             }
-           reporte = busquedas.stream().filter( busqueda -> busqueda.getTerminal() == idTerminal)
-           .collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
+            reporte = busquedas.stream().filter(busqueda -> busqueda.getTerminal() == idTerminal)
+                    .collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
             reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return reporte;
     }
-    
+
 }

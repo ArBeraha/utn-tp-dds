@@ -1,31 +1,17 @@
 package ar.edu.utn.frba.dds.model;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 import ar.edu.utn.frba.dds.util.file.FileUtils;
@@ -39,7 +25,6 @@ public class Busqueda {
     private Double duracion;
     private DateTime fecha;
     private String fechaFormateada;
-    private final String SUBJECT = "Terminal interactiva: Demora excesiva en búsqueda de Punto de Interés";
     private String body;
     private int terminal;
 
@@ -104,7 +89,7 @@ public class Busqueda {
             body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
                     + " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
             //Enviamos el mail
-            mailSender.sendMail(SUBJECT, body, false);
+            mailSender.sendMail(properties.getProperty("subject.mail.demora"), body, false);
             System.out.println("E-Mail enviado con éxito");
         }
         writeToFile();
