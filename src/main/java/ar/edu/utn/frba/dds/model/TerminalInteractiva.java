@@ -203,8 +203,8 @@ public class TerminalInteractiva {
         }
     }
 	
-	public actualizarLocalesComerciales(String archivo) throws FileNotFoundException, IOException {
-        Proceso nuevoProceso = new Proceso;
+	public void actualizarLocalesComerciales(String archivo) throws FileNotFoundException, IOException {
+        Proceso nuevoProceso = new Proceso();
 		nuevoProceso.proceso("Actualizar Locales comerciales", "Admin");
 		String cadena;
         FileReader file = new FileReader(archivo);
@@ -213,26 +213,26 @@ public class TerminalInteractiva {
            String[] subCadena = cadena.split(";");
 		   List<PuntoDeInteres> resultado = this.buscarPuntoDeInteres(subCadena[0]);
 		   if (resultado.size() == 0) {
-			   LocalComercial nuevoLocal = new LocalComercial;
+			   LocalComercial nuevoLocal = new LocalComercial(null);
 			   nuevoLocal.setNombre(subCadena[0]);
-			   nuevoLocal.setPalabrasClave(this.obtenerPalabrasClave(subCadena[1]);
+			   nuevoLocal.setPalabrasClave(this.obtenerPalabrasClave(subCadena[1]));
 			   this.agregarPuntoDeInteres(nuevoLocal);
 			   }
 			   else {
-				resultado.get(0).setPalabrasClave(this.obtenerPalabrasClave(subCadena[1]);
+				resultado.get(0).setPalabrasClave(this.obtenerPalabrasClave(subCadena[1]));
 			      }
 			   }
 			   buffer.close();
-			   nuevoProceso.setFechaFin(new DateTime);
-			   nuevoProceso.setResultado("OK"):
+			   nuevoProceso.setFechaFin(new DateTime());
+			   nuevoProceso.setResultado("OK");
 			   nuevoProceso.setMensajeError("-");
 			   this.procesos.add(nuevoProceso);
-        } //TODO Contemplar errores
+        }
 		
-	private ArrayList<String> obtenerPalabrasClave(String[] cadena) {
+	private ArrayList<String> obtenerPalabrasClave(String cadena) {
 		ArrayList<String> nuevasPalabrasClave = new ArrayList<String>();
 		String[] subCadena = cadena.split("");
-		for(i=0, i < subCadena.length, i++) {
+		for(int i=0; i < subCadena.length; i++) {
 		  nuevasPalabrasClave.add(subCadena[i]);
 	    } 
 	    return nuevasPalabrasClave;

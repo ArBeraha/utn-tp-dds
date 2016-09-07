@@ -11,8 +11,8 @@ public class Proceso {
 	private String resultado;
 	private String mensajeError;
 	
-	public proceso(String nombreProceso, String tipoUsuario) {
-		this.setFechaInicio(new DateTime);
+	public void proceso(String nombreProceso, String tipoUsuario) {
+		this.setFechaInicio(new DateTime());
 		this.setNombre(nombreProceso);
 		this.setUsuario(tipoUsuario);
 	}
@@ -33,7 +33,7 @@ public class Proceso {
 		return fechaFin;
 	}
 	
-	public setNombre(String unNombre) {
+	public void setNombre(String unNombre) {
 		this.nombre = unNombre;
 	}
 	
@@ -41,7 +41,7 @@ public class Proceso {
 		return nombre;
 	}
 	
-	public setUsuario(String unUsuario) {
+	public void setUsuario(String unUsuario) {
 		this.usuario = unUsuario;
 	}
 	
@@ -49,7 +49,7 @@ public class Proceso {
 		return usuario;
 	}
 	
-	public setResultado(String unResultado) {
+	public void setResultado(String unResultado) {
 		this.resultado = unResultado;
 	}
 	
@@ -57,7 +57,7 @@ public class Proceso {
 		return resultado;
 	}
 	
-	public setMensajeError(String mensaje) {
+	public void setMensajeError(String mensaje) {
 		this.mensajeError = mensaje;
 	}
 	
