@@ -14,6 +14,10 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
+import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
+import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class AppTest {

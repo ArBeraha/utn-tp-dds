@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.utn.frba.dds.model.PuntoDeInteres;
-import ar.edu.utn.frba.dds.services.AppService;
-import ar.edu.utn.frba.dds.services.CGPService;
-import ar.edu.utn.frba.dds.services.TerminalInteractivaService;
+import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
+import ar.edu.utn.frba.dds.services.app.AppService;
+import ar.edu.utn.frba.dds.services.poi.CGPService;
+import ar.edu.utn.frba.dds.services.poi.TerminalInteractivaService;
 
 @RestController
 public class POIController {
