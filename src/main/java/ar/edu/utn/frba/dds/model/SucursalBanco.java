@@ -14,11 +14,11 @@ public class SucursalBanco extends PuntoDeInteres {
     private String gerente;
     private ArrayList<ServicioBanco> servicios;
     private Horarios horarios;
-    
-    public SucursalBanco(DateTimeProvider dateTimeProviderImpl){
-    	this.dateTimeProvider = dateTimeProviderImpl;
-    	palabrasClave = new ArrayList<>();
-    	id = contador.incrementAndGet();
+
+    public SucursalBanco(DateTimeProvider dateTimeProviderImpl) {
+        this.dateTimeProvider = dateTimeProviderImpl;
+        palabrasClave = new ArrayList<>();
+        id = contador.incrementAndGet();
         this.horarios = new Horarios();
         LocalTime horaInicioLunesAViernes = new LocalTime(10, 0);
         LocalTime horaFinLunesAViernes = new LocalTime(15, 0);
@@ -72,7 +72,7 @@ public class SucursalBanco extends PuntoDeInteres {
         }
         return horarios.atiende(fechaHoraActual);
     }
-    
+
     public boolean estaDisponible(final String nombreServicioBanco) {
         for (ServicioBanco servicio : servicios) {
             if (servicio.getNombre() == nombreServicioBanco) {

@@ -11,25 +11,21 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ar.edu.utn.frba.dds.model.LocalComercial;
-import ar.edu.utn.frba.dds.model.PuntoDeInteres;
-import ar.edu.utn.frba.dds.model.Rubro;
-import ar.edu.utn.frba.dds.model.TerminalInteractiva;
-import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-public class TerminalInteractivaTest {
+import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-    private TerminalInteractiva terminal;
+public class AppTest {
+
+    private App app;
     private LocalComercial local;
 
     @Before
     public void setUp() throws Exception {
         //setUp para estaDisponible
         //        terminal = new TerminalInteractiva();
-        terminal = TerminalInteractiva.getInstance();
+        app = App.getInstance();
 
         /*
          * Si se llega a precisar pasar una hora específica se tendrá que
@@ -43,7 +39,7 @@ public class TerminalInteractivaTest {
         local.setRubro(rubro);
         ArrayList<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
         pois.add(local);
-        terminal.setPuntosDeInteres(pois);
+        app.setPuntosDeInteres(pois);
         ArrayList<String> palabras = new ArrayList<String>();
         palabras.add("Local");
         local.setPalabrasClave(palabras);
@@ -56,20 +52,20 @@ public class TerminalInteractivaTest {
     @Test
     public void buscarYEncontrarPOIKiosco()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("kiosko");
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("kiosko", new DateTime(),999);
         Assert.assertTrue(resultado.contains(local));
     }
 
     public void buscarYEncontrarPOIKioscoPorPalabraClave()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("loCal");
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("loCal", new DateTime(),999);
         Assert.assertTrue(resultado.contains(local));
     }
 
     @Test
     public void buscarYNoEncontrarNingunPOI()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = terminal.buscarPuntoDeInteres("futbol");
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("futbol", new DateTime(),999);
         Assert.assertTrue(resultado.size() == 0);
     }
     

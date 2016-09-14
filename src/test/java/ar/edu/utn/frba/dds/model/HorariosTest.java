@@ -2,14 +2,10 @@ package ar.edu.utn.frba.dds.model;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import ar.edu.utn.frba.dds.model.Horarios;
-import ar.edu.utn.frba.dds.model.RangoHorario;
-
-import org.junit.Assert;
 
 public class HorariosTest {
 

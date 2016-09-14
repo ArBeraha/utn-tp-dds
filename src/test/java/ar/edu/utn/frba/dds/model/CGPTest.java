@@ -9,12 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ar.edu.utn.frba.dds.model.CGP;
-import ar.edu.utn.frba.dds.model.Comuna;
-import ar.edu.utn.frba.dds.model.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.Horarios;
-import ar.edu.utn.frba.dds.model.RangoHorario;
-import ar.edu.utn.frba.dds.model.ServicioCGP;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class CGPTest {

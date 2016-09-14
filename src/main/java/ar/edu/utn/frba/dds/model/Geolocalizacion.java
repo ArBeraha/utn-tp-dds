@@ -23,7 +23,7 @@ public class Geolocalizacion {
     }
 
     public double calcularDistanciaEnCuadras(Geolocalizacion geolocalizacion) {
-        Properties properties = PropertiesFactory.getProperties();
+        Properties properties = PropertiesFactory.getAppProperties();
 
         double unidadCuadraEnMetros = Double.parseDouble(properties.getProperty("unidadCuadraEnMetros"));
         double gradoLatitudEnMetros = Double.parseDouble(properties.getProperty("gradoLatitudEnMetros"));
