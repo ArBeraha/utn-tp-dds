@@ -18,6 +18,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ar.edu.utn.frba.dds.model.accion.Accion;
+import ar.edu.utn.frba.dds.model.accion.Accion1;
+import ar.edu.utn.frba.dds.model.accion.Accion2;
+import ar.edu.utn.frba.dds.model.accion.AccionFactory;
+import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
@@ -46,7 +51,8 @@ public class App {
     private static List<PuntoDeInteres> puntosDeInteres;
     private static List<TerminalInteractiva> terminales;
     private static List<Usuario> usuarios;
-
+    private static List<ResultadoAccion> resultadosAcciones;
+    
     //Singleton
     public static App getInstance() {
         if (instance == null) {
@@ -59,8 +65,10 @@ public class App {
     private App() {
         terminales = new ArrayList<>();
         usuarios = new ArrayList<>();
+        setResultadosAcciones(new ArrayList<>());
         puntosDeInteres = populateDummyPOIs();
         populateDummyUsers();
+        populateAcciones();
         try {
             this.agregarSucursalesBancoExternas();
             this.agregarCGPExternos();
@@ -226,11 +234,22 @@ public class App {
         return pois;
     }
 
+    private static void populateAcciones(){
+        AccionFactory.acciones = new HashMap<Integer, Accion>();
+        AccionFactory.addAccion(new Accion1());
+        AccionFactory.addAccion(new Accion2());
+        List<Accion> multipleList = new ArrayList<Accion>();
+        multipleList.add(new Accion1());
+        multipleList.add(new Accion2());
+        AccionFactory.addAccionMultiple(multipleList);
+    }
+    
     private static void populateDummyUsers() {
         agregarUsuario("terminalAbasto", "pwd", new Terminal());
         agregarUsuario("terminalDOT", "pwd", new Terminal());
         agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal());
         agregarUsuario("admin", "1234", new Administrador());
+        
     }
 
     private void agregarSucursalesBancoExternas() {
@@ -316,6 +335,24 @@ public class App {
             e.printStackTrace();
         }
         return reporte;
+    }
+    
+    public Usuario buscarUsuarioPorId(final int idUsuario) {
+        List<Usuario> usuario = usuarios.stream().filter(unaUsuario -> idUsuario == unaUsuario.getId())
+                .collect(Collectors.toList());
+        return usuario.get(0);
+    }
+
+    public static List<ResultadoAccion> getResultadosAcciones() {
+        return resultadosAcciones;
+    }
+
+    public static void setResultadosAcciones(List<ResultadoAccion> resultadosAcciones) {
+        App.resultadosAcciones = resultadosAcciones;
+    }
+    
+    public static void addResultadosAcciones(ResultadoAccion resultadoAccion) {
+        resultadosAcciones.add(resultadoAccion);
     }
 
 }
