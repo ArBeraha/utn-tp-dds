@@ -8,8 +8,12 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.utn.frba.dds.dao.DaoFactory;
+import ar.edu.utn.frba.dds.dao.user.UserDAO;
 import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.model.exceptions.LoginException;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
+import ar.edu.utn.frba.dds.model.user.Usuario;
 
 @Service("appService")
 @Transactional
@@ -28,7 +32,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public List<PuntoDeInteres> getPois() {
-        return app.allPOIs();
+        return app.getPuntosDeInteres();
     }
     
     @Override
@@ -65,5 +69,13 @@ public class AppServiceImpl implements AppService {
     @Override
     public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal){
         return app.generarReporteBusquedasDeTerminal(idTerminal);
+    }
+
+    //TODO Esto cuando tengamos BD no le va a pasar la lista de usuarios de la app.
+    // El UserDAO va a ir a la base a buscar los usuarios
+    @Override
+    public Usuario loginUser(String user, String pass) throws LoginException {
+        UserDAO userDao = DaoFactory.getUserDao();
+        return userDao.login(user, pass, app.getUsuarios());
     }
 }

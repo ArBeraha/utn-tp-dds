@@ -2,6 +2,9 @@ package ar.edu.utn.frba.dds.model.user;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({ "pass" })
 public class Usuario {
 
     private static final AtomicInteger contador = new AtomicInteger(0);
@@ -14,7 +17,7 @@ public class Usuario {
     public Usuario() {
         id = contador.incrementAndGet();
     }
-    
+
     public Usuario(String unUsername, String unPassword, TipoUsuario unTipousuario) {
         id = contador.incrementAndGet();
         username = unUsername;
@@ -44,6 +47,14 @@ public class Usuario {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 
 }
