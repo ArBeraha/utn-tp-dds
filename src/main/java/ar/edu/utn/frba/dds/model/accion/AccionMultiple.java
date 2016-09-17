@@ -14,10 +14,10 @@ public class AccionMultiple extends Accion {
     }
 
     @Override
-    public boolean execute(Usuario usuario) {
+    public boolean execute(Usuario usuario, List<Integer> params) {
         System.out.println("Ejecutando AccionMultiple id:"+id);
         boolean exito;
-        exito = acciones.stream().allMatch(a -> a.execute(usuario));
+        exito = acciones.stream().allMatch(a -> a.execute(usuario, params));
         return exito;
     }
 

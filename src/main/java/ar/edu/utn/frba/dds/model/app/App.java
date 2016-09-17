@@ -22,6 +22,7 @@ import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.accion.Accion1;
 import ar.edu.utn.frba.dds.model.accion.Accion2;
 import ar.edu.utn.frba.dds.model.accion.AccionFactory;
+import ar.edu.utn.frba.dds.model.accion.AgregarAcciones;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
@@ -67,8 +68,9 @@ public class App {
         usuarios = new ArrayList<>();
         setResultadosAcciones(new ArrayList<>());
         puntosDeInteres = populateDummyPOIs();
-        populateDummyUsers();
         populateAcciones();
+        populateDummyUsers();
+        
         try {
             this.agregarSucursalesBancoExternas();
             this.agregarCGPExternos();
@@ -238,9 +240,11 @@ public class App {
         AccionFactory.acciones = new HashMap<Integer, Accion>();
         AccionFactory.addAccion(new Accion1());
         AccionFactory.addAccion(new Accion2());
+        AccionFactory.addAccion(new AgregarAcciones());
         List<Accion> multipleList = new ArrayList<Accion>();
         multipleList.add(new Accion1());
         multipleList.add(new Accion2());
+        multipleList.add(new AgregarAcciones());
         AccionFactory.addAccionMultiple(multipleList);
     }
     
@@ -335,6 +339,10 @@ public class App {
             e.printStackTrace();
         }
         return reporte;
+    }
+    
+    public List<Usuario> getUsuarios(){
+        return usuarios;
     }
     
     public Usuario buscarUsuarioPorId(final int idUsuario) {

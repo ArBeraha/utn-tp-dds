@@ -89,7 +89,7 @@ public class Busqueda {
             body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
                     + " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
             //Enviamos el mail
-            mailSender.sendMail(properties.getProperty("subject.mail.demora"), body, false);
+            mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"), body, false);
             System.out.println("E-Mail enviado con éxito");
         }
         writeToFile();

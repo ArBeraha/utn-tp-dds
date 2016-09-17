@@ -1,12 +1,13 @@
 package ar.edu.utn.frba.dds.model.user;
 
-import ar.edu.utn.frba.dds.model.accion.Accion;
+import java.util.List;
 
+import ar.edu.utn.frba.dds.model.accion.Accion;
 
 public class EnviarMail extends ErrorHandler {
 
     @Override
-    protected boolean handle(Usuario usuario, Accion accion) {
+    protected boolean handle(Usuario usuario, Accion accion, List<Integer> params) {
         // TODO Auto-generated method stub
         return false;
     }

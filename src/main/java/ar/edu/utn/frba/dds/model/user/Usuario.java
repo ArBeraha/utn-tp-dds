@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.model.user;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ar.edu.utn.frba.dds.model.accion.Accion;
@@ -23,6 +24,7 @@ public class Usuario {
         username = unUsername;
         pass = unPassword;
         setTipoUsuario(unTipousuario);
+        errorHandler = new NoHacerNada();
     }
 
     public static AtomicInteger getContador() {
@@ -61,10 +63,21 @@ public class Usuario {
         return tipoUsuario.getAccionesDisponibles().contains(accion);
     }
     
-    public boolean ejecutarAccion(Accion accion){
-        if (!accion.execute(this))
-            return errorHandler.handle(this, accion);
+    public boolean ejecutarAccion(Accion accion, List<Integer> params){
+        if (!accion.execute(this,params))
+            return errorHandler.handle(this, accion, params);
         return true;
     }
-
+    
+    public void agregarAccion(Accion accion){
+        tipoUsuario.addAccionesDisponibles(accion);
+    }
+    
+    public void agregarAccion(List<Accion> acciones){
+        tipoUsuario.addAccionesDisponibles(acciones);
+    }
+    
+    public List<Accion> getAccionesDisponibles(){
+        return tipoUsuario.getAccionesDisponibles();
+    }
 }

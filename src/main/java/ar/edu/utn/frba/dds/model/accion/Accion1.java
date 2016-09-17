@@ -1,5 +1,8 @@
 package ar.edu.utn.frba.dds.model.accion;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.model.user.Usuario;
@@ -8,15 +11,23 @@ import ar.edu.utn.frba.dds.model.user.Usuario;
 public class Accion1 extends Accion {
 
     @Override
-    public boolean execute(Usuario usuario) {
-        ResultadoAccion resultado = new ResultadoAccion(usuario,this);
+    public boolean execute(Usuario usuario, List<Integer> params) {
+        System.out.println("Ejecutando Accion: Definir accion multiple");
+        System.out.println("Params:"+params);
         boolean exito = true;
-        System.out.println("Ejecutando Accion1");
+        ResultadoAccion resultado = new ResultadoAccion(usuario, this);
+        try {
+            List<Accion> acciones = new ArrayList<Accion>();
+            AccionFactory factory = new AccionFactory();
+            params.forEach(idAccion -> acciones.add(factory.getAccion(idAccion)));
+            int nuevaAccion = AccionFactory.addAccionMultiple(acciones);
+            usuario.agregarAccion(factory.getAccion(nuevaAccion));
+        } catch (Exception e) {
+            return false;
+        }
         resultado.setResultados(new DateTime(), exito);
         return exito;
     }
-    
-
 
     @Override
     public boolean undo() {
