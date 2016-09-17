@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.model;
+package ar.edu.utn.frba.dds.model.poi;
 
 public enum TipoPoi {
     CGP("CGP"), LOCAL_COMERCIAL("local comercial"), PARADA_COLECTIVO("parada de colectivo"),

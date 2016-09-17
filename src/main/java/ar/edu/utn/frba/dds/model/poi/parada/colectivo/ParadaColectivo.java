@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
+import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 
 public class ParadaColectivo extends PuntoDeInteres {
 
