@@ -12,6 +12,7 @@ public class LocalComercial extends PuntoDeInteres {
     private Horarios horarios;
     private Rubro rubro;
     private HorariosEspeciales horariosEspeciales;
+    private String tipo = TipoPoi.LOCAL_COMERCIAL.toString();
 
     public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
@@ -24,6 +25,7 @@ public class LocalComercial extends PuntoDeInteres {
         return id;
     }
 
+    @Override
     public String getNombre() {
         return nombre;
     }
@@ -82,6 +84,11 @@ public class LocalComercial extends PuntoDeInteres {
         boolean rubroTienePalabra = rubro.getNombre().toLowerCase().contains(palabra.toLowerCase());
         boolean esPalabraClave = this.esPalabraClave(palabra);
         return (nombreTienePalabra || rubroTienePalabra || esPalabraClave);
+    }
+
+    @Override
+    public String getTipo() {
+        return tipo;
     }
 
 }
