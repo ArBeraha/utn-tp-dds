@@ -94,7 +94,6 @@ public class App {
     private static int agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
         Encoder encoder = Encoder.getInstance();
         Usuario usuario = new Usuario(username, encoder.encode(password), tipoUsuario);
-        System.out.println("Agregando usuario: " + username + " con pass encodeada: " + usuario.getPass());
         usuarios.add(usuario);
         return usuario.getId();
     }
