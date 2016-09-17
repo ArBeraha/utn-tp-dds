@@ -1,1 +1,1 @@
-var app = angular.module('terminal-interactiva', ['ui.bootstrap']);
+var app = angular.module('terminal-interactiva', ['ngRoute', 'ui.bootstrap', 'ngAnimate', 'toaster']);

@@ -43,6 +43,10 @@ public abstract class PuntoDeInteres {
 
     public abstract boolean estaDisponible();
 
+    public abstract String getNombre();
+
+    public abstract String getTipo();
+
     public boolean esCercano(final Geolocalizacion geolocalizacion) {
         return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < 5;
     }

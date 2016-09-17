@@ -1,13 +1,16 @@
-app.factory('BuscarPOIService', function () {
+app.factory('BuscarPOIService', ['$http', function ($http) {
     'use strict';
 
     return {
         buscarPOI: function (texto) {
-            if (texto !== undefined && texto !== '') {
-                texto.trim();
-                console.log(texto);
-            }
+            return $http.get('/DDS2016/pois/1/' + texto);
+        },
+        esCercano: function (poiId) {
+            return $http.get('/DDS2016/poi/' + poiId + '/1/cercano');
+        },
+        estaDisponible: function (poiId) {
+            return $http.get('/DDS2016/poi/' + poiId + '/disponible');
         }
     };
 
-});
+}]);

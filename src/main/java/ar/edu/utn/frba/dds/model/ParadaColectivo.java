@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class ParadaColectivo extends PuntoDeInteres {
 
+    private String linea;
+    private String tipo = TipoPoi.PARADA_COLECTIVO.toString();
+
     public ParadaColectivo() {
         palabrasClave = new ArrayList<>();
         id = contador.incrementAndGet();
     }
-
-    private String linea;
 
     public String getLinea() {
         return linea;
@@ -34,6 +35,16 @@ public class ParadaColectivo extends PuntoDeInteres {
         boolean lineaTienePalabra = linea.contains(palabra);
         boolean esPalabraClave = this.esPalabraClave(palabra);
         return (lineaTienePalabra || esPalabraClave);
+    }
+
+    @Override
+    public String getNombre() {
+        return "Parada del " + linea;
+    }
+
+    @Override
+    public String getTipo() {
+        return tipo;
     }
 
 }

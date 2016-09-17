@@ -14,6 +14,7 @@ public class SucursalBanco extends PuntoDeInteres {
     private String gerente;
     private ArrayList<ServicioBanco> servicios;
     private Horarios horarios;
+    private String tipo = TipoPoi.SUCURSAL_BANCO.toString();
 
     public SucursalBanco(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
@@ -112,5 +113,15 @@ public class SucursalBanco extends PuntoDeInteres {
         }
         ret.delete(ret.length() - 2, ret.length());
         return ret.toString();
+    }
+
+    @Override
+    public String getNombre() {
+        return banco;
+    }
+
+    @Override
+    public String getTipo() {
+        return tipo;
     }
 }

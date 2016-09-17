@@ -11,6 +11,7 @@ public class CGP extends PuntoDeInteres {
 
     private ArrayList<ServicioCGP> servicios;
     private Comuna comuna;
+    private String tipo = TipoPoi.CGP.toString();
     private List<String> zonas;
     private String nombreDirector;
     private String telefono;
@@ -52,7 +53,7 @@ public class CGP extends PuntoDeInteres {
     public String getNombreDirector() {
         return nombreDirector;
     }
-    
+
     public void setNombreDirector(String nombreDirector) {
         this.nombreDirector = nombreDirector;
     }
@@ -105,6 +106,16 @@ public class CGP extends PuntoDeInteres {
     @Override
     public boolean esCercano(final Geolocalizacion geolocalizacion) {
         return this.getComuna().incluyeGeolocalizacion(geolocalizacion);
+    }
+
+    @Override
+    public String getNombre() {
+        return "CGP de la comuna N° " + comuna.getNumeroComuna();
+    }
+
+    @Override
+    public String getTipo() {
+        return tipo;
     }
 
 }

@@ -1,8 +1,4 @@
-app.controller('MainController', ['$scope', "BuscarPOIService", function ($scope, BuscarPOIService) {
+app.controller('MainController', ['$scope', "BuscarPOIService", "toaster", function ($scope, BuscarPOIService, toaster) {
     'use strict';
-
-    $scope.buscarPOI = function (texto) {
-        BuscarPOIService.buscarPOI(texto);
-    };
 
 }]);
