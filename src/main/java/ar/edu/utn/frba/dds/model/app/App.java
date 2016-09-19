@@ -19,10 +19,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ar.edu.utn.frba.dds.model.accion.Accion;
-import ar.edu.utn.frba.dds.model.accion.Accion1;
-import ar.edu.utn.frba.dds.model.accion.Accion2;
+import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
+import ar.edu.utn.frba.dds.model.accion.ActualizarLocalesComerciales;
 import ar.edu.utn.frba.dds.model.accion.AccionFactory;
-import ar.edu.utn.frba.dds.model.accion.AgregarAcciones;
+import ar.edu.utn.frba.dds.model.accion.AgregarAccionesATodos;
+import ar.edu.utn.frba.dds.model.accion.BajaPoisInactivos;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
@@ -124,7 +125,10 @@ public class App {
     public PuntoDeInteres buscarPuntoDeInteresPorId(final int idPoi) {
         List<PuntoDeInteres> pois = puntosDeInteres.stream().filter(unPoi -> idPoi == unPoi.getId())
                 .collect(Collectors.toList());
-        return pois.get(0);
+        if (pois.size()!=0)
+            return pois.get(0);
+        else
+            return null;
     }
 
     public TerminalInteractiva buscarTerminalPorId(final int idTerminal) {
@@ -148,13 +152,19 @@ public class App {
             throws JsonParseException, JsonMappingException, IOException {
         // TODO: Registrar la busqueda como hecha por idTerminal
         Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio, idTerminal);
+        List<PuntoDeInteres> resultadoBusqueda = buscarPuntoDeInteresSinAlmacenarResultado(palabra);
+        nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
+        return resultadoBusqueda;
+    }
+    
+    public List<PuntoDeInteres> buscarPuntoDeInteresSinAlmacenarResultado(final String palabra)
+            throws JsonParseException, JsonMappingException, IOException {
         List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
         for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
             if (puntoDeInteres.tienePalabra(palabra)) {
                 resultadoBusqueda.add(puntoDeInteres);
             }
         }
-        nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
         return resultadoBusqueda;
     }
 
@@ -238,13 +248,14 @@ public class App {
 
     private static void populateAcciones(){
         AccionFactory.acciones = new HashMap<Integer, Accion>();
-        AccionFactory.addAccion(new Accion1());
-        AccionFactory.addAccion(new Accion2());
-        AccionFactory.addAccion(new AgregarAcciones());
+        AccionFactory.addAccion(new DefinirProcesoMultiple());
+        AccionFactory.addAccion(new ActualizarLocalesComerciales());
+        AccionFactory.addAccion(new AgregarAccionesATodos());
+        AccionFactory.addAccion(new BajaPoisInactivos());
         List<Accion> multipleList = new ArrayList<Accion>();
-        multipleList.add(new Accion1());
-        multipleList.add(new Accion2());
-        multipleList.add(new AgregarAcciones());
+        multipleList.add(new DefinirProcesoMultiple());
+        multipleList.add(new ActualizarLocalesComerciales());
+        multipleList.add(new AgregarAccionesATodos());
         AccionFactory.addAccionMultiple(multipleList);
     }
     

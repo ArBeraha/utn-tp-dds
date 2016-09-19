@@ -3,42 +3,34 @@ package ar.edu.utn.frba.dds.model.accion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
 // Accion crear proceso multiple
-public class Accion1 extends Accion {
+public class DefinirProcesoMultiple extends Accion {
 
+    public DefinirProcesoMultiple(){
+        this.nombre = "Definición de procesos multiples";
+    }
+    
     @Override
     public boolean execute(Usuario usuario, List<Integer> params) {
         System.out.println("Ejecutando Accion: Definir accion multiple");
         System.out.println("Params:"+params);
-        boolean exito = true;
-        ResultadoAccion resultado = new ResultadoAccion(usuario, this);
         try {
             List<Accion> acciones = new ArrayList<Accion>();
-            AccionFactory factory = new AccionFactory();
-            params.forEach(idAccion -> acciones.add(factory.getAccion(idAccion)));
+            params.forEach(idAccion -> acciones.add(AccionFactory.getAccion(idAccion)));
             int nuevaAccion = AccionFactory.addAccionMultiple(acciones);
-            usuario.agregarAccion(factory.getAccion(nuevaAccion));
+            usuario.agregarAccion(AccionFactory.getAccion(nuevaAccion));
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-        resultado.setResultados(new DateTime(), exito);
-        return exito;
+        return true;
     }
 
     @Override
-    public boolean undo() {
+    public boolean undo(Usuario usuario, List<Integer> params) {
         // TODO Auto-generated method stub
         return false;
     }
-
-    @Override
-    public String toString() {
-        // TODO Auto-generated method stub
-        return "Accion1";
-    }
-
 }

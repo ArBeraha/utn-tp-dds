@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.model;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -15,10 +14,6 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import ar.edu.utn.frba.dds.model.accion.Accion;
-import ar.edu.utn.frba.dds.model.accion.Accion1;
-import ar.edu.utn.frba.dds.model.accion.Accion2;
-import ar.edu.utn.frba.dds.model.accion.AccionFactory;
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;

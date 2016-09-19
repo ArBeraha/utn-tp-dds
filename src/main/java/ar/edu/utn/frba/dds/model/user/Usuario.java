@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ar.edu.utn.frba.dds.model.accion.Accion;
+import ar.edu.utn.frba.dds.model.user.error.ErrorHandler;
+import ar.edu.utn.frba.dds.model.user.error.NoHacerNada;
 
 public class Usuario {
 
@@ -14,6 +16,7 @@ public class Usuario {
     private String pass;
     private TipoUsuario tipoUsuario;
     private ErrorHandler errorHandler;
+    private String email;
 
     public Usuario() {
         id = contador.incrementAndGet();
@@ -64,7 +67,7 @@ public class Usuario {
     }
     
     public boolean ejecutarAccion(Accion accion, List<Integer> params){
-        if (!accion.execute(this,params))
+        if (!accion.executeWithReport(this,params))
             return errorHandler.handle(this, accion, params);
         return true;
     }
@@ -79,5 +82,21 @@ public class Usuario {
     
     public List<Accion> getAccionesDisponibles(){
         return tipoUsuario.getAccionesDisponibles();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public ErrorHandler getErrorHandler() {
+        return errorHandler;
+    }
+
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
     }
 }

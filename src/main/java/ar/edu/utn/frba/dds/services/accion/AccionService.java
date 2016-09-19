@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds.services.accion;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
 
 public interface AccionService {
 
-    public List<Integer> getAccionesDisponibles(int idUsuario);
+    public Map<Integer, String> getAccionesDisponibles(int idUsuario);
     public boolean execute(int idAccion, int idUsuario, List<Integer> params);
 }

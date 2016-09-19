@@ -1,10 +1,7 @@
 package ar.edu.utn.frba.dds.model.accion;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AccionFactory {
     public static HashMap<Integer, Accion> acciones;
@@ -13,7 +10,7 @@ public class AccionFactory {
     public AccionFactory(){
     }
     
-    public Accion getAccion(int key){
+    public static Accion getAccion(int key){
         return acciones.get(key);
     }
     

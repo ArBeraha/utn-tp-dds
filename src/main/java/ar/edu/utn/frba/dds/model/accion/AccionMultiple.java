@@ -1,37 +1,25 @@
 package ar.edu.utn.frba.dds.model.accion;
 
 import java.util.List;
-import org.joda.time.DateTime;
-
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
 public class AccionMultiple extends Accion {
     
     private List<Accion> acciones;
-
+    
     public AccionMultiple(List<Accion> acciones){
         this.acciones = acciones;
+        this.nombre = "Proceso multiple id:"+id;
     }
 
     @Override
     public boolean execute(Usuario usuario, List<Integer> params) {
         System.out.println("Ejecutando AccionMultiple id:"+id);
-        boolean exito;
-        exito = acciones.stream().allMatch(a -> a.execute(usuario, params));
-        return exito;
+        return acciones.stream().allMatch(a -> a.executeWithReport(usuario, params));
     }
 
     @Override
-    public boolean undo() {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean undo(Usuario usuario, List<Integer> params) {
+        return acciones.stream().allMatch(a -> a.undo(usuario,params));
     }
-
-    @Override
-    public String toString() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
 }
