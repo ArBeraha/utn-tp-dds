@@ -101,7 +101,7 @@ public class App {
         return terminal.getId();
     }
 
-    private static int agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
+    public static int agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Usuario usuario = new Usuario(username, encoder.encode(password), tipoUsuario);
         usuarios.add(usuario);
@@ -248,10 +248,10 @@ public class App {
 
     private static void populateAcciones(){
         AccionFactory.acciones = new HashMap<Integer, Accion>();
-        AccionFactory.addAccion(new DefinirProcesoMultiple());
         AccionFactory.addAccion(new ActualizarLocalesComerciales());
-        AccionFactory.addAccion(new AgregarAccionesATodos());
         AccionFactory.addAccion(new BajaPoisInactivos());
+        AccionFactory.addAccion(new AgregarAccionesATodos());
+        AccionFactory.addAccion(new DefinirProcesoMultiple());
         List<Accion> multipleList = new ArrayList<Accion>();
         multipleList.add(new DefinirProcesoMultiple());
         multipleList.add(new ActualizarLocalesComerciales());

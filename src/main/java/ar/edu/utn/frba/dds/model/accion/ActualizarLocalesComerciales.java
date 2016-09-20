@@ -6,23 +6,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+
+import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
+import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
+import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 // Actualizar locales comerciales
 public class ActualizarLocalesComerciales extends Accion {
 
-    public ActualizarLocalesComerciales(){
+    public ActualizarLocalesComerciales() {
         this.nombre = "Actualización de locales comerciales";
     }
-    
+
     @Override
     public boolean execute(Usuario usuario, List<Integer> params) {
-        System.out.println("Ejecutando Accion2");
         Properties properties = PropertiesFactory.getAppProperties();
         String archivo = properties.getProperty("archivo.actualizacion.locales.comerciales");
         String cadena;
@@ -33,12 +37,26 @@ public class ActualizarLocalesComerciales extends Accion {
                 String[] subCadena = cadena.split(";");
                 List<PuntoDeInteres> resultado = App.getInstance().buscarPuntoDeInteresSinAlmacenarResultado(subCadena[0]);
                 if (resultado.size() == 0) {
-                    LocalComercial nuevoLocal = new LocalComercial(null);
+                    LocalComercial nuevoLocal = new LocalComercial(new DateTimeProviderImpl(new DateTime()));
                     nuevoLocal.setNombre(subCadena[0]);
+                    System.out.println("SUB0:"+ subCadena[0]);
+                    System.out.println("SUB1:"+ subCadena[1]);
                     nuevoLocal.setPalabrasClave(this.obtenerPalabrasClave(subCadena[1]));
+                    Rubro rubro = new Rubro();
+                    rubro.setNombre("Default");
+                    rubro.setRadioCercania(5);
+                    nuevoLocal.setRubro(rubro);
                     App.getInstance().agregarPuntoDeInteres(nuevoLocal);
+                    System.out.println("Se agregó el local comercial " + subCadena[0]);
                 } else {
-                    resultado.get(0).setPalabrasClave(this.obtenerPalabrasClave(subCadena[1]));
+                    LocalComercial local = (LocalComercial) resultado.get(0);
+                    ArrayList<String> palabras = local.getPalabrasClave();
+                    List<String> palabrasNuevas = this.obtenerPalabrasClave(subCadena[1]);
+                    List<String> palabrasNuevasDistintas = palabrasNuevas.stream().filter(palabra -> !palabras.contains(palabra)).collect(Collectors.toList());
+                    palabras.addAll(palabrasNuevasDistintas);
+                    local.setPalabrasClave(palabras);
+                    System.out.println(
+                            "Se agregaron al local comercial " + subCadena[0] + " las palabras clave: " + palabrasNuevasDistintas);
                 }
             }
             buffer.close();
@@ -57,7 +75,7 @@ public class ActualizarLocalesComerciales extends Accion {
 
     private ArrayList<String> obtenerPalabrasClave(String cadena) {
         ArrayList<String> nuevasPalabrasClave = new ArrayList<String>();
-        String[] subCadena = cadena.split("");
+        String[] subCadena = cadena.split(" ");
         for (int i = 0; i < subCadena.length; i++) {
             nuevasPalabrasClave.add(subCadena[i]);
         }

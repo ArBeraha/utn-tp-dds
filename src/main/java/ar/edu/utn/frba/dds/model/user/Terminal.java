@@ -11,8 +11,6 @@ public class Terminal extends TipoUsuario {
         nombreTipoUsuario = "Terminal";
         accionesDisponibles = new ArrayList<Accion>();
         accionesDisponibles.add(AccionFactory.getAccion(0));
-        accionesDisponibles.add(AccionFactory.getAccion(1));
         accionesDisponibles.add(AccionFactory.getAccion(2));
-        accionesDisponibles.add(AccionFactory.getAccion(3));
     }
 }

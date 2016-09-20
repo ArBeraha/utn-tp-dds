@@ -23,4 +23,8 @@ public class AccionFactory {
         return addAccion(new AccionMultiple(acciones));
     }
     
+    public static HashMap<Integer, Accion> getAcciones(){
+        return acciones;
+    }
+    
 }
