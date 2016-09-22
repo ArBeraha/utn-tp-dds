@@ -22,31 +22,31 @@ public class ResultadoAccion {
         this.usuario = usuario;
         this.parametros = parametros;
     }
-    
-    public void setResultados(DateTime fin, boolean exito){
+
+    public void setResultados(DateTime fin, boolean exito) {
         this.fin = fin;
         this.exito = exito;
-        if (exito==false) 
-                mensaje = accion.getMensajeError();
+        if (exito == false)
+            mensaje = accion.getMensajeError();
         App.addResultadosAcciones(this);
     }
-    
-    public void undo(Usuario usuario, List<Integer> params){
-        accion.undo(usuario,params);
+
+    public boolean undo() {
+        return accion.undo(usuario, parametros);
     }
-    
+
     public DateTime getInicio() {
         return inicio;
     }
-    
+
     public DateTime getFin() {
         return fin;
     }
-    
+
     public Accion getAccion() {
         return accion;
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -54,11 +54,11 @@ public class ResultadoAccion {
     public String getMensaje() {
         return mensaje;
     }
-    
+
     public List<Integer> getParametros() {
         return parametros;
     }
-    
+
     public boolean isExito() {
         return exito;
     }

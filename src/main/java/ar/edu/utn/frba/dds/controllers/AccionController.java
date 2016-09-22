@@ -38,4 +38,10 @@ public class AccionController {
             @PathVariable("idUsuario") int idUsuario, @PathVariable("params") List<Integer> params) throws Exception {
         return accionService.execute(idAccion, idUsuario, params);
     }
+    
+  //Endpoint para ejecutar undo de la ultima accion ejecutada
+    @RequestMapping(value = { "/undo/{idUsuario}/" }, method = RequestMethod.GET)
+    public @ResponseBody boolean undo(@PathVariable("idUsuario") int idUsuario) throws Exception {
+        return accionService.undo(idUsuario);
+    }
 }
