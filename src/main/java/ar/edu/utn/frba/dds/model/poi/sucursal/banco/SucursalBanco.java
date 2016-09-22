@@ -8,6 +8,7 @@ import org.joda.time.LocalTime;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
 public class SucursalBanco extends PuntoDeInteres {
@@ -17,6 +18,7 @@ public class SucursalBanco extends PuntoDeInteres {
     private String gerente;
     private ArrayList<ServicioBanco> servicios;
     private Horarios horarios;
+    private String tipo = TipoPoi.SUCURSAL_BANCO.toString();
 
     public SucursalBanco(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
@@ -115,5 +117,15 @@ public class SucursalBanco extends PuntoDeInteres {
         }
         ret.delete(ret.length() - 2, ret.length());
         return ret.toString();
+    }
+
+    @Override
+    public String getNombre() {
+        return banco;
+    }
+
+    @Override
+    public String getTipo() {
+        return tipo;
     }
 }

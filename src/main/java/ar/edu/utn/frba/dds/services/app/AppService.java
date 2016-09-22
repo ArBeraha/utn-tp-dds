@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 
+import ar.edu.utn.frba.dds.model.exceptions.LoginException;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
+import ar.edu.utn.frba.dds.model.user.Usuario;
 
 public interface AppService {
 
@@ -18,4 +20,6 @@ public interface AppService {
     public List<PuntoDeInteres> getPois(String palabra, DateTime fecha, int idTerminal) throws IOException;
     public boolean esCercano(int idPoi, int idTerminal);
     public PuntoDeInteres poi(int idPoi);
+    public Usuario loginUser(String user, String pass) throws LoginException;
+    
 }

@@ -6,7 +6,7 @@ import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 
 public class TerminalInteractiva {
-    
+
     protected static final AtomicInteger contador = new AtomicInteger(0);
     protected int id;
     private Geolocalizacion geolocalizacion;
@@ -15,7 +15,7 @@ public class TerminalInteractiva {
         setGeolocalizacion(geolocalizacion);
         id = contador.incrementAndGet();
     }
-    
+
     public static AtomicInteger getContador() {
         return contador;
     }
@@ -35,5 +35,5 @@ public class TerminalInteractiva {
     public boolean esCercano(final PuntoDeInteres poi) {
         return poi.esCercano(this.getGeolocalizacion());
     }
-  
+
 }

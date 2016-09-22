@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -19,11 +18,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ar.edu.utn.frba.dds.model.accion.Accion;
-import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
-import ar.edu.utn.frba.dds.model.accion.ActualizarLocalesComerciales;
 import ar.edu.utn.frba.dds.model.accion.AccionFactory;
+import ar.edu.utn.frba.dds.model.accion.ActualizarLocalesComerciales;
 import ar.edu.utn.frba.dds.model.accion.AgregarAccionesATodos;
 import ar.edu.utn.frba.dds.model.accion.BajaPoisInactivos;
+import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
@@ -35,6 +34,7 @@ import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
+import ar.edu.utn.frba.dds.model.security.Encoder;
 import ar.edu.utn.frba.dds.model.terminal.interactiva.TerminalInteractiva;
 import ar.edu.utn.frba.dds.model.user.Administrador;
 import ar.edu.utn.frba.dds.model.user.Terminal;
@@ -83,12 +83,12 @@ public class App {
         }
     }
 
-    public List<PuntoDeInteres> allPOIs() {
-        return puntosDeInteres;
-    }
-
     public List<PuntoDeInteres> getPuntosDeInteres() {
         return puntosDeInteres;
+    }
+    
+    public List<Usuario> getUsuarios() {
+        return usuarios;
     }
 
     public void setPuntosDeInteres(final List<PuntoDeInteres> unosPuntosDeInteres) {
@@ -102,7 +102,7 @@ public class App {
     }
 
     public static int agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Encoder encoder = Encoder.getInstance();
         Usuario usuario = new Usuario(username, encoder.encode(password), tipoUsuario);
         usuarios.add(usuario);
         return usuario.getId();
@@ -350,10 +350,6 @@ public class App {
             e.printStackTrace();
         }
         return reporte;
-    }
-    
-    public List<Usuario> getUsuarios(){
-        return usuarios;
     }
     
     public Usuario buscarUsuarioPorId(final int idUsuario) {

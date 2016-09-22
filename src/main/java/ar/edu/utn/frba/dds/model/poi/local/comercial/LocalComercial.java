@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.HorariosEspeciales;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
 public class LocalComercial extends PuntoDeInteres {
@@ -17,6 +18,7 @@ public class LocalComercial extends PuntoDeInteres {
     private Horarios horarios;
     private Rubro rubro;
     private HorariosEspeciales horariosEspeciales;
+    private String tipo = TipoPoi.LOCAL_COMERCIAL.toString();
 
     public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
@@ -29,6 +31,7 @@ public class LocalComercial extends PuntoDeInteres {
         return id;
     }
 
+    @Override
     public String getNombre() {
         return nombre;
     }
@@ -87,6 +90,11 @@ public class LocalComercial extends PuntoDeInteres {
         boolean rubroTienePalabra = rubro.getNombre().toLowerCase().contains(palabra.toLowerCase());
         boolean esPalabraClave = this.esPalabraClave(palabra);
         return (nombreTienePalabra || rubroTienePalabra || esPalabraClave);
+    }
+
+    @Override
+    public String getTipo() {
+        return tipo;
     }
 
 }

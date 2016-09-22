@@ -7,6 +7,9 @@ import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.user.error.ErrorHandler;
 import ar.edu.utn.frba.dds.model.user.error.NoHacerNada;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({ "pass" })
 public class Usuario {
 
     private static final AtomicInteger contador = new AtomicInteger(0);
@@ -21,7 +24,7 @@ public class Usuario {
     public Usuario() {
         id = contador.incrementAndGet();
     }
-    
+
     public Usuario(String unUsername, String unPassword, TipoUsuario unTipousuario) {
         id = contador.incrementAndGet();
         username = unUsername;
@@ -61,26 +64,26 @@ public class Usuario {
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
-    
-    public boolean puedeEjecutarAccion(Accion accion){
+
+    public boolean puedeEjecutarAccion(Accion accion) {
         return tipoUsuario.getAccionesDisponibles().contains(accion);
     }
-    
-    public boolean ejecutarAccion(Accion accion, List<Integer> params){
-        if (!accion.executeWithReport(this,params))
+
+    public boolean ejecutarAccion(Accion accion, List<Integer> params) {
+        if (!accion.executeWithReport(this, params))
             return errorHandler.handle(this, accion, params);
         return true;
     }
-    
-    public void agregarAccion(Accion accion){
+
+    public void agregarAccion(Accion accion) {
         tipoUsuario.addAccionesDisponibles(accion);
     }
-    
-    public void agregarAccion(List<Accion> acciones){
+
+    public void agregarAccion(List<Accion> acciones) {
         tipoUsuario.addAccionesDisponibles(acciones);
     }
-    
-    public List<Accion> getAccionesDisponibles(){
+
+    public List<Accion> getAccionesDisponibles() {
         return tipoUsuario.getAccionesDisponibles();
     }
 
@@ -91,7 +94,7 @@ public class Usuario {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public ErrorHandler getErrorHandler() {
         return errorHandler;
     }
