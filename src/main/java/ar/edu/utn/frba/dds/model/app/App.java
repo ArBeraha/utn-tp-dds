@@ -253,9 +253,8 @@ public class App {
         AccionFactory.addAccion(new AgregarAccionesATodos());
         AccionFactory.addAccion(new DefinirProcesoMultiple());
         List<Accion> multipleList = new ArrayList<Accion>();
-        multipleList.add(new DefinirProcesoMultiple());
-        multipleList.add(new ActualizarLocalesComerciales());
-        multipleList.add(new AgregarAccionesATodos());
+        multipleList.add(AccionFactory.getAccion(0));
+        multipleList.add(AccionFactory.getAccion(1));
         AccionFactory.addAccionMultiple(multipleList);
     }
     

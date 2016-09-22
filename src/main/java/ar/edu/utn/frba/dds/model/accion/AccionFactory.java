@@ -16,7 +16,7 @@ public class AccionFactory {
     
     public static int addAccion(Accion accion){
         acciones.put(id, accion);
-        accion.id = id;
+        accion.setId(id);
         return id++;
     }
     public static int addAccionMultiple(List<Accion> acciones){

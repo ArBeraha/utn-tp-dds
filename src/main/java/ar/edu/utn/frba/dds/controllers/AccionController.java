@@ -44,4 +44,10 @@ public class AccionController {
     public @ResponseBody boolean undo(@PathVariable("idUsuario") int idUsuario) throws Exception {
         return accionService.undo(idUsuario);
     }
+    
+    //Endpoint para visualizar las acciones disponibles en el sistema
+    @RequestMapping(value = { "/acciones" }, method = RequestMethod.GET)
+    public @ResponseBody  Map<Integer,String> acciones() throws Exception {
+        return accionService.getAcciones();
+    }
 }

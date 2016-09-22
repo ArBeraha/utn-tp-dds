@@ -8,4 +8,6 @@ public interface AccionService {
     public Map<Integer, String> getAccionesDisponibles(int idUsuario);
     public boolean execute(int idAccion, int idUsuario, List<Integer> params);
     boolean undo(int idUsuario);
+    public Map<Integer, String> getAcciones();
+    
 }
