@@ -241,7 +241,6 @@ public class App {
                 puntosDeInteres.add(sucursalBancoExterna);
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -253,7 +252,6 @@ public class App {
                 puntosDeInteres.add(cgpExterno);
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

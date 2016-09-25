@@ -42,6 +42,7 @@ public class POIController {
         try {
             pois = appService.getPois(textoBusqueda, new DateTime(), idTerminal);
         } catch (IOException e) {
+            //TODO MANEJAR EL ERROR. ESTAMOS HACIENDO EL CATCH PERO DEBERÍAMOS RESPONDER ALGO
             e.printStackTrace();
             throw new Exception("Error interno al obtener los pois");
         }

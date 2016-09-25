@@ -60,20 +60,16 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>${springframework.security.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>${springframework.security.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${springframework.security.version}</version>
 		</dependency>
-
-
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -175,8 +171,8 @@
 		<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
 		<dependency>
 			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4</version>
+			<artifactId>javax.mail-api</artifactId>
+			<version>1.5.6</version>
 		</dependency>
 		<!-- CSV Manipulation -->
 		<!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->

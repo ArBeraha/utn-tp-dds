@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 import ar.edu.utn.frba.dds.util.file.FileUtils;
 import ar.edu.utn.frba.dds.util.mail.MailSender;
+import javassist.tools.reflect.Reflection;
 
 @JsonIgnoreProperties({ "fecha" })
 public class Busqueda {
@@ -89,10 +90,11 @@ public class Busqueda {
             body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
                     + " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
             //Enviamos el mail
-            mailSender.sendMail(properties.getProperty("subject.mail.demora"), body, false);
-            System.out.println("E-Mail enviado con éxito");
+            mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"), body, false);
+            System.out.println("Sigo ejecutando mientras se envía el mail");
         }
-        writeToFile();
+        writeToFile(this);
+        System.out.println("Termino setResultados. Espero que el envío de mail y la escritura de archivo terminen en paralelo");
     }
 
     
@@ -106,22 +108,27 @@ public class Busqueda {
         this.terminal = terminal;
     }
 
-    private void writeToFile() {
-
-        try {
-            File file = FileUtils.obtenerArchivoBusquedas();
-            ObjectMapper mapper = new ObjectMapper();
-            List<Busqueda> busquedas = new ArrayList<>();
-            if (file.length() > 0) {
-                busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-                });
+    private void writeToFile(Busqueda busqueda) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    File file = FileUtils.obtenerArchivoBusquedas();
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<Busqueda> busquedas = new ArrayList<>();
+                    if (file.length() > 0) {
+                        busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
+                        });
+                    }
+                    busquedas.add(busqueda);
+                    mapper.writerWithDefaultPrettyPrinter().writeValue(file, busquedas);
+                    System.out.println("Se copia Json a archivo");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }            
             }
-            busquedas.add(this);
-            mapper.writerWithDefaultPrettyPrinter().writeValue(file, busquedas);
-            System.out.println("Se copia Json a archivo");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
+        t.start();
     }
 
 }
