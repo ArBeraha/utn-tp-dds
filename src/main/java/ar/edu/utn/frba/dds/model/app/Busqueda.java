@@ -90,26 +90,26 @@ public class Busqueda {
             body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
                     + " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
             //Enviamos el mail
-            mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"), body, false);
+            mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"), body,
+                    false);
             System.out.println("Sigo ejecutando mientras se envía el mail");
         }
         writeToFile(this);
-        System.out.println("Termino setResultados. Espero que el envío de mail y la escritura de archivo terminen en paralelo");
+        System.out.println(
+                "Termino setResultados. Espero que el envío de mail y la escritura de archivo terminen en paralelo");
     }
 
-    
-    
     public int getTerminal() {
         return terminal;
     }
 
-    
     public void setTerminal(int terminal) {
         this.terminal = terminal;
     }
 
     private void writeToFile(Busqueda busqueda) {
         Thread t = new Thread(new Runnable() {
+
             @Override
             public void run() {
                 try {
@@ -125,7 +125,7 @@ public class Busqueda {
                     System.out.println("Se copia Json a archivo");
                 } catch (Exception e) {
                     e.printStackTrace();
-                }            
+                }
             }
         });
         t.start();
