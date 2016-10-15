@@ -4,6 +4,7 @@ app.directive('keyEnter', function () {
     return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
             if (event.which === 13) {
+                event.target.blur();
                 scope.$apply(function () {
                     scope.$eval(attrs.keyEnter);
                 });

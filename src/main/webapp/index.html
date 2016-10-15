@@ -21,12 +21,17 @@
         <script language="javascript" type="text/javascript" src="js/app/controllers/BuscadorController.js"></script>
         <script language="javascript" type="text/javascript" src="js/app/directives/keyEnter.js"></script>
         <script language="javascript" type="text/javascript" src="js/app/services/BuscarPOIService.js"></script>
+        <script language="javascript" type="text/javascript" src="js/app/services/LoadingBackdrop.js"></script>
 
         <title>Terminal Interactiva - Buenos Aires Ciudad</title>
         <script type="text/javascript" href=""></script>
     </head>
     <body ng-app="terminal-interactiva" ng-controller="MainController">
         <toaster-container></toaster-container>
+        <div id="loading-backdrop-container" ng-if="showLoadingBackdrop">
+            <img id="loading-spinner" src="resources/img/loading-spinner.gif">
+            <div id="backdrop"></div>
+        </div>
         <img id="logo" src="resources/img/logo.svg">
         <div class="container-fluid">
             <div ng-view></div>
