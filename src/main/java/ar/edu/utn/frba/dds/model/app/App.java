@@ -267,7 +267,6 @@ public class App {
 		agregarUsuario("terminalDOT", "pwd", new Terminal());
 		agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal());
 		agregarUsuario("admin", "1234", new Administrador());
-
 	}
 
 	private void agregarSucursalesBancoExternas() {
@@ -305,7 +304,6 @@ public class App {
 				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
 				});
 			}
-			busquedas.forEach(x -> System.out.println("Buscando:"+buscarUsuarioPorId(x.getTerminal()).getUsername()));
 			historial = busquedas.stream()
 					.filter(x -> buscarUsuarioPorId(x.getTerminal()).getUsername().equals(nombreDeUsuario)).collect(Collectors.toList());
 		} catch (IOException e) {
@@ -318,8 +316,6 @@ public class App {
 	public List<Busqueda> historialPorFecha(long desdeMilis, long hastaMilis) {
 		Date desde = new Date(desdeMilis);
 		Date hasta = new Date(hastaMilis);
-		System.out.println("desde: " + desde);
-		System.out.println("hasta: " + hasta);
 		List<Busqueda> historial = new ArrayList<>();
 		File file;
 		try {
@@ -330,8 +326,9 @@ public class App {
 				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
 				});
 			}
+			historial = busquedas;
 			if (desdeMilis != 0) // solo si se especifica fecha desde
-				historial = busquedas.stream().filter(x -> x.getFecha().after(desde)).collect(Collectors.toList());
+				historial = historial.stream().filter(x -> x.getFecha().after(desde)).collect(Collectors.toList());
 			if (hastaMilis != 0) // solo si se especifica fecha hasta
 				historial = historial.stream().filter(x -> x.getFecha().before(hasta)).collect(Collectors.toList());
 		} catch (IOException e) {
