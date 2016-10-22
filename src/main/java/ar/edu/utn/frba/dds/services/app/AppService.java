@@ -11,15 +11,10 @@ import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
 public interface AppService {
-
-    public Map<String, Long> generarReporteBusquedasPorFecha();
-    public Map<Integer, Long> generarReporteBusquedasPorTerminal();
-    public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal);
     public List<PuntoDeInteres> getPois();
     public boolean estaDisponible(int idPoi);
     public List<PuntoDeInteres> getPois(String palabra, DateTime fecha, int idTerminal) throws IOException;
     public boolean esCercano(int idPoi, int idTerminal);
     public PuntoDeInteres poi(int idPoi);
     public Usuario loginUser(String user, String pass) throws LoginException;
-    
 }

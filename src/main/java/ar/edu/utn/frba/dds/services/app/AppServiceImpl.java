@@ -26,11 +26,6 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public Map<String, Long> generarReporteBusquedasPorFecha() {
-        return app.generarReporteBusquedasPorFecha();
-    }
-
-    @Override
     public List<PuntoDeInteres> getPois() {
         return app.getPuntosDeInteres();
     }
@@ -59,16 +54,6 @@ public class AppServiceImpl implements AppService {
     @Override
     public PuntoDeInteres poi(int idPoi) {
         return app.buscarPuntoDeInteresPorId(idPoi);
-    }
-    
-    @Override
-    public Map<Integer, Long> generarReporteBusquedasPorTerminal(){
-        return app.generarReporteBusquedasPorTerminal();
-    }
-    
-    @Override
-    public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal){
-        return app.generarReporteBusquedasDeTerminal(idTerminal);
     }
 
     //TODO Esto cuando tengamos BD no le va a pasar la lista de usuarios de la app.

@@ -56,20 +56,20 @@ public class AppTest {
     @Test
     public void buscarYEncontrarPOIKiosco()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("kiosko", new DateTime(),999);
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("kiosko", new DateTime(),1);
         Assert.assertTrue(resultado.contains(local));
     }
 
     public void buscarYEncontrarPOIKioscoPorPalabraClave()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("loCal", new DateTime(),999);
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("loCal", new DateTime(),1);
         Assert.assertTrue(resultado.contains(local));
     }
 
     @Test
     public void buscarYNoEncontrarNingunPOI()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("futbol", new DateTime(),999);
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("futbol", new DateTime(),1);
         Assert.assertTrue(resultado.size() == 0);
     }
     
