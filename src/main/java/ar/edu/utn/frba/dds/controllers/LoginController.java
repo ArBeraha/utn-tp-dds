@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,11 @@ public class LoginController {
     public ResponseEntity<?> login(@RequestParam("user") String user, @RequestParam("pass") String pass) {
         try {
             Usuario usuario = appService.loginUser(user, pass);
-            return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+            JSONObject jsonUsuario = new JSONObject();
+            jsonUsuario.accumulate("id", usuario.getId());
+            jsonUsuario.accumulate("username", usuario.getUsername());
+            jsonUsuario.accumulate("tipo", usuario.getTipoUsuario().getNombreTipoUsuario());
+            return new ResponseEntity<String>(jsonUsuario.toString(), HttpStatus.OK);
         } catch (LoginException e) {
             e.printStackTrace();
             return new ResponseEntity<String>("{Login incorrecto}", HttpStatus.BAD_REQUEST);
