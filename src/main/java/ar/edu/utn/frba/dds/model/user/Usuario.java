@@ -1,6 +1,11 @@
 package ar.edu.utn.frba.dds.model.user;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import ar.edu.utn.frba.dds.model.accion.Accion;
+import ar.edu.utn.frba.dds.model.user.error.ErrorHandler;
+import ar.edu.utn.frba.dds.model.user.error.NoHacerNada;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -13,6 +18,8 @@ public class Usuario {
     private String username;
     private String pass;
     private TipoUsuario tipoUsuario;
+    private ErrorHandler errorHandler;
+    private String email;
 
     public Usuario() {
         id = contador.incrementAndGet();
@@ -22,7 +29,8 @@ public class Usuario {
         id = contador.incrementAndGet();
         username = unUsername;
         pass = unPassword;
-        tipoUsuario = unTipousuario;
+        setTipoUsuario(unTipousuario);
+        errorHandler = new NoHacerNada();
     }
 
     public static AtomicInteger getContador() {
@@ -57,4 +65,41 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
+    public boolean puedeEjecutarAccion(Accion accion) {
+        return tipoUsuario.getAccionesDisponibles().contains(accion);
+    }
+
+    public boolean ejecutarAccion(Accion accion, List<Integer> params) {
+        if (!accion.executeWithReport(this, params))
+            return errorHandler.handle(this, accion, params);
+        return true;
+    }
+
+    public void agregarAccion(Accion accion) {
+        tipoUsuario.addAccionesDisponibles(accion);
+    }
+
+    public void agregarAccion(List<Accion> acciones) {
+        tipoUsuario.addAccionesDisponibles(acciones);
+    }
+
+    public List<Accion> getAccionesDisponibles() {
+        return tipoUsuario.getAccionesDisponibles();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public ErrorHandler getErrorHandler() {
+        return errorHandler;
+    }
+
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
 }

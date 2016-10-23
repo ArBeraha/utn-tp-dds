@@ -24,5 +24,11 @@ public abstract class TipoUsuario {
     public void setAccionesDisponibles(List<Accion> accionesDisponibles) {
         this.accionesDisponibles = accionesDisponibles;
     }
+    public void addAccionesDisponibles(Accion accionDisponible) {
+        this.accionesDisponibles.add(accionDisponible);
+    }
+    public void addAccionesDisponibles(List<Accion> accionesDisponible) {
+        accionesDisponibles.forEach(x -> this.accionesDisponibles.add(x));
+    }
 
 }

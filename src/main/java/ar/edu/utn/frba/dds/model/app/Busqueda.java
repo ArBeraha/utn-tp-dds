@@ -17,7 +17,7 @@ import ar.edu.utn.frba.dds.util.PropertiesFactory;
 import ar.edu.utn.frba.dds.util.file.FileUtils;
 import ar.edu.utn.frba.dds.util.mail.MailSender;
 
-@JsonIgnoreProperties({ "fecha" })
+//@JsonIgnoreProperties({ "fecha" })
 public class Busqueda {
 
     private Integer cantidadResultados;
@@ -26,6 +26,7 @@ public class Busqueda {
     private DateTime fecha;
     private String fechaFormateada;
     private String body;
+    private String username;
     private int terminal;
 
     public Busqueda(String unaFraseBuscada, DateTime fechaHoraInicio, int idTerminal) {
@@ -33,6 +34,7 @@ public class Busqueda {
         fraseBuscada = unaFraseBuscada;
         terminal = idTerminal;
         fechaFormateada = fecha.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
+        username = App.getInstance().buscarUsuarioPorId(terminal).getUsername();
     }
 
     //Constructor por default privado. Agregado para que lo use el mapper de Jackson a JSON
@@ -44,6 +46,10 @@ public class Busqueda {
         return cantidadResultados;
     }
 
+    public String getUsername(){
+    	return username;
+    }
+    
     public Date getFecha() {
         return fecha.toDate();
     }
@@ -89,7 +95,7 @@ public class Busqueda {
             body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
                     + " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
             //Enviamos el mail
-            mailSender.sendMail(properties.getProperty("subject.mail.demora"), body, false);
+            mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"), body, false);
             System.out.println("E-Mail enviado con éxito");
         }
         writeToFile();
