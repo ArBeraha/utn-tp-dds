@@ -14,11 +14,10 @@ public class MailSender {
 
     private final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-    public void sendMail(String subject, String body, boolean esHtml) {
+    public void sendMail(String to, String subject, String body, boolean esHtml) {
         try {
             mailSender.setJavaMailProperties(PropertiesFactory.getMailProperties());
             Properties appProperties = PropertiesFactory.getAppProperties();
-
             mailSender.setUsername(appProperties.getProperty("user.mail.sender"));
             mailSender.setPassword(appProperties.getProperty("pass.mail.sender"));
             MimeMessage message = mailSender.createMimeMessage();
@@ -26,7 +25,7 @@ public class MailSender {
             helper.setFrom(appProperties.getProperty("user.mail.sender"));
             helper.setText(body, esHtml);
             helper.setSubject(subject);
-            helper.addTo(appProperties.getProperty("admin.mail"));
+            helper.addTo(to);
             mailSender.send(message);
         } catch (MessagingException e) {
             // TODO Auto-generated catch block
