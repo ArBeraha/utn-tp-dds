@@ -1,9 +1,11 @@
-app.controller('BuscadorController', ['$scope', 'toaster', 'BuscarPOIService', 'LoadingBackdrop', function ($scope, toaster, BuscarPOIService, LoadingBackdrop) {
+app.controller('BuscadorController', ['$scope', '$cookies', 'toaster', 'BuscarPOIService', 'LoadingBackdrop', function ($scope, $cookies, toaster, BuscarPOIService, LoadingBackdrop) {
 
     'use strict';
 
     $scope.sinResultados = false;
     $scope.pois = [];
+    var usuario = $cookies.getObject('user');
+    $scope.isUserLogged = (usuario !== undefined);
 
     $scope.buscarPOI = function (texto) {
         if (texto !== undefined && texto !== '') {

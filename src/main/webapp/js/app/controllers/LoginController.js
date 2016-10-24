@@ -1,8 +1,20 @@
-app.controller('LoginController', ['$scope', '$http', '$location', 'LoadingBackdrop', 'toaster', function ($scope, $http, $location, LoadingBackdrop, toaster) {
+app.controller('LoginController', ['$scope', '$http', '$location', 'LoadingBackdrop', 'toaster', '$cookies', function ($scope, $http, $location, LoadingBackdrop, toaster, $cookies) {
 
     'use strict';
 
     $scope.user = {};
+
+    var usuarioLogueado = $cookies.getObject('user');
+
+    var init = function () {
+        if (usuarioLogueado !== undefined) {
+            if (usuarioLogueado.tipo.toLowerCase() === "administrador") {
+                $location.url('admin');
+            } else {
+                $location.url('/terminal');
+            }
+        }
+    };
 
     $scope.validar = function () {
         if ($scope.user.name !== "" && $scope.user.password !== "") {
@@ -10,7 +22,10 @@ app.controller('LoginController', ['$scope', '$http', '$location', 'LoadingBackd
             LoadingBackdrop.show();
             promise.then(function (response) {
                 LoadingBackdrop.hide();
-                if (response.data.tipo.toLowerCase() === "terminal") {
+                $cookies.putObject('user', response.data);
+                if (response.data.tipo.toLowerCase() === "administrador") {
+                    $location.url('/admin');
+                } else {
                     $location.url('/terminal');
                 }
             }, function (response) {
@@ -19,5 +34,7 @@ app.controller('LoginController', ['$scope', '$http', '$location', 'LoadingBackd
             });
         }
     };
+
+    init();
 
 }]);
