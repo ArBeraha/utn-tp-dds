@@ -66,3 +66,25 @@ body {
     background-color: orange;
     border-radius: 5px;
 }
+
+#loading-backdrop-container {
+    display: flex;
+    justify-content: center;
+}
+
+#backdrop {
+    background-color: rgba(0,0,0,0.7);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 3;
+}
+
+#loading-spinner {
+    position: fixed;
+    height: 50px;
+    width: 50px;
+    top: 50%;
+    margin-top: -25px;
+    z-index: 4;
+}

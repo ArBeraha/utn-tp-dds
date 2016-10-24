@@ -1,19 +1,24 @@
-app.controller('BuscadorController', ['$scope', 'toaster', 'BuscarPOIService', function ($scope, toaster, BuscarPOIService) {
+app.controller('BuscadorController', ['$scope', '$cookies', 'toaster', 'BuscarPOIService', 'LoadingBackdrop', function ($scope, $cookies, toaster, BuscarPOIService, LoadingBackdrop) {
 
     'use strict';
 
     $scope.sinResultados = false;
     $scope.pois = [];
+    var usuario = $cookies.getObject('user');
+    $scope.isUserLogged = (usuario !== undefined);
 
     $scope.buscarPOI = function (texto) {
         if (texto !== undefined && texto !== '') {
             texto.trim();
             var promise = BuscarPOIService.buscarPOI(texto);
+            LoadingBackdrop.show();
             promise.then(function (response) {
                 $scope.pois = response.data;
                 $scope.sinResultados = ($scope.pois.length === 0);
+                LoadingBackdrop.hide();
             }, function () {
                 toaster.pop('error', "Error", "Hubo un problema al realizar la búsqueda. Por favor intente de nuevo más tarde");
+                LoadingBackdrop.hide();
             });
         }
     };

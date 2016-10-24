@@ -21,33 +21,33 @@ public class AccionController {
 
     //Endpoint que devuelve las acciones disponibles de un usuario
     @RequestMapping(value = { "/accion/{idUsuario}" }, method = RequestMethod.GET)
-    public @ResponseBody Map<Integer,String> getAllAcciones(@PathVariable("idUsuario") int idUsuario) {
+    public @ResponseBody Map<Integer, String> getAllAcciones(@PathVariable("idUsuario") int idUsuario) {
         return accionService.getAccionesDisponibles(idUsuario);
     }
 
     //Endpoint para ejecutar acciones que no requieran parametros
-    @RequestMapping(value = { "/accion/{idUsuario}/{idAccion}/" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/accion/{idUsuario}/{idAccion}" }, method = RequestMethod.GET)
     public @ResponseBody boolean execute(@PathVariable("idAccion") int idAccion, @PathVariable("idUsuario") int idUsuario)
             throws Exception {
         return accionService.execute(idAccion, idUsuario, new ArrayList<Integer>());
     }
 
-  //Endpoint para ejecutar acciones que requieran parametros como una lista de ints
+    //Endpoint para ejecutar acciones que requieran parametros como una lista de ints
     @RequestMapping(value = { "/accion/{idUsuario}/{idAccion}/{params}" }, method = RequestMethod.GET)
     public @ResponseBody boolean executeParams(@PathVariable("idAccion") int idAccion,
             @PathVariable("idUsuario") int idUsuario, @PathVariable("params") List<Integer> params) throws Exception {
         return accionService.execute(idAccion, idUsuario, params);
     }
-    
-  //Endpoint para ejecutar undo de la ultima accion ejecutada
-    @RequestMapping(value = { "/undo/{idUsuario}/" }, method = RequestMethod.GET)
+
+    //Endpoint para ejecutar undo de la ultima accion ejecutada
+    @RequestMapping(value = { "/undo/{idUsuario}" }, method = RequestMethod.GET)
     public @ResponseBody boolean undo(@PathVariable("idUsuario") int idUsuario) throws Exception {
         return accionService.undo(idUsuario);
     }
-    
+
     //Endpoint para visualizar las acciones disponibles en el sistema
     @RequestMapping(value = { "/acciones" }, method = RequestMethod.GET)
-    public @ResponseBody  Map<Integer,String> acciones() throws Exception {
+    public @ResponseBody Map<Integer, String> acciones() throws Exception {
         return accionService.getAcciones();
     }
 }

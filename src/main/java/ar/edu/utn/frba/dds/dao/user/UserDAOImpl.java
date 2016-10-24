@@ -15,12 +15,13 @@ public class UserDAOImpl implements UserDAO {
     public Usuario login(String username, String pass, List<Usuario> usuariosDisponibles) throws LoginException {
         Encoder encoder = Encoder.getInstance();
         Optional<Usuario> usuarioLogueado = usuariosDisponibles.stream()
-                .filter(usuario -> usuario.getUsername().equals(username) && encoder.getbCryptEncoder().matches(pass, usuario.getPass()))
+                .filter(usuario -> usuario.getUsername().equals(username)
+                        && encoder.getbCryptEncoder().matches(pass, usuario.getPass()))
                 .findFirst();
         try {
             return usuarioLogueado.get();
         } catch (NoSuchElementException nse) {
-            System.out.println("No se encontró le usuario. Login incorrecto");
+            System.out.println("No se encontró el usuario. Login incorrecto");
             throw new LoginException();
         }
     }
