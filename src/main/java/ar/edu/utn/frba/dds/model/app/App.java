@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.model.app;
 
 import java.awt.Polygon;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,17 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils.MillisProvider;
 import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.accion.AccionFactory;
 import ar.edu.utn.frba.dds.model.accion.ActualizarLocalesComerciales;
@@ -43,11 +36,11 @@ import ar.edu.utn.frba.dds.model.user.Administrador;
 import ar.edu.utn.frba.dds.model.user.Terminal;
 import ar.edu.utn.frba.dds.model.user.TipoUsuario;
 import ar.edu.utn.frba.dds.model.user.Usuario;
+import ar.edu.utn.frba.dds.repositorios.RepoBusquedas;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaBanco;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaBancoImpl;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGP;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGPImpl;
-import ar.edu.utn.frba.dds.util.file.FileUtils;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class App {
@@ -74,7 +67,6 @@ public class App {
 		puntosDeInteres = populateDummyPOIs();
 		populateAcciones();
 		populateDummyUsers();
-
 		try {
 			this.agregarSucursalesBancoExternas();
 			this.agregarCGPExternos();
@@ -295,21 +287,10 @@ public class App {
 
 	public List<Busqueda> historialPorUsuario(String nombreDeUsuario) {
 		List<Busqueda> historial = new ArrayList<>();
-		File file;
-		try {
-			file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
-			historial = busquedas.stream()
-					.filter(x -> buscarUsuarioPorId(x.getTerminal()).getUsername().equals(nombreDeUsuario)).collect(Collectors.toList());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		List<Busqueda> busquedas = RepoBusquedas.getInstance().allInstances();
+		historial = busquedas.stream()
+				.filter(x -> buscarUsuarioPorId(x.getTerminal()).getUsername().equals(nombreDeUsuario))
+				.collect(Collectors.toList());
 		return historial;
 	}
 
@@ -317,24 +298,12 @@ public class App {
 		Date desde = new Date(desdeMilis);
 		Date hasta = new Date(hastaMilis);
 		List<Busqueda> historial = new ArrayList<>();
-		File file;
-		try {
-			file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
-			historial = busquedas;
-			if (desdeMilis != 0) // solo si se especifica fecha desde
-				historial = historial.stream().filter(x -> x.getFecha().after(desde)).collect(Collectors.toList());
-			if (hastaMilis != 0) // solo si se especifica fecha hasta
-				historial = historial.stream().filter(x -> x.getFecha().before(hasta)).collect(Collectors.toList());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		List<Busqueda> resultados = RepoBusquedas.getInstance().allInstances();
+		historial = resultados;
+		if (desdeMilis != 0) // solo si se especifica fecha desde
+			historial = historial.stream().filter(x -> x.getFecha().after(desde)).collect(Collectors.toList());
+		if (hastaMilis != 0) // solo si se especifica fecha hasta
+			historial = historial.stream().filter(x -> x.getFecha().before(hasta)).collect(Collectors.toList());
 		return historial;
 	}
 
@@ -342,13 +311,7 @@ public class App {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando de Busquedas Reporte:");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
+			List<Busqueda> busquedas = RepoBusquedas.getInstance().allInstances();
 			reporte = busquedas.stream()
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
@@ -362,13 +325,7 @@ public class App {
 		Map<Integer, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas por terminal:");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
+			List<Busqueda> busquedas = RepoBusquedas.getInstance().allInstances();
 			reporte = busquedas.stream()
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getTerminal(), Collectors.counting()));
 			reporte.forEach(
@@ -383,13 +340,7 @@ public class App {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas de Terminal " + idTerminal + ": ");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
+			List<Busqueda> busquedas = RepoBusquedas.getInstance().allInstances();
 			reporte = busquedas.stream().filter(busqueda -> busqueda.getTerminal() == idTerminal)
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
