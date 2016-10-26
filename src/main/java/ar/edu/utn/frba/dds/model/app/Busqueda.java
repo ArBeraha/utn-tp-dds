@@ -1,44 +1,43 @@
 package ar.edu.utn.frba.dds.model.app;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
-import ar.edu.utn.frba.dds.util.file.FileUtils;
 import ar.edu.utn.frba.dds.util.mail.MailSender;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 //@JsonIgnoreProperties({ "fecha" })
+@Entity
 public class Busqueda {
 
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
     private Integer cantidadResultados;
     private String fraseBuscada;
     private Double duracion;
-    private DateTime fecha;
+    private long fecha;
     private String fechaFormateada;
     private String body;
     private String username;
     private int terminal;
 
     public Busqueda(String unaFraseBuscada, DateTime fechaHoraInicio, int idTerminal) {
-        fecha = fechaHoraInicio;
+        fecha = fechaHoraInicio.getMillis();
         fraseBuscada = unaFraseBuscada;
         terminal = idTerminal;
-        fechaFormateada = fecha.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
+        fechaFormateada = (new DateTime(fecha)).toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         username = App.getInstance().buscarUsuarioPorId(terminal).getUsername();
     }
 
     //Constructor por default privado. Agregado para que lo use el mapper de Jackson a JSON
-    private Busqueda() {
+    public Busqueda() {
 
     }
 
@@ -51,7 +50,7 @@ public class Busqueda {
     }
     
     public Date getFecha() {
-        return fecha.toDate();
+        return new Date(fecha);
     }
 
     public Double getDuracion() {
@@ -62,7 +61,31 @@ public class Busqueda {
         return fraseBuscada;
     }
 
-    public void setFraseBuscada(String fraseBuscada) {
+    public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public void setFecha(DateTime fecha) {
+		this.fecha = fecha.getMillis();
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setFraseBuscada(String fraseBuscada) {
         this.fraseBuscada = fraseBuscada;
     }
 
@@ -86,7 +109,7 @@ public class Busqueda {
         Properties properties = PropertiesFactory.getAppProperties();
         Double maxSegundos = Double.valueOf(properties.getProperty("max.demora.busqueda.segundos"));
         cantidadResultados = resultados;
-        duracion = Double.valueOf(fechaFinBusqueda.getMillis() - fecha.getMillis()) / 1000;
+        duracion = Double.valueOf(fechaFinBusqueda.getMillis() - fecha) / 1000;
         if (duracion > maxSegundos) {
             //Notificar
             //Instanciamos el Sender
@@ -98,7 +121,6 @@ public class Busqueda {
             mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"), body, false);
             System.out.println("E-Mail enviado con éxito");
         }
-        writeToFile();
     }
 
     
@@ -111,23 +133,4 @@ public class Busqueda {
     public void setTerminal(int terminal) {
         this.terminal = terminal;
     }
-
-    private void writeToFile() {
-
-        try {
-            File file = FileUtils.obtenerArchivoBusquedas();
-            ObjectMapper mapper = new ObjectMapper();
-            List<Busqueda> busquedas = new ArrayList<>();
-            if (file.length() > 0) {
-                busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-                });
-            }
-            busquedas.add(this);
-            mapper.writerWithDefaultPrettyPrinter().writeValue(file, busquedas);
-            System.out.println("Se copia Json a archivo");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

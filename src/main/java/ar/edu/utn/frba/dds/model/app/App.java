@@ -11,8 +11,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.transaction.Transactional;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils.MillisProvider;
+import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -47,10 +50,9 @@ import ar.edu.utn.frba.dds.services.externo.ServicioConsultaBanco;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaBancoImpl;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGP;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGPImpl;
-import ar.edu.utn.frba.dds.util.file.FileUtils;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-public class App {
+public class App implements WithGlobalEntityManager {
 
 	private static App instance;
 	private static List<PuntoDeInteres> puntosDeInteres;
@@ -157,6 +159,13 @@ public class App {
 		Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio, idTerminal);
 		List<PuntoDeInteres> resultadoBusqueda = buscarPuntoDeInteresSinAlmacenarResultado(palabra);
 		nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
+		entityManager().getTransaction().begin();
+		entityManager().persist(nuevaBusqueda);
+		entityManager().getTransaction().commit();
+		nuevaBusqueda.setBody("VAMOS VIEJAAAAAAA!");
+		entityManager().getTransaction().begin();
+		entityManager().merge(nuevaBusqueda);
+		entityManager().getTransaction().commit();
 		return resultadoBusqueda;
 	}
 
@@ -293,62 +302,44 @@ public class App {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Busqueda> historialPorUsuario(String nombreDeUsuario) {
 		List<Busqueda> historial = new ArrayList<>();
-		File file;
 		try {
-			file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
-			historial = busquedas.stream()
-					.filter(x -> buscarUsuarioPorId(x.getTerminal()).getUsername().equals(nombreDeUsuario)).collect(Collectors.toList());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			historial = entityManager().createQuery("FROM Busqueda WHERE username='" + nombreDeUsuario + "'")
+					.getResultList();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return historial;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Busqueda> historialPorFecha(long desdeMilis, long hastaMilis) {
-		Date desde = new Date(desdeMilis);
-		Date hasta = new Date(hastaMilis);
 		List<Busqueda> historial = new ArrayList<>();
-		File file;
 		try {
-			file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
-			historial = busquedas;
-			if (desdeMilis != 0) // solo si se especifica fecha desde
-				historial = historial.stream().filter(x -> x.getFecha().after(desde)).collect(Collectors.toList());
-			if (hastaMilis != 0) // solo si se especifica fecha hasta
-				historial = historial.stream().filter(x -> x.getFecha().before(hasta)).collect(Collectors.toList());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			if (desdeMilis * hastaMilis != 0)
+				historial = entityManager()
+						.createQuery("FROM Busqueda WHERE fecha BETWEEN " + desdeMilis + " AND " + hastaMilis)
+						.getResultList();
+			else if (desdeMilis > 0)
+				historial = entityManager().createQuery("FROM Busqueda WHERE fecha >" + desdeMilis).getResultList();
+			else if (hastaMilis > 0)
+				historial = entityManager().createQuery("FROM Busqueda WHERE fecha <" + hastaMilis).getResultList();
+			else
+				historial = entityManager().createQuery("FROM Busqueda").getResultList();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return historial;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Long> generarReporteBusquedasPorFecha() {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando de Busquedas Reporte:");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
+			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda").getResultList();
 			reporte = busquedas.stream()
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
@@ -358,17 +349,12 @@ public class App {
 		return reporte;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<Integer, Long> generarReporteBusquedasPorTerminal() {
 		Map<Integer, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas por terminal:");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
+			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda").getResultList();
 			reporte = busquedas.stream()
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getTerminal(), Collectors.counting()));
 			reporte.forEach(
@@ -379,19 +365,13 @@ public class App {
 		return reporte;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal) {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas de Terminal " + idTerminal + ": ");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
-			reporte = busquedas.stream().filter(busqueda -> busqueda.getTerminal() == idTerminal)
-					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
+			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda WHERE terminal="+idTerminal).getResultList();
+			reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
 		} catch (Exception e) {
 			e.printStackTrace();
