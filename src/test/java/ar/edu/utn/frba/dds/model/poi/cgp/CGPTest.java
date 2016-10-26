@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.model.poi.cgp;
 
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -48,10 +50,10 @@ public class CGPTest {
         Horarios horario = new Horarios();
         horario.agregarRangoHorario(6, new RangoHorario(10,0,18,0));
         servicioRentas.setHorarios(horario);
-        ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
+        Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
         servicios.add(servicioRentas);
         cgp.setServicios(servicios);
-        ArrayList<String> palabras = new ArrayList<String>();
+        HashSet<String> palabras = new HashSet<String>();
         palabras.add("CGP");
         cgp.setPalabrasClave(palabras);
     }

@@ -2,8 +2,17 @@ package ar.edu.utn.frba.dds.model.poi;
 
 import java.util.ArrayList;
 
-public class Direccion {
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Direccion {
+	@Id
+	protected int id;
     protected String callePrincipal;
     protected ArrayList<String> callesEntre;
     protected int altura;
@@ -12,6 +21,8 @@ public class Direccion {
     protected String provincia;
     protected String pais;
 
+    public Direccion() {}
+    
     public String getCallePrincipal() {
         return callePrincipal;
     }

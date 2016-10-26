@@ -1,7 +1,12 @@
 package ar.edu.utn.frba.dds.model.poi.local.comercial;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Rubro {
 
+	@Column(name ="rubro_nombre")
     private String nombre;
     private int radioCercania;
 

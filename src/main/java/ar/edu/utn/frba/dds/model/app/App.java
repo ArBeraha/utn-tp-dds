@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -221,7 +223,7 @@ public class App implements WithGlobalEntityManager {
 		local.setGeolocalizacion(geolocalizacionLocal);
 		local.setNombre("Regla y compás");
 		local.setRubro(rubroLibreria);
-		ArrayList<String> palabrasClave = new ArrayList<String>();
+		HashSet<String> palabrasClave = new HashSet<String>();
 		palabrasClave.add("Tienda");
 		local.setPalabrasClave(palabrasClave);
 		local.setHorarios(horarios);
@@ -246,10 +248,10 @@ public class App implements WithGlobalEntityManager {
 		Horarios horario = new Horarios();
 		horario.agregarRangoHorario(6, new RangoHorario(10, 0, 18, 0));
 		servicioRentas.setHorarios(horario);
-		ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
+		Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
 		servicios.add(servicioRentas);
 		cgp.setServicios(servicios);
-		ArrayList<String> palabras = new ArrayList<String>();
+		HashSet<String> palabras = new HashSet<String>();
 		palabras.add("CGP");
 		cgp.setPalabrasClave(palabras);
 

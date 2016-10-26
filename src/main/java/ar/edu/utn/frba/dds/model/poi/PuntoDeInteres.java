@@ -1,27 +1,60 @@
 package ar.edu.utn.frba.dds.model.poi;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class PuntoDeInteres {
 
-    protected static final AtomicInteger contador = new AtomicInteger(0);
+    //protected static final AtomicInteger contador = new AtomicInteger(0);
     //TODO Este id es temporal para simular un ID de la base de datos, hasta que implementemos la misma
+    
+	@Id @GeneratedValue
     protected int id;
+	@OneToOne(fetch=FetchType.LAZY) @Cascade(value = CascadeType.ALL)
     protected Direccion direccion;
+    @Embedded
     protected Geolocalizacion geolocalizacion;
+    @Transient
     protected DateTimeProvider dateTimeProvider;
-    protected ArrayList<String> palabrasClave;
+    @ElementCollection @Cascade({CascadeType.ALL})
+    @CollectionTable(name = "palabras")
+    protected Set<String> palabrasClave = new HashSet<String>();
 
-    public static AtomicInteger getContador() {
-        return contador;
-    }
+//    public static AtomicInteger getContador() {
+//        return contador;
+//    }
 
-    public int getId() {
+    public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
         return id;
     }
 
@@ -61,12 +94,12 @@ public abstract class PuntoDeInteres {
 
     public abstract boolean tienePalabra(final String palabra);
 
-    public void setPalabrasClave(ArrayList<String> palabrasClave) {
+    public void setPalabrasClave(HashSet<String> palabrasClave) {
         this.palabrasClave = palabrasClave;
     }
 
-    public ArrayList<String> getPalabrasClave() {
-        return this.palabrasClave;
+    public HashSet<String> getPalabrasClave() {
+        return (HashSet<String>) this.palabrasClave;
     }
 
     protected boolean esPalabraClave(final String palabra) {

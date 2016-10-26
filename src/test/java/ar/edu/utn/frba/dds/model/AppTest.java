@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.model;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -44,7 +45,7 @@ public class AppTest {
         ArrayList<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
         pois.add(local);
         app.setPuntosDeInteres(pois);
-        ArrayList<String> palabras = new ArrayList<String>();
+        HashSet<String> palabras = new HashSet<String>();
         palabras.add("Local");
         local.setPalabrasClave(palabras);
     }

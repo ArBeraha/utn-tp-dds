@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="db" transaction-type="RESOURCE_LOCAL">
-	    	<provider>org.hibernate.ejb.HibernatePersistence</provider>
-	<!--  <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> -->
+	    <!-- 	<provider>org.hibernate.ejb.HibernatePersistence</provider>-->
+	 <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> 
 		<class>ar.edu.utn.frba.dds.model.app.Busqueda</class>
+		<class>ar.edu.utn.frba.dds.model.poi.Direccion</class>
+		<class>ar.edu.utn.frba.dds.model.poi.Geolocalizacion</class>
+		<class>ar.edu.utn.frba.dds.model.poi.PuntoDeInteres</class>
+		<class>ar.edu.utn.frba.dds.model.poi.cgp.CGP</class>
+		<class>ar.edu.utn.frba.dds.model.poi.cgp.Comuna</class>
+		<class>ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP</class>
+		<class>ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial</class>
+		<class>ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro</class>
+		<class>ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo</class>
+		<class>ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco</class>
+		<class>ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco</class>
+		<class>ar.edu.utn.frba.dds.model.poi.DireccionEstablecimiento</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		
 		

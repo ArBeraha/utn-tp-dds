@@ -1,11 +1,19 @@
 package ar.edu.utn.frba.dds.model.poi;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class DireccionEstablecimiento extends Direccion {
 
     private String departamento;
     private String unidad;
     private String codigoPostal;
 
+    public DireccionEstablecimiento(){
+    	
+    }
+    
     public String getDepartamento() {
         return departamento;
     }

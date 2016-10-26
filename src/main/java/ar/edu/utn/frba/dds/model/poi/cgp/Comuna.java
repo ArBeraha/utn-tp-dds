@@ -2,14 +2,19 @@ package ar.edu.utn.frba.dds.model.poi.cgp;
 
 import java.awt.Polygon;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 
 @JsonIgnoreProperties({ "superficie" })
+@Embeddable
 public class Comuna {
 
     private int numeroComuna;
+    @Transient
     private Polygon superficie;
 
     public int getNumeroComuna() {

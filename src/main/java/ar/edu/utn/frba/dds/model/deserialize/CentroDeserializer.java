@@ -4,8 +4,11 @@ import java.awt.Polygon;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 
@@ -30,14 +33,14 @@ public class CentroDeserializer extends JsonDeserializer<List<CGP>> {
     public List<CGP> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode nodeElements = jp.getCodec().readTree(jp);
         Iterator<JsonNode> nodeIterator = nodeElements.elements();
-        ArrayList<String> palabrasClave = new ArrayList<>();
+        HashSet<String> palabrasClave = new HashSet<>();
         palabrasClave.addAll(Arrays.asList("CGP", "Centro", "Gestion", "Participacion"));
         List<CGP> centrosDeserializados = new ArrayList<>();
         //Cada Centro
         while (nodeIterator.hasNext()) {
             JsonNode node = nodeIterator.next();
             CGP cgp = new CGP(new DateTimeProviderImpl(new DateTime()));
-            ArrayList<ServicioCGP> servicios = new ArrayList<>();
+            Set<ServicioCGP> servicios = new HashSet<>();
             Comuna comuna = new Comuna();
             comuna.setNumeroComuna(node.get("comuna").asInt());
             comuna.setSuperficie(new Polygon());
@@ -48,6 +51,7 @@ public class CentroDeserializer extends JsonDeserializer<List<CGP>> {
             String telefono = node.get("telefono").asText();
             String zonas = node.get("zonas").asText();
             List<String> zonasList = Arrays.asList(zonas.split(", "));
+            HashSet<String> zonasSet = (HashSet<String>) zonasList.stream().collect(Collectors.toSet());
             Iterator<JsonNode> nodeServiciosIterator = node.get("servicios").elements();
             //Cada ServicioCGP del Centro
             while (nodeServiciosIterator.hasNext()) {
@@ -74,7 +78,7 @@ public class CentroDeserializer extends JsonDeserializer<List<CGP>> {
             cgp.setPalabrasClave(palabrasClave);
             cgp.setServicios(servicios);
             cgp.setTelefono(telefono);
-            cgp.setZonas(zonasList);
+            cgp.setZonas(zonasSet);
             
             centrosDeserializados.add(cgp);
         }

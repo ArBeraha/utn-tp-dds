@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
@@ -50,9 +52,9 @@ public class ActualizarLocalesComerciales extends Accion {
                     System.out.println("Se agregó el local comercial " + subCadena[0]);
                 } else {
                     LocalComercial local = (LocalComercial) resultado.get(0);
-                    ArrayList<String> palabras = local.getPalabrasClave();
-                    List<String> palabrasNuevas = this.obtenerPalabrasClave(subCadena[1]);
-                    List<String> palabrasNuevasDistintas = palabrasNuevas.stream().filter(palabra -> !palabras.contains(palabra)).collect(Collectors.toList());
+                    HashSet<String> palabras = local.getPalabrasClave();
+                    HashSet<String> palabrasNuevas = this.obtenerPalabrasClave(subCadena[1]);
+                    Set<String> palabrasNuevasDistintas = palabrasNuevas.stream().filter(palabra -> !palabras.contains(palabra)).collect(Collectors.toSet());
                     palabras.addAll(palabrasNuevasDistintas);
                     local.setPalabrasClave(palabras);
                     System.out.println(
@@ -73,8 +75,8 @@ public class ActualizarLocalesComerciales extends Accion {
         return false;
     }
 
-    private ArrayList<String> obtenerPalabrasClave(String cadena) {
-        ArrayList<String> nuevasPalabrasClave = new ArrayList<String>();
+    private HashSet<String> obtenerPalabrasClave(String cadena) {
+    	HashSet<String> nuevasPalabrasClave = new HashSet<String>();
         String[] subCadena = cadena.split(" ");
         for (int i = 0; i < subCadena.length; i++) {
             nuevasPalabrasClave.add(subCadena[i]);

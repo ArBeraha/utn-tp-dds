@@ -1,7 +1,10 @@
 package ar.edu.utn.frba.dds.model.poi.sucursal.banco;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -10,20 +13,33 @@ import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
+@Entity
 public class SucursalBanco extends PuntoDeInteres {
 
     private String banco;
     private String sucursal;
     private String gerente;
-    private ArrayList<ServicioBanco> servicios;
+	@OneToMany(fetch=FetchType.EAGER) @Cascade(value = CascadeType.ALL)
+	@JoinColumn(name = "idBanco", referencedColumnName = "id")
+    private Set<ServicioBanco> servicios;
+@Transient
     private Horarios horarios;
     private String tipo = TipoPoi.SUCURSAL_BANCO.toString();
 
+    public SucursalBanco(){
+    	
+    }
+    
     public SucursalBanco(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
-        palabrasClave = new ArrayList<>();
-        id = contador.incrementAndGet();
+        palabrasClave = new HashSet<>();
+        //id = contador.incrementAndGet();
         this.horarios = new Horarios();
         LocalTime horaInicioLunesAViernes = new LocalTime(10, 0);
         LocalTime horaFinLunesAViernes = new LocalTime(15, 0);
@@ -39,7 +55,19 @@ public class SucursalBanco extends PuntoDeInteres {
         return banco;
     }
 
-    public void setBanco(final String banco) {
+    public Horarios getHorarios() {
+		return horarios;
+	}
+
+	public void setHorarios(Horarios horarios) {
+		this.horarios = horarios;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public void setBanco(final String banco) {
         this.banco = banco;
     }
 
@@ -59,11 +87,11 @@ public class SucursalBanco extends PuntoDeInteres {
         this.gerente = gerente;
     }
 
-    public ArrayList<ServicioBanco> getServicios() {
+    public Set<ServicioBanco> getServicios() {
         return servicios;
     }
 
-    public void setServicios(final ArrayList<ServicioBanco> servicios) {
+    public void setServicios(final Set<ServicioBanco> servicios) {
         this.servicios = servicios;
     }
 

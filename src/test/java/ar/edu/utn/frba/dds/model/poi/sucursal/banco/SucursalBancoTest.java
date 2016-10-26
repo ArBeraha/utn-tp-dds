@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.dds.model.poi.sucursal.banco;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -46,7 +48,7 @@ public class SucursalBancoTest {
         servicio.setNombre("Asesoramiento");
         geolocalizacionSucursal = new Geolocalizacion(12, 28);
         sucursal.setGeolocalizacion(geolocalizacionSucursal);
-        ArrayList<ServicioBanco> servicios = new ArrayList<ServicioBanco>();
+        Set<ServicioBanco> servicios = new HashSet<ServicioBanco>();
         servicios.add(servicio);
         Horarios horarioServicio = new Horarios();
         LocalTime horaInicio = new LocalTime(12, 0);
@@ -57,7 +59,7 @@ public class SucursalBancoTest {
         servicio.setHorarios(horarioServicio);
         sucursal.setServicios(servicios);
         
-        ArrayList<String> palabras = new ArrayList<String>();
+        HashSet<String> palabras = new HashSet<String>();
         palabras.add("Banco");
         sucursal.setPalabrasClave(palabras);
     }

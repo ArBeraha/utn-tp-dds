@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.model.poi.local.comercial;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.joda.time.DateTime;
 
@@ -12,26 +12,44 @@ import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
+@Entity
 public class LocalComercial extends PuntoDeInteres {
 
     private String nombre;
-    private Horarios horarios;
+    @Embedded
     private Rubro rubro;
+    @Transient
+    private Horarios horarios;
+    @Transient
     private HorariosEspeciales horariosEspeciales;
     private String tipo = TipoPoi.LOCAL_COMERCIAL.toString();
 
+    public LocalComercial(){}
+    
     public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
         horariosEspeciales = new HorariosEspeciales();
-        palabrasClave = new ArrayList<>();
-        id = contador.incrementAndGet();
+        palabrasClave = new HashSet<>();
+       // id = contador.incrementAndGet();
     }
 
     public int getId() {
         return id;
     }
 
-    @Override
+    public void setHorariosEspeciales(HorariosEspeciales horariosEspeciales) {
+		this.horariosEspeciales = horariosEspeciales;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	@Override
     public String getNombre() {
         return nombre;
     }

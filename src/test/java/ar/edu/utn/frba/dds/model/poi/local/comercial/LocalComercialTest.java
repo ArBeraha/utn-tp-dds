@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.model.poi.local.comercial;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -97,7 +98,7 @@ public class LocalComercialTest {
     public void dadaUnaPalabraLibreriaEscolarTienePalabraDebeCoincidirConNombre() {
         local.setNombre("Regla y compás");
         local.setRubro(rubroLibreria);
-        ArrayList<String> palabrasClave = new ArrayList<String>();
+        HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);
         Assert.assertTrue(local.tienePalabra("reGla"));
     }
@@ -106,7 +107,7 @@ public class LocalComercialTest {
     public void dadaUnaPalabraContenidaEnElNombreDelRubroLibreriaEscolarDebeTenerLaPalabra() {
         local.setNombre("Regla y compás");
         local.setRubro(rubroLibreria);
-        ArrayList<String> palabrasClave = new ArrayList<String>();
+        HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);
         Assert.assertTrue(local.tienePalabra("breRIA"));
     }
@@ -115,7 +116,7 @@ public class LocalComercialTest {
     public void dadaUnaPalabraQueNoEsClaveNiDelRubroNiDelNombreLibreriaEscolarNoDebeTenerEsaPalabra() {
         local.setNombre("Regla y compás");
         local.setRubro(rubroLibreria);
-        ArrayList<String> palabrasClave = new ArrayList<String>();
+        HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);
         Assert.assertFalse(local.tienePalabra("futbol"));
     }

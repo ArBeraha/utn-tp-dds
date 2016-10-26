@@ -4,17 +4,33 @@ import java.util.Properties;
 
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+
+@Embeddable
 public class Geolocalizacion {
 
     private double latitud;
     private double longitud;
 
+    public Geolocalizacion(){
+    	
+    }
+    
     public Geolocalizacion(final double unaLatitud, final double unaLongitud) {
         latitud = unaLatitud;
         longitud = unaLongitud;
     }
 
-    public double getLatitud() {
+    public void setLatitud(double latitud) {
+		this.latitud = latitud;
+	}
+
+	public void setLongitud(double longitud) {
+		this.longitud = longitud;
+	}
+
+	public double getLatitud() {
         return latitud;
     }
 
