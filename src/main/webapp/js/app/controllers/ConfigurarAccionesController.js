@@ -8,7 +8,9 @@ app.controller('ConfigurarAccionesController', ['$scope', '$http', '$cookies', '
     var getAccionesPromise = Acciones.lista(usuario.id);
 
     var init = function () {
-
+        getAccionesPromise.then(function (response) {
+            $scope.acciones = response.data;
+        });
     };
 
     init();
