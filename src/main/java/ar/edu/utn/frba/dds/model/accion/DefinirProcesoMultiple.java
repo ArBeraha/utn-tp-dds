@@ -21,8 +21,8 @@ public class DefinirProcesoMultiple extends Accion {
         try {
             List<Accion> acciones = new ArrayList<Accion>();
             params.forEach(idAccion -> acciones.add(AccionFactory.getAccion(idAccion)));
-            int nuevaAccion = AccionFactory.addAccionMultiple(acciones);
-            usuario.agregarAccion(AccionFactory.getAccion(nuevaAccion));
+            Accion nuevaAccion = AccionFactory.getInstance().addAccionMultiple(acciones);
+            usuario.agregarAccion(nuevaAccion);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

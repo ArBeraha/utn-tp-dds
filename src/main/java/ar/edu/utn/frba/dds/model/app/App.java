@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.model.app;
 
 import java.awt.Polygon;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGP;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGPImpl;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
+@SuppressWarnings("unchecked")
 public class App implements WithGlobalEntityManager {
 
 	private static App instance;
@@ -63,7 +65,6 @@ public class App implements WithGlobalEntityManager {
 	}
 
 	// Constructor privado por el Singleton
-	@SuppressWarnings("unchecked")
 	private App() {
 		terminales = new ArrayList<>();
 		usuarios = entityManager().createQuery("FROM Usuario").getResultList();
@@ -297,19 +298,22 @@ public class App implements WithGlobalEntityManager {
 	}
 
 	private void populateAcciones() {
-		AccionFactory.acciones = new HashMap<Integer, Accion>();
 		if (entityManager().createQuery("FROM Accion").getResultList().isEmpty()) {
-			AccionFactory.addAccion(new ActualizarLocalesComerciales());
-			AccionFactory.addAccion(new BajaPoisInactivos());
-			AccionFactory.addAccion(new AgregarAccionesATodos());
-			AccionFactory.addAccion(new DefinirProcesoMultiple());
+			Accion Accion1 = new ActualizarLocalesComerciales();
+			Accion Accion2 = new BajaPoisInactivos();
+			Accion Accion3 = new AgregarAccionesATodos();
+			Accion Accion4 = new DefinirProcesoMultiple();
+			AccionFactory.getInstance().addAccion(Accion1);
+			AccionFactory.getInstance().addAccion(Accion2);
+			AccionFactory.getInstance().addAccion(Accion3);
+			AccionFactory.getInstance().addAccion(Accion4);
 			List<Accion> multipleList = new ArrayList<Accion>();
-			multipleList.add(AccionFactory.getAccion(0));
-			multipleList.add(AccionFactory.getAccion(1));
-			AccionFactory.addAccionMultiple(multipleList);
+			multipleList.add(Accion1);
+			multipleList.add(Accion2);
+			AccionFactory.getInstance().addAccionMultiple(multipleList);
 		} else {
 			List<Accion> accs = entityManager().createQuery("FROM Accion").getResultList();
-			accs.forEach(x -> AccionFactory.addAccion(x));
+			accs.forEach(x -> AccionFactory.getInstance().addAccion(x));
 		}
 	}
 
@@ -346,7 +350,6 @@ public class App implements WithGlobalEntityManager {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Busqueda> historialPorUsuario(String nombreDeUsuario) {
 		List<Busqueda> historial = new ArrayList<>();
 		try {
@@ -358,7 +361,6 @@ public class App implements WithGlobalEntityManager {
 		return historial;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Busqueda> historialPorFecha(long desdeMilis, long hastaMilis) {
 		List<Busqueda> historial = new ArrayList<>();
 		try {
@@ -378,7 +380,6 @@ public class App implements WithGlobalEntityManager {
 		return historial;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<String, Long> generarReporteBusquedasPorFecha() {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
@@ -393,7 +394,7 @@ public class App implements WithGlobalEntityManager {
 		return reporte;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	public Map<Integer, Long> generarReporteBusquedasPorTerminal() {
 		Map<Integer, Long> reporte = new HashMap<>();
 		try {
@@ -409,7 +410,6 @@ public class App implements WithGlobalEntityManager {
 		return reporte;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal) {
 		Map<String, Long> reporte = new HashMap<>();
 		try {

@@ -2,19 +2,10 @@ package ar.edu.utn.frba.dds.model.user;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.annotation.Generated;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.user.error.ErrorHandler;

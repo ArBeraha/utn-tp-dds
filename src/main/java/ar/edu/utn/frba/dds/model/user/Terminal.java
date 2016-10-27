@@ -10,7 +10,7 @@ public class Terminal extends TipoUsuario {
     public Terminal() {
         nombreTipoUsuario = "Terminal";
         accionesDisponibles = new ArrayList<Accion>();
-        accionesDisponibles.add(AccionFactory.getAccion(0));
-        accionesDisponibles.add(AccionFactory.getAccion(2));
+        accionesDisponibles.add(AccionFactory.getAccion(1));
+        accionesDisponibles.add(AccionFactory.getAccion(3));
     }
 }

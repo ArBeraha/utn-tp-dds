@@ -21,7 +21,6 @@ public class AccionTest {
         usuario = App.getInstance().agregarUsuario("Pepito","qwerty",new Terminal());
         System.out.println(AccionFactory.getAcciones().size());
         AccionFactory.getAcciones().forEach( (x,y) -> System.out.println(y.getNombre()));
-        
         App.getInstance().getUsuarios().forEach(x -> System.out.println(x.getUsername()+"["+x.getId()+"]"));
 
         
@@ -29,13 +28,13 @@ public class AccionTest {
     
     @Test
     public void dadoUnUsuarioSinAccion1LaConsigueEjecutandoLaAccionAgregarAcciones() {
-        Assert.assertFalse(usuario.puedeEjecutarAccion(AccionFactory.getAccion(1)));
+        Assert.assertFalse(usuario.puedeEjecutarAccion(AccionFactory.getAccion(2)));
         System.out.println(usuario.getAccionesDisponibles().size());
         List<Integer> nuevasAcciones = new ArrayList<>();
-        nuevasAcciones.add(1);
-        AccionFactory.getAccion(2).execute(usuario, nuevasAcciones);
+        nuevasAcciones.add(2);
+        AccionFactory.getAccion(3).execute(usuario, nuevasAcciones);
         usuario.getAccionesDisponibles().forEach(x -> System.out.println("Accion:"+x.nombre));
-        Assert.assertTrue(usuario.puedeEjecutarAccion(AccionFactory.getAccion(1)));
+        Assert.assertTrue(usuario.puedeEjecutarAccion(AccionFactory.getAccion(2)));
     }
     
 }
