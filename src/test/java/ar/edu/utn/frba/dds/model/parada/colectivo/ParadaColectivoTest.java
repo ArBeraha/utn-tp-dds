@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.model.parada.colectivo;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.junit.After;

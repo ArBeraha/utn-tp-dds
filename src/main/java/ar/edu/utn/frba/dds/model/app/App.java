@@ -22,6 +22,7 @@ import ar.edu.utn.frba.dds.model.accion.ActualizarLocalesComerciales;
 import ar.edu.utn.frba.dds.model.accion.AgregarAccionesATodos;
 import ar.edu.utn.frba.dds.model.accion.BajaPoisInactivos;
 import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
+import ar.edu.utn.frba.dds.model.accion.Primitivas;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
@@ -319,8 +320,8 @@ public class App implements WithGlobalEntityManager {
 			agregarUsuario("terminalDOT", "pwd", new Terminal());
 			agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal());
 			Usuario admin = agregarUsuario("admin", "1234", new Administrador());
-			admin.agregarAccion(AccionFactory.getAccion(1));
-			admin.agregarAccion(AccionFactory.getAccion(3));
+			admin.agregarAccion(AccionFactory.getAccion(Primitivas.ActualizarLocalesComerciales));
+			admin.agregarAccion(AccionFactory.getAccion(Primitivas.AgregarAccionesATodos));
 		}
 	}
 

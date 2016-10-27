@@ -27,6 +27,10 @@ public class AccionFactory implements WithGlobalEntityManager {
         return acciones.stream().filter(x -> x.getId() == key).collect(Collectors.toList()).get(0);
     }
     
+    public static Accion getAccion(Primitivas primitiva){
+        return acciones.stream().filter(x -> x.getId() == primitiva.getId()).collect(Collectors.toList()).get(0);
+    }
+    
     public Accion addAccion(Accion accion){
         acciones.add(accion);
         entityManager().getTransaction().begin();

@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.model.poi.local.comercial;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.joda.time.DateTime;

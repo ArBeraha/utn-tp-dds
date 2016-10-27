@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.model.poi.cgp;
 
 import java.awt.Polygon;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 

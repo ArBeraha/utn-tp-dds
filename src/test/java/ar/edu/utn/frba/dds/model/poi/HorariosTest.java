@@ -12,7 +12,7 @@ import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 
 public class HorariosTest {
 
-    Horarios horarios = new Horarios();
+    private Horarios horarios = new Horarios();
 
     @Rule
     public ExpectedException exception = ExpectedException.none();

@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.model.poi.sucursal.banco;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
