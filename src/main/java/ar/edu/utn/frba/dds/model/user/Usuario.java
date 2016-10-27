@@ -2,9 +2,13 @@ package ar.edu.utn.frba.dds.model.user;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import ar.edu.utn.frba.dds.model.accion.Accion;
@@ -26,7 +30,7 @@ public class Usuario {
     @Transient
     //@Embedded
     private TipoUsuario tipoUsuario;
-    @Transient
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ErrorHandler errorHandler;
     private String email;
 

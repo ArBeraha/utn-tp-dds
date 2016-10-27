@@ -12,10 +12,10 @@ import javax.persistence.InheritanceType;
 import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
-//@Entity
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class ErrorHandler {
-//	@Id @GeneratedValue
-//	private int id;
+	@Id @GeneratedValue
+	private int id;
     public abstract boolean handle(Usuario usuario, Accion accion, List<Integer> params);
 }
