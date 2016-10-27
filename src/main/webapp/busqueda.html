@@ -26,10 +26,54 @@
         <div class="span4"></div>
     </div>
     <div ng-repeat="poi in pois">
-        <div class="row">
+<!--         <div class="row">
             <div class="input-group col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
                 <div class="text-center poi" ng-click="verInfo(poi)">
                     <h4>{{poi.nombre}}</h4>
+                </div>
+            </div>
+        </div> -->
+        <div class="row" ng-if="poi.tipo.toLowerCase() === 'local comercial'">
+            <div class="input-group col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+                <div class="text-center poi" ng-click="verInfo(poi)">
+                    <img src="resources/img/local_icono.png" class="icono-poi">
+                    <h4>{{poi.nombre}}</h4>
+                    <h4>Rubro: {{poi.rubro.nombre}}</h4>
+                    <h4>Direccion: {{poi.direccion}}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="poi.tipo.toLowerCase() === 'cgp'">
+            <div class="input-group col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+                <div class="text-center poi" ng-click="verInfo(poi)">
+                    <img src="resources/img/cgp_icono.png" class="icono-poi">
+                    <h4>{{poi.nombre}}</h4>
+                    <h4>Direccion: {{poi.direccion}}</h4>
+                    <h4>Zonas: </h4>
+                    <h6 ng-repeat="zona in poi.zonas">{{zona}}</h6>
+                    <h4>Servicios: </h4>
+                    <h6 ng-repeat="servicio in poi.servicio">{{servicio.nombre}}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="poi.tipo.toLowerCase() === 'sucursal de banco'">
+            <div class="input-group col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+                <div class="text-center poi" ng-click="verInfo(poi)">
+                    <img src="resources/img/banco_icono.png" class="icono-poi">
+                    <h4>{{poi.nombre}}</h4>
+                    <h4>Direccion: {{poi.direccion}}</h4>
+                    <h4>Zonas: </h4>
+                    <h6 ng-repeat="zona in poi.zonas">{{zona}}</h6>
+                    <h4>Servicios: </h4>
+                    <h6 ng-repeat="servicio in poi.servicio">{{servicio.nombre}}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="poi.tipo.toLowerCase() === 'parada de colectivo'">
+            <div class="input-group col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+                <div class="text-center poi" ng-click="verInfo(poi)">
+                    <img src="resources/img/parada_icono.png" class="icono-poi">
+                    <h4>Numero de linea: {{poi.linea}}</h4>
                 </div>
             </div>
         </div>
