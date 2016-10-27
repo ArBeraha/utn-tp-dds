@@ -12,7 +12,7 @@ import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
-@JsonIgnoreProperties({ "comuna", "nombreDirector", "telefono" })
+@JsonIgnoreProperties({ "comuna", "nombreDirector", "telefono", "dateTimeProvider", "geolocalizacion", "palabrasClave" })
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<ServicioCGP> servicios;

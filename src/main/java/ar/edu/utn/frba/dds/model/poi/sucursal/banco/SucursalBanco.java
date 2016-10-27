@@ -13,7 +13,7 @@ import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
-@JsonIgnoreProperties({ "sucursal" , "gerente", "horarios" })
+@JsonIgnoreProperties({ "sucursal" , "gerente", "horarios", "dateTimeProvider", "geolocalizacion", "palabrasClave" })
 public class SucursalBanco extends PuntoDeInteres {
 
     private String banco;

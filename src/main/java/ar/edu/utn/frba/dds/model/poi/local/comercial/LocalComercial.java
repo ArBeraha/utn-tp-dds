@@ -14,7 +14,7 @@ import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
-@JsonIgnoreProperties({ "horarios", "horariosEspeciales" })
+@JsonIgnoreProperties({ "horarios", "horariosEspeciales", "dateTimeProvider","geolocalizacion","palabrasClave" })
 public class LocalComercial extends PuntoDeInteres {
 
     private String nombre;
