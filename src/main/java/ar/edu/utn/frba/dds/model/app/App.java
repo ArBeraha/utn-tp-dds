@@ -36,6 +36,7 @@ import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
+import ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.model.security.Encoder;
 import ar.edu.utn.frba.dds.model.terminal.interactiva.TerminalInteractiva;
@@ -243,9 +244,19 @@ public class App {
 		ArrayList<String> palabras = new ArrayList<String>();
 		palabras.add("CGP");
 		cgp.setPalabrasClave(palabras);
+		
+		ParadaColectivo parada = new ParadaColectivo();
+		parada.setLinea("114");
+		ArrayList<String> palabrasParada = new ArrayList<String>();
+		palabrasParada.add("parada");
+		palabrasParada.add("colectivo");
+		palabrasParada.add("114");
+		parada.setPalabrasClave(palabrasParada);
+		parada.setGeolocalizacion(new Geolocalizacion(12.001, 28.001));
 
 		pois.add(local);
 		pois.add(cgp);
+		pois.add(parada);
 
 		return pois;
 	}
