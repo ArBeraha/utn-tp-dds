@@ -36,21 +36,14 @@ public class POIController {
     }
 
     @RequestMapping(value = { "/pois/{idTerminal}/{textoBusqueda}" }, method = RequestMethod.GET)
-    public @ResponseBody List<PoiMapper> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda,
+    public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda,
             @PathVariable("idTerminal") int idTerminal) throws Exception {
-        List<PuntoDeInteres> pois;
         try {
-            pois = appService.getPois(textoBusqueda, new DateTime(), idTerminal);
+            return appService.getPois(textoBusqueda, new DateTime(), idTerminal);
         } catch (IOException e) {
             e.printStackTrace();
             throw new Exception("Error interno al obtener los pois");
         }
-        List<PoiMapper> poiDto = new ArrayList<PoiMapper>();
-        for (PuntoDeInteres poi : pois) {
-            PoiMapper poiMapper = new PoiMapper(poi.getId(), poi.getNombre(), poi.getTipo());
-            poiDto.add(poiMapper);
-        }
-        return poiDto;
     }
 
     @RequestMapping(value = { "/poi/{idPoi}" }, method = RequestMethod.GET)
