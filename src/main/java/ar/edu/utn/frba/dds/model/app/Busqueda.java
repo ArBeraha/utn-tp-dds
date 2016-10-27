@@ -6,12 +6,15 @@ import java.util.Properties;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
+import ar.edu.utn.frba.dds.model.user.Usuario;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 import ar.edu.utn.frba.dds.util.mail.MailSender;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 //@JsonIgnoreProperties({ "fecha" })
 @Entity
@@ -24,16 +27,15 @@ public class Busqueda {
     private Double duracion;
     private long fecha;
     private String fechaFormateada;
-    private String body;
-    private String username;
-    private int terminal;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Usuario usuario;
 
     public Busqueda(String unaFraseBuscada, DateTime fechaHoraInicio, int idTerminal) {
         fecha = fechaHoraInicio.getMillis();
         fraseBuscada = unaFraseBuscada;
-        terminal = idTerminal;
+        //terminal = idTerminal;
         fechaFormateada = (new DateTime(fecha)).toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
-        username = App.getInstance().buscarUsuarioPorId(terminal).getUsername();
+        usuario = App.getInstance().buscarUsuarioPorId(idTerminal);
     }
 
     //Constructor por default privado. Agregado para que lo use el mapper de Jackson a JSON
@@ -43,10 +45,6 @@ public class Busqueda {
 
     public Integer getCantidadResultados() {
         return cantidadResultados;
-    }
-
-    public String getUsername(){
-    	return username;
     }
     
     public Date getFecha() {
@@ -69,20 +67,8 @@ public class Busqueda {
 		this.id = id;
 	}
 
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
-	}
-
 	public void setFecha(DateTime fecha) {
 		this.fecha = fecha.getMillis();
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public void setFraseBuscada(String fraseBuscada) {
@@ -115,7 +101,7 @@ public class Busqueda {
             //Instanciamos el Sender
             MailSender mailSender = new MailSender();
             //Especificamos el Body del mail
-            body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
+            String body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
                     + " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
             //Enviamos el mail
             mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"), body, false);
@@ -123,14 +109,15 @@ public class Busqueda {
         }
     }
 
-    
-    
-    public int getTerminal() {
-        return terminal;
-    }
+	public Usuario getUsuario() {
+		return usuario;
+	}
 
-    
-    public void setTerminal(int terminal) {
-        this.terminal = terminal;
-    }
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public void setFecha(long fecha) {
+		this.fecha = fecha;
+	}
 }

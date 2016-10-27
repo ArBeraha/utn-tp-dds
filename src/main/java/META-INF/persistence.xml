@@ -16,7 +16,11 @@
 		<class>ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco</class>
 		<class>ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco</class>
 		<class>ar.edu.utn.frba.dds.model.poi.DireccionEstablecimiento</class>
-		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<class>ar.edu.utn.frba.dds.model.user.Usuario</class>
+		<class>ar.edu.utn.frba.dds.model.user.TipoUsuario</class>
+		<class>ar.edu.utn.frba.dds.model.user.Administrador</class>
+		<class>ar.edu.utn.frba.dds.model.user.Terminal</class>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		
 		
 		

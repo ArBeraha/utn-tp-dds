@@ -163,16 +163,11 @@ public class App implements WithGlobalEntityManager {
 
 	public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra, final DateTime fechaHoraInicio,
 			int idTerminal) throws JsonParseException, JsonMappingException, IOException {
-		// TODO: Registrar la busqueda como hecha por idTerminal
 		Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio, idTerminal);
 		List<PuntoDeInteres> resultadoBusqueda = buscarPuntoDeInteresSinAlmacenarResultado(palabra);
 		nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
 		entityManager().getTransaction().begin();
 		entityManager().persist(nuevaBusqueda);
-		entityManager().getTransaction().commit();
-		nuevaBusqueda.setBody("VAMOS VIEJAAAAAAA!");
-		entityManager().getTransaction().begin();
-		entityManager().merge(nuevaBusqueda);
 		entityManager().getTransaction().commit();
 		return resultadoBusqueda;
 	}
@@ -404,7 +399,7 @@ public class App implements WithGlobalEntityManager {
 			System.out.println("Generando Reporte de Busquedas por terminal:");
 			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda").getResultList();
 			reporte = busquedas.stream()
-					.collect(Collectors.groupingBy(busqueda -> busqueda.getTerminal(), Collectors.counting()));
+					.collect(Collectors.groupingBy(busqueda -> busqueda.getUsuario().getId(), Collectors.counting()));
 			reporte.forEach(
 					(terminal, cantidad) -> System.out.println("Terminal : " + terminal + " Cantidad : " + cantidad));
 		} catch (Exception e) {
