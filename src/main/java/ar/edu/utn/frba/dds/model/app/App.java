@@ -27,6 +27,7 @@ import ar.edu.utn.frba.dds.model.accion.AgregarAccionesATodos;
 import ar.edu.utn.frba.dds.model.accion.BajaPoisInactivos;
 import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
+import ar.edu.utn.frba.dds.model.poi.Direccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
@@ -217,6 +218,7 @@ public class App {
 		palabrasClave.add("Tienda");
 		local.setPalabrasClave(palabrasClave);
 		local.setHorarios(horarios);
+		local.setDireccion("Mozart 2300");
 
 		CGP cgp;
 		Comuna comuna;
@@ -243,6 +245,7 @@ public class App {
 		cgp.setServicios(servicios);
 		ArrayList<String> palabras = new ArrayList<String>();
 		palabras.add("CGP");
+		palabras.add("CGPDummy");
 		cgp.setPalabrasClave(palabras);
 		
 		ParadaColectivo parada = new ParadaColectivo();

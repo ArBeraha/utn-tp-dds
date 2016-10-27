@@ -5,14 +5,17 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
+@JsonIgnoreProperties({ "dateTimeProvider","geolocalizacion","palabrasClave" })
 public abstract class PuntoDeInteres {
 
     protected static final AtomicInteger contador = new AtomicInteger(0);
     //TODO Este id es temporal para simular un ID de la base de datos, hasta que implementemos la misma
     protected int id;
-    protected Direccion direccion;
+    protected String direccion;
     protected Geolocalizacion geolocalizacion;
     protected DateTimeProvider dateTimeProvider;
     protected ArrayList<String> palabrasClave;
@@ -25,11 +28,11 @@ public abstract class PuntoDeInteres {
         return id;
     }
 
-    public Direccion getDireccion() {
+    public String getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(final Direccion direccion) {
+    public void setDireccion(final String direccion) {
         this.direccion = direccion;
     }
 

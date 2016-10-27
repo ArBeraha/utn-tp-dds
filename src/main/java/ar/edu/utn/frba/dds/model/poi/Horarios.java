@@ -11,8 +11,17 @@ import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({ "rangosHorario" })
+//@JsonIgnoreProperties({ "rangosHorario" })
 public class Horarios {
+
+    
+    public Map<Integer, List<RangoHorario>> getRangosHorario() {
+        return rangosHorario;
+    }
+
+    public void setRangosHorario(Map<Integer, List<RangoHorario>> rangosHorario) {
+        this.rangosHorario = rangosHorario;
+    }
 
     private Map<Integer, List<RangoHorario>> rangosHorario = new HashMap<Integer, List<RangoHorario>>();
 

@@ -2,9 +2,12 @@ package ar.edu.utn.frba.dds.model.poi.sucursal.banco;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.HorariosEspeciales;
 
+@JsonIgnoreProperties({ "horarios" })
 public class ServicioBanco {
 
     private String nombre;

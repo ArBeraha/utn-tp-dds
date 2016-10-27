@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.HorariosEspeciales;
@@ -12,6 +14,7 @@ import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
+@JsonIgnoreProperties({ "horarios", "horariosEspeciales" })
 public class LocalComercial extends PuntoDeInteres {
 
     private String nombre;

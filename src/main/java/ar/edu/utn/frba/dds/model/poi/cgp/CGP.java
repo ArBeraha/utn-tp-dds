@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
+@JsonIgnoreProperties({ "comuna", "nombreDirector", "telefono" })
 public class CGP extends PuntoDeInteres {
 
     private ArrayList<ServicioCGP> servicios;

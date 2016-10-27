@@ -43,8 +43,6 @@ public class CentroDeserializer extends JsonDeserializer<List<CGP>> {
             comuna.setSuperficie(new Polygon());
             String nombreDirector = node.get("director").asText();
             String domicilio = node.get("domicilio").asText();
-            Direccion direccion = new Direccion();
-            direccion.setCallePrincipal(domicilio);
             String telefono = node.get("telefono").asText();
             String zonas = node.get("zonas").asText();
             List<String> zonasList = Arrays.asList(zonas.split(", "));
@@ -67,7 +65,7 @@ public class CentroDeserializer extends JsonDeserializer<List<CGP>> {
                 servicios.add(servicioCGP);
             }
             cgp.setComuna(comuna);
-            cgp.setDireccion(direccion);
+            cgp.setDireccion(domicilio);
             //TODO Que hacemos con la geolocalizacion?
             cgp.setGeolocalizacion(new Geolocalizacion(0, 0));
             cgp.setNombreDirector(nombreDirector);

@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
+@JsonIgnoreProperties({ "sucursal" , "gerente", "horarios" })
 public class SucursalBanco extends PuntoDeInteres {
 
     private String banco;
