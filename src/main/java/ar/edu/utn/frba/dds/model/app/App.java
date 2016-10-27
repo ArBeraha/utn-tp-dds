@@ -113,10 +113,16 @@ public class App implements WithGlobalEntityManager {
 	}
 
 	public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
+		entityManager().getTransaction().begin();
+		entityManager().persist(pdi);
+		entityManager().getTransaction().commit();
 		puntosDeInteres.add(pdi);
 	}
 
 	public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
+		entityManager().getTransaction().begin();
+		entityManager().remove(pdi);
+		entityManager().getTransaction().commit();
 		puntosDeInteres.remove(pdi);
 	}
 
@@ -124,6 +130,9 @@ public class App implements WithGlobalEntityManager {
 		pdi.setDireccion(pdiNuevo.getDireccion());
 		pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
 		pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
+		entityManager().getTransaction().begin();
+		entityManager().merge(pdi);
+		entityManager().getTransaction().commit();
 	}
 
 	public PuntoDeInteres buscarPuntoDeInteresPorId(final int idPoi) {
@@ -182,9 +191,7 @@ public class App implements WithGlobalEntityManager {
 	// TODO Esto queda public hasta que se implemente base de datos donde estén
 	// guardados los POIs
 	public List<PuntoDeInteres> populateDummyPOIs() {
-		List<PuntoDeInteres> pois = entityManager().createQuery("FROM PuntoDeInteres").getResultList();
-
-		// new ArrayList<PuntoDeInteres>();
+		puntosDeInteres = entityManager().createQuery("FROM PuntoDeInteres").getResultList();
 
 		agregarTerminal(new Geolocalizacion(9, 9)); // ID 1 Cercano al CGP
 		agregarTerminal(new Geolocalizacion(12, 28)); // ID 2 Cercano al Local
@@ -260,7 +267,7 @@ public class App implements WithGlobalEntityManager {
 		Set<String> pal = new HashSet<>();
 		pal.add("Colectivo");
 		pal.add("Bondi");
-		parada.setPalabrasClave(palabrasClave);
+		parada.setPalabrasClave(pal);
 
 		SucursalBanco sucursal = new SucursalBanco(new DateTimeProviderImpl(new DateTime()));
 		sucursal.setBanco("Nacion");
@@ -283,18 +290,12 @@ public class App implements WithGlobalEntityManager {
 		palabras2.add("Banco");
 		sucursal.setPalabrasClave(palabras2);
 
-		pois.add(local);
-		pois.add(cgp);
-		pois.add(parada);
-
-		entityManager().getTransaction().begin();
-		entityManager().persist(local);
-		entityManager().persist(cgp);
-		entityManager().persist(parada);
-		entityManager().persist(sucursal);
-		entityManager().getTransaction().commit();
-
-		return pois;
+		agregarPuntoDeInteres(local);
+		agregarPuntoDeInteres(cgp);
+		agregarPuntoDeInteres(parada);
+		agregarPuntoDeInteres(sucursal);
+		
+		return puntosDeInteres;
 	}
 
 	private void populateAcciones() {

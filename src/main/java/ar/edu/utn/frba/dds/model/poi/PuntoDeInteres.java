@@ -89,12 +89,12 @@ public abstract class PuntoDeInteres {
 
     public abstract boolean tienePalabra(final String palabra);
 
-    public void setPalabrasClave(HashSet<String> palabrasClave) {
+    public void setPalabrasClave(Set<String> palabrasClave) {
         this.palabrasClave = palabrasClave;
     }
 
-    public HashSet<String> getPalabrasClave() {
-        return (HashSet<String>) this.palabrasClave;
+    public Set<String> getPalabrasClave() {
+        return this.palabrasClave;
     }
 
     protected boolean esPalabraClave(final String palabra) {

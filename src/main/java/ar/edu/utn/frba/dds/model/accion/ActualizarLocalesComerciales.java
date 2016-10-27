@@ -53,8 +53,8 @@ public class ActualizarLocalesComerciales extends Accion {
                     System.out.println("Se agregó el local comercial " + subCadena[0]);
                 } else {
                     LocalComercial local = (LocalComercial) resultado.get(0);
-                    HashSet<String> palabras = local.getPalabrasClave();
-                    HashSet<String> palabrasNuevas = this.obtenerPalabrasClave(subCadena[1]);
+                    Set<String> palabras = local.getPalabrasClave();
+                    Set<String> palabrasNuevas = this.obtenerPalabrasClave(subCadena[1]);
                     Set<String> palabrasNuevasDistintas = palabrasNuevas.stream().filter(palabra -> !palabras.contains(palabra)).collect(Collectors.toSet());
                     palabras.addAll(palabrasNuevasDistintas);
                     local.setPalabrasClave(palabras);

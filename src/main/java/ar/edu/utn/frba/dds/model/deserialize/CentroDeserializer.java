@@ -51,7 +51,7 @@ public class CentroDeserializer extends JsonDeserializer<List<CGP>> {
             String telefono = node.get("telefono").asText();
             String zonas = node.get("zonas").asText();
             List<String> zonasList = Arrays.asList(zonas.split(", "));
-            HashSet<String> zonasSet = (HashSet<String>) zonasList.stream().collect(Collectors.toSet());
+            Set<String> zonasSet = zonasList.stream().collect(Collectors.toSet());
             Iterator<JsonNode> nodeServiciosIterator = node.get("servicios").elements();
             //Cada ServicioCGP del Centro
             while (nodeServiciosIterator.hasNext()) {
