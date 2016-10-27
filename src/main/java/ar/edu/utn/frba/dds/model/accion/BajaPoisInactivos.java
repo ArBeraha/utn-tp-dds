@@ -5,7 +5,9 @@ import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 import ar.edu.utn.frba.dds.services.externo.ServicioInactividadPOIImpl;
+import javax.persistence.Entity;
 
+@Entity
 public class BajaPoisInactivos extends Accion {
 
     public BajaPoisInactivos() {

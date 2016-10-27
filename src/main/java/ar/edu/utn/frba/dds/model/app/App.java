@@ -1,30 +1,20 @@
 package ar.edu.utn.frba.dds.model.app;
 
 import java.awt.Polygon;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.transaction.Transactional;
-
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils.MillisProvider;
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.accion.AccionFactory;
 import ar.edu.utn.frba.dds.model.accion.ActualizarLocalesComerciales;
@@ -41,6 +31,8 @@ import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
+import ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo;
+import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.model.security.Encoder;
 import ar.edu.utn.frba.dds.model.terminal.interactiva.TerminalInteractiva;
@@ -71,9 +63,10 @@ public class App implements WithGlobalEntityManager {
 	}
 
 	// Constructor privado por el Singleton
+	@SuppressWarnings("unchecked")
 	private App() {
 		terminales = new ArrayList<>();
-		usuarios = new ArrayList<>();
+		usuarios = entityManager().createQuery("FROM Usuario").getResultList();
 		setResultadosAcciones(new ArrayList<>());
 		puntosDeInteres = populateDummyPOIs();
 		populateAcciones();
@@ -108,11 +101,14 @@ public class App implements WithGlobalEntityManager {
 		return terminal.getId();
 	}
 
-	public static int agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
+	public Usuario agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
 		Encoder encoder = Encoder.getInstance();
 		Usuario usuario = new Usuario(username, encoder.encode(password), tipoUsuario);
+		entityManager().getTransaction().begin();
+		entityManager().persist(usuario);
+		entityManager().getTransaction().commit();
 		usuarios.add(usuario);
-		return usuario.getId();
+		return usuario;
 	}
 
 	public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
@@ -184,8 +180,10 @@ public class App implements WithGlobalEntityManager {
 
 	// TODO Esto queda public hasta que se implemente base de datos donde estén
 	// guardados los POIs
-	public static List<PuntoDeInteres> populateDummyPOIs() {
-		List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
+	public List<PuntoDeInteres> populateDummyPOIs() {
+		List<PuntoDeInteres> pois = entityManager().createQuery("FROM PuntoDeInteres").getResultList();
+
+		// new ArrayList<PuntoDeInteres>();
 
 		agregarTerminal(new Geolocalizacion(9, 9)); // ID 1 Cercano al CGP
 		agregarTerminal(new Geolocalizacion(12, 28)); // ID 2 Cercano al Local
@@ -255,29 +253,73 @@ public class App implements WithGlobalEntityManager {
 		palabras.add("CGP");
 		cgp.setPalabrasClave(palabras);
 
+		ParadaColectivo parada = new ParadaColectivo();
+		parada.setGeolocalizacion(new Geolocalizacion(12, 58));
+		parada.setLinea("103");
+		Set<String> pal = new HashSet<>();
+		pal.add("Colectivo");
+		pal.add("Bondi");
+		parada.setPalabrasClave(palabrasClave);
+
+		SucursalBanco sucursal = new SucursalBanco(new DateTimeProviderImpl(new DateTime()));
+		sucursal.setBanco("Nacion");
+		ServicioBanco servicioB = new ServicioBanco();
+		servicioB.setNombre("Asesoramiento");
+		Geolocalizacion geolocalizacionSucursal = new Geolocalizacion(12, 28);
+		sucursal.setGeolocalizacion(geolocalizacionSucursal);
+		Set<ServicioBanco> servicios2 = new HashSet<ServicioBanco>();
+		servicios2.add(servicioB);
+		Horarios horarioServicio = new Horarios();
+		LocalTime horaInicio = new LocalTime(12, 0);
+		LocalTime horaFin = new LocalTime(16, 0);
+		RangoHorario tardeLunesYMartes = new RangoHorario(horaInicio, horaFin);
+		horarioServicio.agregarRangoHorario(1, tardeLunesYMartes);
+		horarioServicio.agregarRangoHorario(2, tardeLunesYMartes);
+		servicioB.setHorarios(horarioServicio);
+		sucursal.setServicios(servicios2);
+
+		HashSet<String> palabras2 = new HashSet<String>();
+		palabras2.add("Banco");
+		sucursal.setPalabrasClave(palabras2);
+
 		pois.add(local);
 		pois.add(cgp);
+		pois.add(parada);
+
+		entityManager().getTransaction().begin();
+		entityManager().persist(local);
+		entityManager().persist(cgp);
+		entityManager().persist(parada);
+		entityManager().persist(sucursal);
+		entityManager().getTransaction().commit();
 
 		return pois;
 	}
 
-	private static void populateAcciones() {
+	private void populateAcciones() {
 		AccionFactory.acciones = new HashMap<Integer, Accion>();
-		AccionFactory.addAccion(new ActualizarLocalesComerciales());
-		AccionFactory.addAccion(new BajaPoisInactivos());
-		AccionFactory.addAccion(new AgregarAccionesATodos());
-		AccionFactory.addAccion(new DefinirProcesoMultiple());
-		List<Accion> multipleList = new ArrayList<Accion>();
-		multipleList.add(AccionFactory.getAccion(0));
-		multipleList.add(AccionFactory.getAccion(1));
-		AccionFactory.addAccionMultiple(multipleList);
+		if (entityManager().createQuery("FROM Accion").getResultList().isEmpty()) {
+			AccionFactory.addAccion(new ActualizarLocalesComerciales());
+			AccionFactory.addAccion(new BajaPoisInactivos());
+			AccionFactory.addAccion(new AgregarAccionesATodos());
+			AccionFactory.addAccion(new DefinirProcesoMultiple());
+			List<Accion> multipleList = new ArrayList<Accion>();
+			multipleList.add(AccionFactory.getAccion(0));
+			multipleList.add(AccionFactory.getAccion(1));
+			AccionFactory.addAccionMultiple(multipleList);
+		} else {
+			List<Accion> accs = entityManager().createQuery("FROM Accion").getResultList();
+			accs.forEach(x -> AccionFactory.addAccion(x));
+		}
 	}
 
-	public static void populateDummyUsers() {
-		agregarUsuario("terminalAbasto", "pwd", new Terminal());
-		agregarUsuario("terminalDOT", "pwd", new Terminal());
-		agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal());
-		agregarUsuario("admin", "1234", new Administrador());
+	public void populateDummyUsers() {
+		if (entityManager().createQuery("FROM Usuario").getResultList().isEmpty()) {
+			agregarUsuario("terminalAbasto", "pwd", new Terminal());
+			agregarUsuario("terminalDOT", "pwd", new Terminal());
+			agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal());
+			agregarUsuario("admin", "1234", new Administrador());
+		}
 	}
 
 	private void agregarSucursalesBancoExternas() {
@@ -372,8 +414,10 @@ public class App implements WithGlobalEntityManager {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas de Terminal " + idTerminal + ": ");
-			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda WHERE terminal="+idTerminal).getResultList();
-			reporte = busquedas.stream().collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
+			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda WHERE terminal=" + idTerminal)
+					.getResultList();
+			reporte = busquedas.stream()
+					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
 		} catch (Exception e) {
 			e.printStackTrace();

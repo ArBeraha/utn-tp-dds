@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.utn.frba.dds.model.user.Usuario;
+import javax.persistence.Entity;
 
 // Accion crear proceso multiple
+@Entity
 public class DefinirProcesoMultiple extends Accion {
 
     public DefinirProcesoMultiple(){

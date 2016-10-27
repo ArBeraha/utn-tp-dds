@@ -4,9 +4,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.utn.frba.dds.model.user.Usuario;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+@Entity
 public class AccionMultiple extends Accion {
     
+	@Transient//@ManyToMany(fetch=FetchType.LAZY)
     private List<Accion> acciones;
     
     public AccionMultiple(List<Accion> acciones){

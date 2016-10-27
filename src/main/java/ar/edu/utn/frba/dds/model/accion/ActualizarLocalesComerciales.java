@@ -19,8 +19,10 @@ import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
+import javax.persistence.Entity;
 
 // Actualizar locales comerciales
+@Entity
 public class ActualizarLocalesComerciales extends Accion {
 
     public ActualizarLocalesComerciales() {
