@@ -1,14 +1,11 @@
 package ar.edu.utn.frba.dds.model.user;
 
-import java.util.ArrayList;
+import javax.persistence.Entity;
 
-import ar.edu.utn.frba.dds.model.accion.Accion;
-
+@Entity
 public class Administrador extends TipoUsuario {
 
     public Administrador() {
         nombreTipoUsuario = "Administrador";
-        accionesDisponibles = new ArrayList<Accion>();
-        
     }
 }

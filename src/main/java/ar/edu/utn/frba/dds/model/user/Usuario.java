@@ -27,8 +27,8 @@ public class Usuario {
     private int id;
     private String username;
     private String pass;
-    @Transient
-    //@Embedded
+    //@Transient
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private TipoUsuario tipoUsuario;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ErrorHandler errorHandler;

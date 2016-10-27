@@ -322,7 +322,9 @@ public class App implements WithGlobalEntityManager {
 			agregarUsuario("terminalAbasto", "pwd", new Terminal());
 			agregarUsuario("terminalDOT", "pwd", new Terminal());
 			agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal());
-			agregarUsuario("admin", "1234", new Administrador());
+			Usuario admin = agregarUsuario("admin", "1234", new Administrador());
+			admin.agregarAccion(AccionFactory.getAccion(1));
+			admin.agregarAccion(AccionFactory.getAccion(3));
 		}
 	}
 
