@@ -7,6 +7,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
@@ -20,6 +22,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+
+@JsonIgnoreProperties({ "comuna", "nombreDirector", "telefono", "dateTimeProvider", "geolocalizacion", "palabrasClave" })
 @Entity
 public class CGP extends PuntoDeInteres {
 	

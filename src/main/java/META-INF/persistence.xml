@@ -4,7 +4,6 @@
 	    <!-- 	<provider>org.hibernate.ejb.HibernatePersistence</provider>-->
 	 <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> 
 		<class>ar.edu.utn.frba.dds.model.app.Busqueda</class>
-		<class>ar.edu.utn.frba.dds.model.poi.Direccion</class>
 		<class>ar.edu.utn.frba.dds.model.poi.Geolocalizacion</class>
 		<class>ar.edu.utn.frba.dds.model.poi.PuntoDeInteres</class>
 		<class>ar.edu.utn.frba.dds.model.poi.cgp.CGP</class>
@@ -15,7 +14,6 @@
 		<class>ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo</class>
 		<class>ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco</class>
 		<class>ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco</class>
-		<class>ar.edu.utn.frba.dds.model.poi.DireccionEstablecimiento</class>
 		<class>ar.edu.utn.frba.dds.model.user.Usuario</class>
 		<class>ar.edu.utn.frba.dds.model.user.TipoUsuario</class>
 		<class>ar.edu.utn.frba.dds.model.user.Administrador</class>

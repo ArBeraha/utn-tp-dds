@@ -23,7 +23,6 @@ public class LoginController {
     @Autowired
     AppService appService;
 
-    //TODO cómo tomo los parámetros en el request con SPRING MVC para un POST????
     @RequestMapping(value = { "/login" }, method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<?> login(@RequestParam("name") String user, @RequestParam("password") String pass) {
         try {

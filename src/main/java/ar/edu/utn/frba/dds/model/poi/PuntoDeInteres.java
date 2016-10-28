@@ -17,16 +17,16 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
+
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
-
-@JsonIgnoreProperties({ "dateTimeProvider","geolocalizacion" })
+@JsonIgnoreProperties({ "dateTimeProvider","geolocalizacion","palabrasClave" })
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class PuntoDeInteres {
@@ -34,9 +34,7 @@ public abstract class PuntoDeInteres {
 	@Id
 	@GeneratedValue
 	protected int id;
-	@OneToOne(fetch = FetchType.LAZY)
-	@Cascade(value = CascadeType.ALL)
-	protected Direccion direccion;
+	protected String direccion;
 	@Embedded
 	protected Geolocalizacion geolocalizacion;
 	@Transient
@@ -54,11 +52,11 @@ public abstract class PuntoDeInteres {
 		return id;
 	}
 
-	public Direccion getDireccion() {
+	public String getDireccion() {
 		return direccion;
 	}
 
-	public void setDireccion(final Direccion direccion) {
+	public void setDireccion(final String direccion) {
 		this.direccion = direccion;
 	}
 

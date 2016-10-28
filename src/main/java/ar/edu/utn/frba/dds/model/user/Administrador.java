@@ -7,5 +7,6 @@ public class Administrador extends TipoUsuario {
 	
     public Administrador() {
         nombreTipoUsuario = "Administrador";
+
     }
 }

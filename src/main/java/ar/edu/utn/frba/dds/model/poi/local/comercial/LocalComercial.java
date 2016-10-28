@@ -4,6 +4,8 @@ import java.util.HashSet;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
@@ -18,6 +20,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
 @Entity
+@JsonIgnoreProperties({ "horarios", "horariosEspeciales", "dateTimeProvider","geolocalizacion","palabrasClave" })
+
 public class LocalComercial extends PuntoDeInteres {
 
 	private String nombre;

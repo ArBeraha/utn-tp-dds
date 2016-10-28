@@ -1,4 +1,4 @@
-app.controller('AdminController', ['$scope', '$cookies', function ($scope, $cookies) {
+app.controller('AdminController', ['$scope', '$cookies', '$location', function ($scope, $cookies, $location) {
 
     'use strict';
 

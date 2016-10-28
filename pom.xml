@@ -164,6 +164,13 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-joda -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-joda</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
 		<!-- Mail sender -->
 		<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
 		<dependency>
@@ -207,15 +214,6 @@
 			<version>2.2.8</version>
 		</dependency>
 		<!-- End: JPA Persistence Dependencies -->
-
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-joda -->
- 		<dependency>
- 			<groupId>com.fasterxml.jackson.datatype</groupId>
- 			<artifactId>jackson-datatype-joda</artifactId>
- 			<version>${jackson.version}</version>
- 		</dependency>
-
-
 
 	</dependencies>
 

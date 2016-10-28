@@ -21,9 +21,10 @@ app.controller('LoginController', ['$scope', '$http', '$location', 'LoadingBackd
             var promise = $http.post('/DDS2016/login?name=' + $scope.user.name + '&password=' + $scope.user.password);
             LoadingBackdrop.show();
             promise.then(function (response) {
+                var user = JSON.parse(response.data);
                 LoadingBackdrop.hide();
-                $cookies.putObject('user', response.data);
-                if (response.data.tipo.toLowerCase() === "administrador") {
+                $cookies.putObject('user', user);
+                if (user.tipo.toLowerCase() === "administrador") {
                     $location.url('/admin');
                 } else {
                     $location.url('/terminal');

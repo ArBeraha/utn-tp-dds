@@ -5,13 +5,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="form-group">
-            <select class="form-control">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-            </select>
+        <div class="col-xs-offset-4 col-xs-4">
+            <div class="form-group">
+                <select class="form-control">
+                    <option>Seleccione una accion</option>
+                    <option ng-repeat="accion in acciones">{{accion}}</option>
+                </select>
+            </div>
         </div>
     </div>
 </div>

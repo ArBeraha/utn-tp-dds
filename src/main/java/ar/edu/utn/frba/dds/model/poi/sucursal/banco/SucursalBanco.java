@@ -6,6 +6,9 @@ import java.util.Set;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
@@ -19,6 +22,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+@JsonIgnoreProperties({ "sucursal" , "gerente", "horarios", "dateTimeProvider", "geolocalizacion", "palabrasClave" })
 @Entity
 public class SucursalBanco extends PuntoDeInteres {
 

@@ -4,6 +4,8 @@ import java.awt.Polygon;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,8 +13,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.joda.time.DateTime;
+
 import org.joda.time.LocalDate;
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
+
 import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -25,7 +29,9 @@ import ar.edu.utn.frba.dds.model.accion.BajaPoisInactivos;
 import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
 import ar.edu.utn.frba.dds.model.accion.Primitivas;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
+import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
+
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
@@ -37,6 +43,7 @@ import ar.edu.utn.frba.dds.model.poi.horario.RangoHorarioEspecial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo;
+
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.model.security.Encoder;
@@ -57,6 +64,7 @@ public class App implements WithGlobalEntityManager {
 	private static List<PuntoDeInteres> puntosDeInteres;
 	private static List<Usuario> usuarios;
 	private static List<ResultadoAccion> resultadosAcciones;
+    private static List<AccionAnteBusqueda> accionesAnteBusqueda;
 
 	// Singleton
 	public static App getInstance() {
@@ -73,6 +81,8 @@ public class App implements WithGlobalEntityManager {
 		puntosDeInteres = populateDummyPOIs();
 		populateAcciones();
 		populateDummyUsers();
+		accionesAnteBusqueda = new ArrayList<>();
+		populateDummyAccionesAnteBusqueda();
 
 		try {
 			this.agregarSucursalesBancoExternas();
@@ -320,6 +330,18 @@ public class App implements WithGlobalEntityManager {
 		}
 	}
 
+    // TODO Esto queda public hasta que se implemente base de datos donde estén
+    // guardadas las AccionesAnteBusqueda
+    public static void populateDummyAccionesAnteBusqueda() {
+        AccionAnteBusqueda notificarAdmin = new AccionAnteBusqueda(); //id=1?
+        AccionAnteBusqueda almacenarBusqueda = new AccionAnteBusqueda(); //id=2?
+        notificarAdmin.setActivada(true);
+        notificarAdmin.setNombre("Notificar Administrador por demora excesiva en Búsqueda");
+        almacenarBusqueda.setActivada(true);
+        almacenarBusqueda.setNombre("Almacenar resultados de las búsquedas");
+        accionesAnteBusqueda.addAll(Arrays.asList(notificarAdmin,almacenarBusqueda));
+    }
+	
 	private void agregarSucursalesBancoExternas() {
 		ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
 		try {
@@ -450,5 +472,11 @@ public class App implements WithGlobalEntityManager {
 		usuarios.forEach(x -> actualizarUsuario(x));
 	}
 	
+    public List<AccionAnteBusqueda> getAccionesAnteBusqueda() {
+        return accionesAnteBusqueda;
+    }
 
+    public void setAccionesAnteBusqueda(List<AccionAnteBusqueda> accionesAnteBusqueda) {
+        App.accionesAnteBusqueda = accionesAnteBusqueda;
+    }
 }

@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
 
@@ -14,7 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-@JsonIgnoreProperties({ "id" })
+@JsonIgnoreProperties({ "horarios","id" })
 @Entity
 public class ServicioBanco {
 

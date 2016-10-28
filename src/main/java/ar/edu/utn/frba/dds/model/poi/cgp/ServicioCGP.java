@@ -39,7 +39,7 @@ public class ServicioCGP {
     public Horarios getHorarios() {
         return horarios;
     }
-    
+
     public void setHorarios(Horarios horarios) {
         this.horarios = horarios;
     }

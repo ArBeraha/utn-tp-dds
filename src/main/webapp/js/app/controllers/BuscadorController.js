@@ -6,6 +6,9 @@ app.controller('BuscadorController', ['$scope', '$cookies', 'toaster', 'BuscarPO
     $scope.pois = [];
     var usuario = $cookies.getObject('user');
     $scope.isUserLogged = (usuario !== undefined);
+    $scope.showModal = false;
+    $scope.modalHeader = "Consultar cercanía y disponibilidad";
+    $scope.modalText = "";
 
     $scope.buscarPOI = function (texto) {
         if (texto !== undefined && texto !== '') {
@@ -44,10 +47,28 @@ app.controller('BuscadorController', ['$scope', '$cookies', 'toaster', 'BuscarPO
             if (estaDisponible) {
                 mensajeDisponible = "está disponible";
             }
-            alert("El punto de interés " + poi.nombre + " " + mensajeCercano + " y " + mensajeDisponible);
+            $scope.modalText = "El punto de interés " + poi.nombre + " " + mensajeCercano + " y " + mensajeDisponible;
+            $scope.showModal = true;
         }, function () {
             toaster.pop('error', "Error", "Hubo un problema al realizar la consulta. Por favor intente de nuevo más tarde");
         });
+    };
+
+    $scope.getDia = function (numero) {
+        var dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+        return dias[numero - 1];
+    };
+
+    $scope.getKeys = function (json) {
+        return Object.keys(json);
+    };
+
+    $scope.addZeros = function (int) {
+        return int < 10 ? '0' + int : int;
+    };
+
+    $scope.cerrarModal = function () {
+        $scope.showModal = false;
     };
 
 }]);
