@@ -259,6 +259,7 @@ public class App implements WithGlobalEntityManager {
 		cgp.setServicios(servicios);
 		HashSet<String> palabras = new HashSet<String>();
 		palabras.add("CGP");
+		palabras.add("Chacabuco");
 		cgp.setPalabrasClave(palabras);
 
 		ParadaColectivo parada = new ParadaColectivo();

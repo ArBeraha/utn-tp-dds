@@ -24,7 +24,6 @@ public class RangoHorarioTest {
     @Test
     public void dadaUnaHoraFueraDeUnRangoNoDeberiaEstarIncluidaEnElRango() {
         LocalDateTime unaFechaHora = new LocalDateTime(2016, 10, 27, 11, 59);
-        int dia = unaFechaHora.getDayOfWeek();
         LocalTime horaInicioRango = new LocalTime(12, 00);
         LocalTime horaFinRango = new LocalTime(13, 00);
         RangoHorario rangoHorario = new RangoHorario(1, horaInicioRango, horaFinRango);
