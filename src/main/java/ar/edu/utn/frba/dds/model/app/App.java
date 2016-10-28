@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 import org.joda.time.LocalTime;
 
@@ -25,12 +26,14 @@ import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
 import ar.edu.utn.frba.dds.model.accion.Primitivas;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorarioEspecial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo;
@@ -202,20 +205,17 @@ public class App implements WithGlobalEntityManager {
 		LocalTime horaFinLunesAViernes2 = new LocalTime(18, 30);
 		LocalTime horaInicioSabado = new LocalTime(10, 0);
 		LocalTime horaFinSabado = new LocalTime(13, 30);
-		RangoHorario manianaLunesAViernes = new RangoHorario(horaInicioLunesAViernes, horaFinLunesAViernes);
-		RangoHorario tardeLunesAViernes = new RangoHorario(horaInicioLunesAViernes2, horaFinLunesAViernes2);
-		RangoHorario horarioSabado = new RangoHorario(horaInicioSabado, horaFinSabado);
-		horarios.agregarRangoHorario(1, manianaLunesAViernes);
-		horarios.agregarRangoHorario(2, manianaLunesAViernes);
-		horarios.agregarRangoHorario(3, manianaLunesAViernes);
-		horarios.agregarRangoHorario(4, manianaLunesAViernes);
-		horarios.agregarRangoHorario(5, manianaLunesAViernes);
-		horarios.agregarRangoHorario(1, tardeLunesAViernes);
-		horarios.agregarRangoHorario(2, tardeLunesAViernes);
-		horarios.agregarRangoHorario(3, tardeLunesAViernes);
-		horarios.agregarRangoHorario(4, tardeLunesAViernes);
-		horarios.agregarRangoHorario(5, tardeLunesAViernes);
-		horarios.agregarRangoHorario(6, horarioSabado);
+		horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
 		local = new LocalComercial(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 13, 30, 0)));
 		// setUp para esCercano
 		rubroLibreria = new Rubro();
@@ -229,7 +229,11 @@ public class App implements WithGlobalEntityManager {
 		palabrasClave.add("Tienda");
 		local.setPalabrasClave(palabrasClave);
 		local.setHorarios(horarios);
-
+		HorariosEspeciales especial = new HorariosEspeciales();
+		especial.agregarRangoHorario(new RangoHorarioEspecial(new LocalDate(2016,10,23), horaInicioLunesAViernes, horaFinLunesAViernes));
+		local.setHorariosEspeciales(especial);
+		
+		
 		CGP cgp;
 		Comuna comuna;
 		Polygon superficie;
@@ -248,13 +252,14 @@ public class App implements WithGlobalEntityManager {
 		ServicioCGP servicioRentas = new ServicioCGP();
 		servicioRentas.setNombre("Rentas");
 		Horarios horario = new Horarios();
-		horario.agregarRangoHorario(6, new RangoHorario(10, 0, 18, 0));
+		horario.agregarRangoHorario(new RangoHorario(6, 10, 0, 18, 0));
 		servicioRentas.setHorarios(horario);
 		Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
 		servicios.add(servicioRentas);
 		cgp.setServicios(servicios);
 		HashSet<String> palabras = new HashSet<String>();
 		palabras.add("CGP");
+		palabras.add("Chacabuco");
 		cgp.setPalabrasClave(palabras);
 
 		ParadaColectivo parada = new ParadaColectivo();
@@ -276,9 +281,8 @@ public class App implements WithGlobalEntityManager {
 		Horarios horarioServicio = new Horarios();
 		LocalTime horaInicio = new LocalTime(12, 0);
 		LocalTime horaFin = new LocalTime(16, 0);
-		RangoHorario tardeLunesYMartes = new RangoHorario(horaInicio, horaFin);
-		horarioServicio.agregarRangoHorario(1, tardeLunesYMartes);
-		horarioServicio.agregarRangoHorario(2, tardeLunesYMartes);
+		horarioServicio.agregarRangoHorario(new RangoHorario(1, horaInicio, horaFin));
+		horarioServicio.agregarRangoHorario(new RangoHorario(2, horaInicio, horaFin));
 		servicioB.setHorarios(horarioServicio);
 		sucursal.setServicios(servicios2);
 

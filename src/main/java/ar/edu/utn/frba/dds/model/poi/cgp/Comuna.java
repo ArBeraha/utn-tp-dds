@@ -14,7 +14,6 @@ import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 public class Comuna {
 
     private int numeroComuna;
-    @Transient
     private Polygon superficie;
 
     public int getNumeroComuna() {

@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.model.poi;
 
 import java.util.ArrayList;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -13,70 +12,71 @@ import javax.persistence.InheritanceType;
 public class Direccion {
 	@Id
 	protected int id;
-    protected String callePrincipal;
-    protected ArrayList<String> callesEntre;
-    protected int altura;
-    protected String localidad;
-    protected String barrio;
-    protected String provincia;
-    protected String pais;
+	protected String callePrincipal;
+	protected ArrayList<String> callesEntre;
+	protected int altura;
+	protected String localidad;
+	protected String barrio;
+	protected String provincia;
+	protected String pais;
 
-    public Direccion() {}
-    
-    public String getCallePrincipal() {
-        return callePrincipal;
-    }
+	public Direccion() {
+	}
 
-    public void setCallePrincipal(final String callePrincipal) {
-        this.callePrincipal = callePrincipal;
-    }
+	public String getCallePrincipal() {
+		return callePrincipal;
+	}
 
-    public ArrayList<String> getCallesEntre() {
-        return callesEntre;
-    }
+	public void setCallePrincipal(final String callePrincipal) {
+		this.callePrincipal = callePrincipal;
+	}
 
-    public void setCallesEntre(final ArrayList<String> callesEntre) {
-        this.callesEntre = callesEntre;
-    }
+	public ArrayList<String> getCallesEntre() {
+		return callesEntre;
+	}
 
-    public int getAltura() {
-        return altura;
-    }
+	public void setCallesEntre(final ArrayList<String> callesEntre) {
+		this.callesEntre = callesEntre;
+	}
 
-    public void setAltura(final int altura) {
-        this.altura = altura;
-    }
+	public int getAltura() {
+		return altura;
+	}
 
-    public String getLocalidad() {
-        return localidad;
-    }
+	public void setAltura(final int altura) {
+		this.altura = altura;
+	}
 
-    public void setLocalidad(final String localidad) {
-        this.localidad = localidad;
-    }
+	public String getLocalidad() {
+		return localidad;
+	}
 
-    public String getBarrio() {
-        return barrio;
-    }
+	public void setLocalidad(final String localidad) {
+		this.localidad = localidad;
+	}
 
-    public void setBarrio(final String barrio) {
-        this.barrio = barrio;
-    }
+	public String getBarrio() {
+		return barrio;
+	}
 
-    public String getProvincia() {
-        return provincia;
-    }
+	public void setBarrio(final String barrio) {
+		this.barrio = barrio;
+	}
 
-    public void setProvincia(final String provincia) {
-        this.provincia = provincia;
-    }
+	public String getProvincia() {
+		return provincia;
+	}
 
-    public String getPais() {
-        return pais;
-    }
+	public void setProvincia(final String provincia) {
+		this.provincia = provincia;
+	}
 
-    public void setPais(final String pais) {
-        this.pais = pais;
-    }
+	public String getPais() {
+		return pais;
+	}
+
+	public void setPais(final String pais) {
+		this.pais = pais;
+	}
 
 }
