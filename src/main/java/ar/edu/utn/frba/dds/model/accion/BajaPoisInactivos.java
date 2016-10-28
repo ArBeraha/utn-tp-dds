@@ -23,12 +23,13 @@ public class BajaPoisInactivos extends Accion {
 			ServicioInactividadPOIImpl servicio = new ServicioInactividadPOIImpl();
 			List<BajaInactividad> bajas = servicio.getPoisInactivos();
 			for (BajaInactividad baja : bajas) {
-				PuntoDeInteres poi = App.getInstance().buscarPuntoDeInteresPorId(baja.id);
+				PuntoDeInteres poi = App.getInstance().buscarPuntoDeInteresPorId(baja.getId());
 				if (poi != null) {
 					App.getInstance().eliminarPuntoDeInteres(poi);
-					System.out.println("Eliminando por inactividad POI id:" + baja.id);
+					App.getInstance().entityManager().persist(baja);
+					System.out.println("Eliminando por inactividad POI id:" + baja.getId());
 				} else
-					System.out.println("Eliminando por inactividad POI inexistente id:" + baja.id);
+					System.out.println("Baja por inactividad POI inexistente id:" + baja.getId());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
