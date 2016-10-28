@@ -22,8 +22,7 @@ public class HorariosTest {
         DateTime fechaHoraAConsultar = new DateTime(2016, 1, 1, 12, 30);
         LocalTime unaHoraInicio = new LocalTime(9, 30);
         LocalTime unaHoraFin = new LocalTime(20, 0);
-        RangoHorario unRangoHorario = new RangoHorario(unaHoraInicio, unaHoraFin);
-        horarios.agregarRangoHorario(fechaHoraAConsultar.getDayOfWeek(), unRangoHorario);
+        horarios.agregarRangoHorario(new RangoHorario(fechaHoraAConsultar.getDayOfWeek(), unaHoraInicio, unaHoraFin));
         Assert.assertTrue(horarios.atiende(fechaHoraAConsultar));
     }
 
@@ -32,8 +31,7 @@ public class HorariosTest {
         DateTime fechaHoraAConsultar = new DateTime(2016, 1, 1, 12, 30);
         LocalTime unaHoraInicio = new LocalTime(13, 0);
         LocalTime unaHoraFin = new LocalTime(20, 0);
-        RangoHorario unRangoHorario = new RangoHorario(unaHoraInicio, unaHoraFin);
-        horarios.agregarRangoHorario(fechaHoraAConsultar.getDayOfWeek(), unRangoHorario);
+        horarios.agregarRangoHorario(new RangoHorario(fechaHoraAConsultar.getDayOfWeek(),unaHoraInicio, unaHoraFin));
         Assert.assertFalse(horarios.atiende(fechaHoraAConsultar));
     }
 
@@ -49,12 +47,12 @@ public class HorariosTest {
         LocalTime rangoExistenteHoraFin = new LocalTime(20, 0);
         LocalTime rangoAagregarHoraInicio = new LocalTime(7, 0);
         LocalTime rangoAagregarHoraFin = new LocalTime(15, 0);
-        RangoHorario rangoExistente = new RangoHorario(rangoExistenteHoraInicio, rangoExistenteHoraFin);
-        RangoHorario rangoAagregar = new RangoHorario(rangoAagregarHoraInicio, rangoAagregarHoraFin);
-        horarios.agregarRangoHorario(1, rangoExistente);
+        RangoHorario rangoExistente = new RangoHorario(1, rangoExistenteHoraInicio, rangoExistenteHoraFin);
+        RangoHorario rangoAagregar = new RangoHorario(1, rangoAagregarHoraInicio, rangoAagregarHoraFin);
+        horarios.agregarRangoHorario(rangoExistente);
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("El rango ingresado: [07:00; 15:00] se superpone con el rango existente: [09:00; 20:00]");
-        horarios.agregarRangoHorario(1, rangoAagregar);
+        horarios.agregarRangoHorario(rangoAagregar);
     }
 
 }

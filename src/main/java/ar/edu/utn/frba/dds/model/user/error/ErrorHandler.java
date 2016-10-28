@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.model.user.error;
 
 import java.util.List;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

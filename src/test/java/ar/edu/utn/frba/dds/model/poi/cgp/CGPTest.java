@@ -47,7 +47,7 @@ public class CGPTest {
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
         Horarios horario = new Horarios();
-        horario.agregarRangoHorario(6, new RangoHorario(10,0,18,0));
+        horario.agregarRangoHorario(new RangoHorario(6,10,0,18,0));
         servicioRentas.setHorarios(horario);
         Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
         servicios.add(servicioRentas);

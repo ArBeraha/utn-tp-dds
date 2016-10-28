@@ -52,9 +52,8 @@ public class SucursalBancoTest {
         Horarios horarioServicio = new Horarios();
         LocalTime horaInicio = new LocalTime(12, 0);
         LocalTime horaFin = new LocalTime(16, 0);
-        RangoHorario tardeLunesYMartes = new RangoHorario(horaInicio, horaFin);
-        horarioServicio.agregarRangoHorario(1, tardeLunesYMartes);
-        horarioServicio.agregarRangoHorario(2, tardeLunesYMartes);
+        horarioServicio.agregarRangoHorario(new RangoHorario(1, horaInicio, horaFin));
+        horarioServicio.agregarRangoHorario(new RangoHorario(2, horaInicio, horaFin));
         servicio.setHorarios(horarioServicio);
         sucursal.setServicios(servicios);
         

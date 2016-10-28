@@ -12,8 +12,11 @@ import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 @Entity
@@ -22,7 +25,7 @@ public class LocalComercial extends PuntoDeInteres {
     private String nombre;
     @Embedded
     private Rubro rubro;
-    @Transient
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Horarios horarios;
     @Transient
     private HorariosEspeciales horariosEspeciales;
@@ -82,8 +85,8 @@ public class LocalComercial extends PuntoDeInteres {
         this.horariosEspeciales = horariosEspeciales;
     }
 
-    public void agregarRangoHorario(int unDia, RangoHorario unRangoHorario) {
-        this.horarios.agregarRangoHorario(unDia, unRangoHorario);
+    public void agregarRangoHorario(RangoHorario unRangoHorario) {
+        this.horarios.agregarRangoHorario(unRangoHorario);
     }
 
     @Override

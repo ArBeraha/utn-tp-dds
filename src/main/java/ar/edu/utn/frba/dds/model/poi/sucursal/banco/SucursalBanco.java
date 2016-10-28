@@ -3,8 +3,6 @@ package ar.edu.utn.frba.dds.model.poi.sucursal.banco;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -13,11 +11,13 @@ import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.OneToOne;
 
 @Entity
 public class SucursalBanco extends PuntoDeInteres {
@@ -25,10 +25,10 @@ public class SucursalBanco extends PuntoDeInteres {
     private String banco;
     private String sucursal;
     private String gerente;
-	@OneToMany(fetch=FetchType.EAGER) @Cascade(value = CascadeType.ALL)
+	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "idBanco", referencedColumnName = "id")
     private Set<ServicioBanco> servicios;
-@Transient
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Horarios horarios;
     private String tipo = TipoPoi.SUCURSAL_BANCO.toString();
 
@@ -43,12 +43,11 @@ public class SucursalBanco extends PuntoDeInteres {
         this.horarios = new Horarios();
         LocalTime horaInicioLunesAViernes = new LocalTime(10, 0);
         LocalTime horaFinLunesAViernes = new LocalTime(15, 0);
-        RangoHorario manianaLunesAViernes = new RangoHorario(horaInicioLunesAViernes, horaFinLunesAViernes);
-        horarios.agregarRangoHorario(1, manianaLunesAViernes);
-        horarios.agregarRangoHorario(2, manianaLunesAViernes);
-        horarios.agregarRangoHorario(3, manianaLunesAViernes);
-        horarios.agregarRangoHorario(4, manianaLunesAViernes);
-        horarios.agregarRangoHorario(5, manianaLunesAViernes);
+        horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes, horaFinLunesAViernes));
+        horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes, horaFinLunesAViernes));
+        horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes, horaFinLunesAViernes));
+        horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes, horaFinLunesAViernes));
+        horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes, horaFinLunesAViernes));
     }
 
     public String getBanco() {

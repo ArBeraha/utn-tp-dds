@@ -12,7 +12,7 @@ public class DefinirProcesoMultiple extends Accion {
 
 	public DefinirProcesoMultiple() {
 		nombre = "Definición de procesos multiples";
-		if (mensajeError=="Error Defualt")
+		if (mensajeError == "Error Defualt")
 			mensajeError = "Error al ejecutar el proceso: " + nombre;
 	}
 

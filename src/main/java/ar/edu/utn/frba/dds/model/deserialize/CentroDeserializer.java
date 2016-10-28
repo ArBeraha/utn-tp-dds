@@ -62,9 +62,9 @@ public class CentroDeserializer extends JsonDeserializer<List<CGP>> {
                 //Cada horario del ServicioCGP
                 while (nodeHorariosIterator.hasNext()) {
                     JsonNode nodeHorario = nodeHorariosIterator.next();
-                    RangoHorario rangoHorario = new RangoHorario(nodeHorario.get("horaDesde").asInt(),
+                    RangoHorario rangoHorario = new RangoHorario(nodeHorario.get("diaSemana").asInt(), nodeHorario.get("horaDesde").asInt(),
                             nodeHorario.get("minutosDesde").asInt(), nodeHorario.get("horaHasta").asInt(), nodeHorario.get("minutosHasta").asInt());
-                    horarios.agregarRangoHorario(nodeHorario.get("diaSemana").asInt(), rangoHorario);
+                    horarios.agregarRangoHorario(rangoHorario);
                 }
                 servicioCGP.setNombre(nodeServicio.get("nombre").asText());
                 servicioCGP.setHorarios(horarios);

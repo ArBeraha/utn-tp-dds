@@ -202,20 +202,17 @@ public class App implements WithGlobalEntityManager {
 		LocalTime horaFinLunesAViernes2 = new LocalTime(18, 30);
 		LocalTime horaInicioSabado = new LocalTime(10, 0);
 		LocalTime horaFinSabado = new LocalTime(13, 30);
-		RangoHorario manianaLunesAViernes = new RangoHorario(horaInicioLunesAViernes, horaFinLunesAViernes);
-		RangoHorario tardeLunesAViernes = new RangoHorario(horaInicioLunesAViernes2, horaFinLunesAViernes2);
-		RangoHorario horarioSabado = new RangoHorario(horaInicioSabado, horaFinSabado);
-		horarios.agregarRangoHorario(1, manianaLunesAViernes);
-		horarios.agregarRangoHorario(2, manianaLunesAViernes);
-		horarios.agregarRangoHorario(3, manianaLunesAViernes);
-		horarios.agregarRangoHorario(4, manianaLunesAViernes);
-		horarios.agregarRangoHorario(5, manianaLunesAViernes);
-		horarios.agregarRangoHorario(1, tardeLunesAViernes);
-		horarios.agregarRangoHorario(2, tardeLunesAViernes);
-		horarios.agregarRangoHorario(3, tardeLunesAViernes);
-		horarios.agregarRangoHorario(4, tardeLunesAViernes);
-		horarios.agregarRangoHorario(5, tardeLunesAViernes);
-		horarios.agregarRangoHorario(6, horarioSabado);
+		horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
 		local = new LocalComercial(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 13, 30, 0)));
 		// setUp para esCercano
 		rubroLibreria = new Rubro();
@@ -248,7 +245,7 @@ public class App implements WithGlobalEntityManager {
 		ServicioCGP servicioRentas = new ServicioCGP();
 		servicioRentas.setNombre("Rentas");
 		Horarios horario = new Horarios();
-		horario.agregarRangoHorario(6, new RangoHorario(10, 0, 18, 0));
+		horario.agregarRangoHorario(new RangoHorario(6, 10, 0, 18, 0));
 		servicioRentas.setHorarios(horario);
 		Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
 		servicios.add(servicioRentas);
@@ -276,9 +273,8 @@ public class App implements WithGlobalEntityManager {
 		Horarios horarioServicio = new Horarios();
 		LocalTime horaInicio = new LocalTime(12, 0);
 		LocalTime horaFin = new LocalTime(16, 0);
-		RangoHorario tardeLunesYMartes = new RangoHorario(horaInicio, horaFin);
-		horarioServicio.agregarRangoHorario(1, tardeLunesYMartes);
-		horarioServicio.agregarRangoHorario(2, tardeLunesYMartes);
+		horarioServicio.agregarRangoHorario(new RangoHorario(1, horaInicio, horaFin));
+		horarioServicio.agregarRangoHorario(new RangoHorario(2, horaInicio, horaFin));
 		servicioB.setHorarios(horarioServicio);
 		sucursal.setServicios(servicios2);
 

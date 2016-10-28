@@ -6,9 +6,13 @@ import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.HorariosEspeciales;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class ServicioBanco {
@@ -16,7 +20,7 @@ public class ServicioBanco {
 	@Id @GeneratedValue
 	private int id;
     private String nombre;
-    @Transient
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Horarios horarios;
     @Transient
     private HorariosEspeciales horariosEspeciales;
