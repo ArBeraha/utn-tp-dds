@@ -30,6 +30,7 @@ import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
 import ar.edu.utn.frba.dds.model.accion.Primitivas;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
+import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusquedasEnum;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
@@ -64,7 +65,7 @@ public class App implements WithGlobalEntityManager {
 	private static List<PuntoDeInteres> puntosDeInteres;
 	private static List<Usuario> usuarios;
 	private static List<ResultadoAccion> resultadosAcciones;
-    private static List<AccionAnteBusqueda> accionesAnteBusqueda;
+	private static List<AccionAnteBusqueda> accionesAnteBusqueda;
 
 	// Singleton
 	public static App getInstance() {
@@ -81,8 +82,11 @@ public class App implements WithGlobalEntityManager {
 		puntosDeInteres = populateDummyPOIs();
 		populateAcciones();
 		populateDummyUsers();
-		accionesAnteBusqueda = new ArrayList<>();
-		populateDummyAccionesAnteBusqueda();
+
+		if (entityManager().createQuery("FROM AccionAnteBusqueda").getResultList().isEmpty())
+			populateDummyAccionesAnteBusqueda();
+		else
+			accionesAnteBusqueda = entityManager().createQuery("FROM AccionAnteBusqueda").getResultList();
 
 		try {
 			this.agregarSucursalesBancoExternas();
@@ -148,14 +152,15 @@ public class App implements WithGlobalEntityManager {
 		else
 			return null;
 	}
-	
-	public List<Terminal> getTerminales(){
-		return usuarios.stream().filter(x -> x.getTipoUsuario().getClass() == Terminal.class).map(y ->(Terminal) y.getTipoUsuario()).collect(Collectors.toList());
+
+	public List<Terminal> getTerminales() {
+		return usuarios.stream().filter(x -> x.getTipoUsuario().getClass() == Terminal.class)
+				.map(y -> (Terminal) y.getTipoUsuario()).collect(Collectors.toList());
 	}
 
 	public Terminal buscarTerminalPorId(final int idTerminal) {
-		List<Terminal> terminal = getTerminales().stream()
-				.filter(unaTerminal -> idTerminal == unaTerminal.getId()).collect(Collectors.toList());
+		List<Terminal> terminal = getTerminales().stream().filter(unaTerminal -> idTerminal == unaTerminal.getId())
+				.collect(Collectors.toList());
 		return terminal.get(0);
 	}
 
@@ -172,12 +177,14 @@ public class App implements WithGlobalEntityManager {
 
 	public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra, final DateTime fechaHoraInicio,
 			int idTerminal) throws JsonParseException, JsonMappingException, IOException {
-		Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio, idTerminal);
 		List<PuntoDeInteres> resultadoBusqueda = buscarPuntoDeInteresSinAlmacenarResultado(palabra);
-		nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
-		entityManager().getTransaction().begin();
-		entityManager().persist(nuevaBusqueda);
-		entityManager().getTransaction().commit();
+		if (AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS.isActivada()) {
+			Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio, idTerminal);
+			nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
+			entityManager().getTransaction().begin();
+			entityManager().persist(nuevaBusqueda);
+			entityManager().getTransaction().commit();
+		}
 		return resultadoBusqueda;
 	}
 
@@ -231,10 +238,10 @@ public class App implements WithGlobalEntityManager {
 		local.setPalabrasClave(palabrasClave);
 		local.setHorarios(horarios);
 		HorariosEspeciales especial = new HorariosEspeciales();
-		especial.agregarRangoHorario(new RangoHorarioEspecial(new LocalDate(2016,10,23), horaInicioLunesAViernes, horaFinLunesAViernes));
+		especial.agregarRangoHorario(
+				new RangoHorarioEspecial(new LocalDate(2016, 10, 23), horaInicioLunesAViernes, horaFinLunesAViernes));
 		local.setHorariosEspeciales(especial);
-		
-		
+
 		CGP cgp;
 		Comuna comuna;
 		Polygon superficie;
@@ -296,7 +303,7 @@ public class App implements WithGlobalEntityManager {
 		agregarPuntoDeInteres(cgp);
 		agregarPuntoDeInteres(parada);
 		agregarPuntoDeInteres(sucursal);
-		
+
 		return puntosDeInteres;
 	}
 
@@ -322,27 +329,44 @@ public class App implements WithGlobalEntityManager {
 
 	public void populateDummyUsers() {
 		if (entityManager().createQuery("FROM Usuario").getResultList().isEmpty()) {
-			agregarUsuario("terminalAbasto", "pwd", new Terminal(new Geolocalizacion(12,28))); // ID 1 Cercano al Local
-			agregarUsuario("terminalDOT", "pwd", new Terminal(new Geolocalizacion(9, 9))); // ID 2 Cercano al CGP
-			agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal(new Geolocalizacion(666, 666))); //ID 3 Cercano a ninguno
+			agregarUsuario("terminalAbasto", "pwd", new Terminal(new Geolocalizacion(12, 28))); // ID
+																								// 1
+																								// Cercano
+																								// al
+																								// Local
+			agregarUsuario("terminalDOT", "pwd", new Terminal(new Geolocalizacion(9, 9))); // ID
+																							// 2
+																							// Cercano
+																							// al
+																							// CGP
+			agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal(new Geolocalizacion(666, 666))); // ID
+																												// 3
+																												// Cercano
+																												// a
+																												// ninguno
 			Usuario admin = agregarUsuario("admin", "1234", new Administrador());
 			admin.agregarAccion(AccionFactory.getAccion(Primitivas.ActualizarLocalesComerciales));
 			admin.agregarAccion(AccionFactory.getAccion(Primitivas.AgregarAccionesATodos));
 		}
 	}
 
-    // TODO Esto queda public hasta que se implemente base de datos donde estén
-    // guardadas las AccionesAnteBusqueda
-    public static void populateDummyAccionesAnteBusqueda() {
-        AccionAnteBusqueda notificarAdmin = new AccionAnteBusqueda(); //id=1?
-        AccionAnteBusqueda almacenarBusqueda = new AccionAnteBusqueda(); //id=2?
-        notificarAdmin.setActivada(true);
-        notificarAdmin.setNombre("Notificar Administrador por demora excesiva en Búsqueda");
-        almacenarBusqueda.setActivada(true);
-        almacenarBusqueda.setNombre("Almacenar resultados de las búsquedas");
-        accionesAnteBusqueda.addAll(Arrays.asList(notificarAdmin,almacenarBusqueda));
-    }
-	
+	// TODO Esto queda public hasta que se implemente base de datos donde estén
+	// guardadas las AccionesAnteBusqueda
+	public void populateDummyAccionesAnteBusqueda() {
+		accionesAnteBusqueda = new ArrayList<>();
+		AccionAnteBusqueda notificarAdmin = new AccionAnteBusqueda(); // id=1?
+		AccionAnteBusqueda almacenarBusqueda = new AccionAnteBusqueda(); // id=2?
+		notificarAdmin.setNombre("Notificar Administrador por demora excesiva en Búsqueda");
+		almacenarBusqueda.setNombre("Almacenar resultados de las búsquedas");
+		notificarAdmin.setActivada(true);
+		almacenarBusqueda.setActivada(true);
+		entityManager().getTransaction().begin();
+		entityManager().persist(notificarAdmin);
+		entityManager().persist(almacenarBusqueda);
+		entityManager().getTransaction().commit();
+		accionesAnteBusqueda.addAll(Arrays.asList(notificarAdmin, almacenarBusqueda));
+	}
+
 	private void agregarSucursalesBancoExternas() {
 		ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
 		try {
@@ -411,7 +435,6 @@ public class App implements WithGlobalEntityManager {
 		return reporte;
 	}
 
-
 	public Map<Integer, Long> generarReporteBusquedasPorTerminal() {
 		Map<Integer, Long> reporte = new HashMap<>();
 		try {
@@ -462,22 +485,22 @@ public class App implements WithGlobalEntityManager {
 		entityManager().getTransaction().commit();
 		resultadosAcciones.add(resultadoAccion);
 	}
-	
-	public void actualizarUsuario(Usuario usuario){
+
+	public void actualizarUsuario(Usuario usuario) {
 		entityManager().getTransaction().begin();
 		entityManager().merge(usuario);
 		entityManager().getTransaction().commit();
 	}
-	
-	public void actualizarUsuarios(){
+
+	public void actualizarUsuarios() {
 		usuarios.forEach(x -> actualizarUsuario(x));
 	}
-	
-    public List<AccionAnteBusqueda> getAccionesAnteBusqueda() {
-        return accionesAnteBusqueda;
-    }
 
-    public void setAccionesAnteBusqueda(List<AccionAnteBusqueda> accionesAnteBusqueda) {
-        App.accionesAnteBusqueda = accionesAnteBusqueda;
-    }
+	public List<AccionAnteBusqueda> getAccionesAnteBusqueda() {
+		return accionesAnteBusqueda;
+	}
+
+	public void setAccionesAnteBusqueda(List<AccionAnteBusqueda> accionesAnteBusqueda) {
+		App.accionesAnteBusqueda = accionesAnteBusqueda;
+	}
 }

@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 
+import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusquedasEnum;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 import ar.edu.utn.frba.dds.util.mail.MailSender;
@@ -21,46 +22,48 @@ import javax.persistence.OneToOne;
 @Entity
 public class Busqueda {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-    private Integer cantidadResultados;
-    private String fraseBuscada;
-    private Double duracion;
-    private LocalDateTime fecha;
-    private String fechaFormateada;
-    @OneToOne(fetch = FetchType.EAGER)
-    private Usuario usuario;
+	private Integer cantidadResultados;
+	private String fraseBuscada;
+	private Double duracion;
+	private LocalDateTime fecha;
+	private String fechaFormateada;
+	@OneToOne(fetch = FetchType.EAGER)
+	private Usuario usuario;
 
-    public Busqueda(String unaFraseBuscada, DateTime fechaHoraInicio, int idTerminal) {
-        fecha = fechaHoraInicio.toLocalDateTime();
-        fraseBuscada = unaFraseBuscada;
-        //terminal = idTerminal;
-        fechaFormateada = fecha.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
-        usuario = App.getInstance().buscarUsuarioPorId(idTerminal);
-    }
+	public Busqueda(String unaFraseBuscada, DateTime fechaHoraInicio, int idTerminal) {
+		fecha = fechaHoraInicio.toLocalDateTime();
+		fraseBuscada = unaFraseBuscada;
+		// terminal = idTerminal;
+		fechaFormateada = fecha.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
+		usuario = App.getInstance().buscarUsuarioPorId(idTerminal);
+	}
 
-    //Constructor por default privado. Agregado para que lo use el mapper de Jackson a JSON
-    public Busqueda() {
+	// Constructor por default privado. Agregado para que lo use el mapper de
+	// Jackson a JSON
+	public Busqueda() {
 
-    }
+	}
 
-    public Integer getCantidadResultados() {
-        return cantidadResultados;
-    }
-    
-    public Date getFecha() {
-        return fecha.toDate();
-    }
+	public Integer getCantidadResultados() {
+		return cantidadResultados;
+	}
 
-    public Double getDuracion() {
-        return duracion;
-    }
+	public Date getFecha() {
+		return fecha.toDate();
+	}
 
-    public String getFraseBuscada() {
-        return fraseBuscada;
-    }
+	public Double getDuracion() {
+		return duracion;
+	}
 
-    public int getId() {
+	public String getFraseBuscada() {
+		return fraseBuscada;
+	}
+
+	public int getId() {
 		return id;
 	}
 
@@ -73,42 +76,43 @@ public class Busqueda {
 	}
 
 	public void setFraseBuscada(String fraseBuscada) {
-        this.fraseBuscada = fraseBuscada;
-    }
+		this.fraseBuscada = fraseBuscada;
+	}
 
-    public String getFechaFormateada() {
-        return fechaFormateada;
-    }
+	public String getFechaFormateada() {
+		return fechaFormateada;
+	}
 
-    public void setFechaFormateada(String fechaFormateada) {
-        this.fechaFormateada = fechaFormateada;
-    }
+	public void setFechaFormateada(String fechaFormateada) {
+		this.fechaFormateada = fechaFormateada;
+	}
 
-    public void setCantidadResultados(Integer cantidadResultados) {
-        this.cantidadResultados = cantidadResultados;
-    }
+	public void setCantidadResultados(Integer cantidadResultados) {
+		this.cantidadResultados = cantidadResultados;
+	}
 
-    public void setDuracion(Double duracion) {
-        this.duracion = duracion;
-    }
+	public void setDuracion(Double duracion) {
+		this.duracion = duracion;
+	}
 
-    public void setResultados(Integer resultados, DateTime fechaFinBusqueda) {
-        Properties properties = PropertiesFactory.getAppProperties();
-        Double maxSegundos = Double.valueOf(properties.getProperty("max.demora.busqueda.segundos"));
-        cantidadResultados = resultados;
-        duracion = Double.valueOf(fechaFinBusqueda.getMillis() - fecha.toDateTime().getMillis()) / 1000;
-        if (duracion > maxSegundos) {
-            //Notificar
-            //Instanciamos el Sender
-            MailSender mailSender = new MailSender();
-            //Especificamos el Body del mail
-            String body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
-                    + " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
-            //Enviamos el mail
-            mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"), body, false);
-            System.out.println("E-Mail enviado con éxito");
-        }
-    }
+	public void setResultados(Integer resultados, DateTime fechaFinBusqueda) {
+		Properties properties = PropertiesFactory.getAppProperties();
+		Double maxSegundos = Double.valueOf(properties.getProperty("max.demora.busqueda.segundos"));
+		cantidadResultados = resultados;
+		duracion = Double.valueOf(fechaFinBusqueda.getMillis() - fecha.toDateTime().getMillis()) / 1000;
+		if (AccionAnteBusquedasEnum.NOTIFICAR_ADMINISTRADOR.isActivada() && (duracion > maxSegundos)) {
+			// Notificar
+			// Instanciamos el Sender
+			MailSender mailSender = new MailSender();
+			// Especificamos el Body del mail
+			String body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
+					+ " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
+			// Enviamos el mail
+			mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"),
+					body, false);
+			System.out.println("E-Mail enviado con éxito");
+		}
+	}
 
 	public Usuario getUsuario() {
 		return usuario;
