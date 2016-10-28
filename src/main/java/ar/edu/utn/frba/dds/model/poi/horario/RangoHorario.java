@@ -1,18 +1,14 @@
-package ar.edu.utn.frba.dds.model.poi;
+package ar.edu.utn.frba.dds.model.poi.horario;
 
-import org.joda.time.LocalTime;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 
 @Entity
-public class RangoHorario {
+public class RangoHorario extends Rango {
 
-	@Id
-	@GeneratedValue
-	private int id;
 	private int dia;
-	private LocalTime horaInicio, horaFin;
 
 	public RangoHorario() {
 	}
@@ -45,30 +41,10 @@ public class RangoHorario {
 			throw new IllegalAccessError("Los valores recibidos no corresponden a tiempos válidos");
 		}
 	}
-	
-	public boolean seSolapaCon(final RangoHorario rangoHorario) {
-		return ((rangoHorario.horaInicio.isBefore(horaFin) || rangoHorario.horaInicio.isEqual(horaFin))
-				&& (rangoHorario.horaFin.isAfter(horaInicio) || rangoHorario.horaFin.isEqual(horaInicio)));
-	}
 
-	public LocalTime getHoraInicio() {
-		return horaInicio;
-	}
-
-	public LocalTime getHoraFin() {
-		return horaFin;
-	}
-
-	public boolean incluye(final LocalTime hora) {
-		return ((hora.isAfter(horaInicio) || hora.isEqual(horaInicio)) && hora.isBefore(horaFin));
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	@Override
+	public boolean incluye(final LocalDateTime fechahora) {
+		return super.incluye(fechahora) && (fechahora.dayOfWeek().get() == this.dia);
 	}
 
 	public int getDia() {
@@ -77,13 +53,5 @@ public class RangoHorario {
 
 	public void setDia(int dia) {
 		this.dia = dia;
-	}
-
-	public void setHoraInicio(LocalTime horaInicio) {
-		this.horaInicio = horaInicio;
-	}
-
-	public void setHoraFin(LocalTime horaFin) {
-		this.horaFin = horaFin;
 	}
 }

@@ -6,10 +6,10 @@ import java.util.Set;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
-import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
 import javax.persistence.CascadeType;

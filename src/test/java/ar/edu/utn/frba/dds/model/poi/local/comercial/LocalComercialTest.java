@@ -10,8 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;

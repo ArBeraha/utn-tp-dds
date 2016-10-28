@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.model.poi;
+package ar.edu.utn.frba.dds.model.poi.horario;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -9,38 +9,21 @@ import javax.persistence.*;
 import javax.persistence.Id;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
-
+import org.joda.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({ "rangosHorario" }) //TODO: Sigue siendo necesario con el refactor?
+@JsonIgnoreProperties({ "rangosHorario" }) // TODO: Sigue siendo necesario con
+											// el refactor?
 @Entity
 public class Horarios {
 	@Id
 	@GeneratedValue
 	private int id;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "idPoi", referencedColumnName = "id") 
-	// Al ser Horario embedded en PuntoDeInteres el id al que accede es al del Poi y Al horarios no tener atributos no registra tabla, solo los rangos 
+	@JoinColumn(name = "idHorario", referencedColumnName = "id")
 	private Set<RangoHorario> rangosHorario = new HashSet<>();
 
 	public Horarios() {
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Set<RangoHorario> getRangosHorario() {
-		return rangosHorario;
-	}
-
-	public void setRangosHorario(Set<RangoHorario> rangosHorario) {
-		this.rangosHorario = rangosHorario;
 	}
 
 	public void agregarRangoHorario(RangoHorario unRangoHorario) {
@@ -71,8 +54,23 @@ public class Horarios {
 	}
 
 	public boolean atiende(final DateTime fechaHoraActual) {
-		int diaSemana = fechaHoraActual.getDayOfWeek();
-		LocalTime hora = fechaHoraActual.toLocalTime();
-		return rangosHorario.stream().anyMatch(x -> x.getDia() == diaSemana && x.incluye(hora));
+		LocalDateTime fechaHora = fechaHoraActual.toLocalDateTime();
+		return rangosHorario.stream().anyMatch(x -> x.incluye(fechaHora));
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Set<RangoHorario> getRangosHorario() {
+		return rangosHorario;
+	}
+
+	public void setRangosHorario(Set<RangoHorario> rangosHorario) {
+		this.rangosHorario = rangosHorario;
 	}
 }

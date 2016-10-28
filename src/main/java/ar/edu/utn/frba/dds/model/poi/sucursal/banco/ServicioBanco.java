@@ -4,8 +4,8 @@ import javax.persistence.Transient;
 
 import org.joda.time.DateTime;
 
-import ar.edu.utn.frba.dds.model.poi.Horarios;
-import ar.edu.utn.frba.dds.model.poi.HorariosEspeciales;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

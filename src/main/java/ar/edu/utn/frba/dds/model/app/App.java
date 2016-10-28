@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 import org.joda.time.LocalTime;
 
@@ -25,12 +26,14 @@ import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
 import ar.edu.utn.frba.dds.model.accion.Primitivas;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorarioEspecial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo;
@@ -226,7 +229,11 @@ public class App implements WithGlobalEntityManager {
 		palabrasClave.add("Tienda");
 		local.setPalabrasClave(palabrasClave);
 		local.setHorarios(horarios);
-
+		HorariosEspeciales especial = new HorariosEspeciales();
+		especial.agregarRangoHorario(new RangoHorarioEspecial(new LocalDate(2016,10,23), horaInicioLunesAViernes, horaFinLunesAViernes));
+		local.setHorariosEspeciales(especial);
+		
+		
 		CGP cgp;
 		Comuna comuna;
 		Polygon superficie;

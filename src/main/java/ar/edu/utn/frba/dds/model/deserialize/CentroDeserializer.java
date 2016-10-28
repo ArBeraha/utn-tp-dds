@@ -20,11 +20,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import ar.edu.utn.frba.dds.model.poi.Direccion;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class CentroDeserializer extends JsonDeserializer<List<CGP>> {

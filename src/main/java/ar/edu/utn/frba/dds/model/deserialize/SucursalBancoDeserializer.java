@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;

@@ -5,11 +5,11 @@ import java.util.HashSet;
 import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
-import ar.edu.utn.frba.dds.model.poi.HorariosEspeciales;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
 import javax.persistence.CascadeType;
@@ -17,7 +17,6 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 
 @Entity
 public class LocalComercial extends PuntoDeInteres {
@@ -27,7 +26,7 @@ public class LocalComercial extends PuntoDeInteres {
     private Rubro rubro;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Horarios horarios;
-    @Transient
+    @Embedded
     private HorariosEspeciales horariosEspeciales;
     private String tipo = TipoPoi.LOCAL_COMERCIAL.toString();
 
@@ -79,10 +78,6 @@ public class LocalComercial extends PuntoDeInteres {
 
     public HorariosEspeciales getHorariosEspeciales() {
         return horariosEspeciales;
-    }
-
-    public void setHorariosEpeciales(HorariosEspeciales horariosEspeciales) {
-        this.horariosEspeciales = horariosEspeciales;
     }
 
     public void agregarRangoHorario(RangoHorario unRangoHorario) {

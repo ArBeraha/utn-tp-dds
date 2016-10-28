@@ -1,32 +1,35 @@
 package ar.edu.utn.frba.dds.model.poi;
 
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 
 public class RangoHorarioTest {
 
     @Test
     public void dadaUnaHoraDentroDeUnRangoDeberiaEstarIncluidaEnElRango() {
-        LocalTime unaHora = new LocalTime(12, 30);
+        LocalDateTime unaFechaHora = new LocalDateTime(2016, 10, 27, 12, 30);
+        int dia = unaFechaHora.getDayOfWeek();
         LocalTime horaInicioRango = new LocalTime(12, 00);
         LocalTime horaFinRango = new LocalTime(13, 00);
-        RangoHorario rangoHorario = new RangoHorario(1, horaInicioRango, horaFinRango);
+        RangoHorario rangoHorario = new RangoHorario(dia , horaInicioRango, horaFinRango);
 
-        Assert.assertTrue(rangoHorario.incluye(unaHora));
+        Assert.assertTrue(rangoHorario.incluye(unaFechaHora));
 
     }
 
     @Test
     public void dadaUnaHoraFueraDeUnRangoNoDeberiaEstarIncluidaEnElRango() {
-        LocalTime unaHora = new LocalTime(11, 59);
+        LocalDateTime unaFechaHora = new LocalDateTime(2016, 10, 27, 11, 59);
+        int dia = unaFechaHora.getDayOfWeek();
         LocalTime horaInicioRango = new LocalTime(12, 00);
         LocalTime horaFinRango = new LocalTime(13, 00);
         RangoHorario rangoHorario = new RangoHorario(1, horaInicioRango, horaFinRango);
 
-        Assert.assertFalse(rangoHorario.incluye(unaHora));
+        Assert.assertFalse(rangoHorario.incluye(unaFechaHora));
 
     }
 
