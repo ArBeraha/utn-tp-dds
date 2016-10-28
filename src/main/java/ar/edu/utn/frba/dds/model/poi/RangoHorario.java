@@ -4,7 +4,9 @@ import org.joda.time.LocalTime;
 
 public class RangoHorario {
 
-    private LocalTime horaInicio, horaFin;
+    private LocalTime horaInicio;
+    
+    private LocalTime horaFin;
 
     public RangoHorario(final LocalTime unaHoraInicio, final LocalTime unaHoraFin) {
         if (unaHoraInicio.isBefore(unaHoraFin)) {
@@ -34,9 +36,17 @@ public class RangoHorario {
     public LocalTime getHoraInicio() {
         return horaInicio;
     }
+    
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
 
     public LocalTime getHoraFin() {
         return horaFin;
+    }
+    
+    public void setHoraFin(LocalTime horaFin) {
+        this.horaFin = horaFin;
     }
 
     public boolean incluye(final LocalTime hora) {

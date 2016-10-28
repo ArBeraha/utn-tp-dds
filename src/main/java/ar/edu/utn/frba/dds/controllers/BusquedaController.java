@@ -1,15 +1,20 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
 import ar.edu.utn.frba.dds.model.app.Busqueda;
 import ar.edu.utn.frba.dds.services.busqueda.BusquedaService;
 
@@ -45,6 +50,23 @@ public class BusquedaController {
     @RequestMapping(value = { "/reporteParcialPorTerminal/{idTerminal}" }, method = RequestMethod.GET)
     public @ResponseBody Map<String, Long> generarReporteDeTerminal(@PathVariable("idTerminal") int idTerminal) {
         return busquedaService.generarReporteBusquedasDeTerminal(idTerminal);
+    }
+    
+    @RequestMapping(value = { "/accionesBusqueda" }, method = RequestMethod.GET)
+    public @ResponseBody List<AccionAnteBusqueda> getAccionesBusqueda() {
+        return busquedaService.getAccionesBusqueda();
+    }
+    
+    @RequestMapping(value = { "/setAccionBusqueda" }, method = RequestMethod.POST)
+    public @ResponseBody ResponseEntity<?> setAccionBusqueda(@RequestParam("id") int idAccion, @RequestParam("activado") Boolean activado) {
+        try {
+            busquedaService.setAccionBusqueda(idAccion, activado);
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("Error", e.getMessage());
+            return new ResponseEntity<Map<String,String>>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("Actualización Correcta!", HttpStatus.OK);
     }
 
 }
