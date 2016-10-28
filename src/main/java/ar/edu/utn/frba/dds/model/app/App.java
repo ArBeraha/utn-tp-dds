@@ -253,6 +253,7 @@ public class App implements WithGlobalEntityManager {
 		ServicioCGP servicioRentas = new ServicioCGP();
 		servicioRentas.setNombre("Rentas");
 		Horarios horario = new Horarios();
+		horario.agregarRangoHorario(new RangoHorario(5, 10, 0, 18, 0));
 		horario.agregarRangoHorario(new RangoHorario(6, 10, 0, 18, 0));
 		servicioRentas.setHorarios(horario);
 		Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
