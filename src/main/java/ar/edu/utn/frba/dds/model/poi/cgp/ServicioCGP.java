@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.model.poi.cgp;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
 
@@ -11,8 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 
+@JsonIgnoreProperties({ "id" })
 @Entity
 public class ServicioCGP {
 
@@ -21,7 +23,7 @@ public class ServicioCGP {
     private String nombre;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Horarios horarios;
-    @Transient
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private HorariosEspeciales horariosEspeciales;
 
     public ServicioCGP(){}
@@ -50,5 +52,21 @@ public class ServicioCGP {
             return horarios.atiende(fechaHoraActual);
         }
     }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public HorariosEspeciales getHorariosEspeciales() {
+		return horariosEspeciales;
+	}
+
+	public void setHorariosEspeciales(HorariosEspeciales horariosEspeciales) {
+		this.horariosEspeciales = horariosEspeciales;
+	}
 
 }

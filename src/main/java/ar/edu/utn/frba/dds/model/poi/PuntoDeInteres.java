@@ -21,9 +21,12 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
+@JsonIgnoreProperties({ "dateTimeProvider","geolocalizacion" })
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class PuntoDeInteres {

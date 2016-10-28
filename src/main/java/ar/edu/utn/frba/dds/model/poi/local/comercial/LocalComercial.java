@@ -25,7 +25,7 @@ public class LocalComercial extends PuntoDeInteres {
 	private Rubro rubro;
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Horarios horarios;
-	@Embedded
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private HorariosEspeciales horariosEspeciales;
 	private String tipo = TipoPoi.LOCAL_COMERCIAL.toString();
 
@@ -36,7 +36,6 @@ public class LocalComercial extends PuntoDeInteres {
 		this.dateTimeProvider = dateTimeProviderImpl;
 		horariosEspeciales = new HorariosEspeciales();
 		palabrasClave = new HashSet<>();
-		// id = contador.incrementAndGet();
 	}
 
 	public int getId() {

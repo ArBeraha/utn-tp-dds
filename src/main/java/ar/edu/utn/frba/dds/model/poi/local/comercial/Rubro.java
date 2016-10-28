@@ -3,6 +3,9 @@ package ar.edu.utn.frba.dds.model.poi.local.comercial;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({ "radioCercania" })
 @Embeddable
 public class Rubro {
 

@@ -1,13 +1,16 @@
 package ar.edu.utn.frba.dds.model.poi.horario;
 
 import java.util.HashSet;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
@@ -15,12 +18,14 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-//@Entity
-@Embeddable
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({ "id" })
+@Entity
 public class HorariosEspeciales {
-//	@Id
-//	@GeneratedValue
-//	private int id;
+	@Id
+	@GeneratedValue
+	private int id;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "idLocalComercial", referencedColumnName = "id")
 	private Set<RangoHorarioEspecial> rangosHorario = new HashSet<>();
@@ -48,13 +53,13 @@ public class HorariosEspeciales {
 		return rangosHorario.stream().anyMatch(x -> x.incluye(fechaHora));
 	}
 
-//	public int getId() {
-//		return id;
-//	}
-//
-//	public void setId(int id) {
-//		this.id = id;
-//	}
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public Set<RangoHorarioEspecial> getRangosHorario() {
 		return rangosHorario;

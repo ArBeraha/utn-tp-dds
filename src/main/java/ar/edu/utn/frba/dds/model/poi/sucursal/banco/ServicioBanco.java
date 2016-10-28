@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.model.poi.sucursal.banco;
 
-import javax.persistence.Transient;
-
 import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+@JsonIgnoreProperties({ "id" })
 @Entity
 public class ServicioBanco {
 
@@ -22,7 +23,7 @@ public class ServicioBanco {
     private String nombre;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Horarios horarios;
-    @Transient
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private HorariosEspeciales horariosEspeciales;
 
     public ServicioBanco() {
@@ -60,4 +61,12 @@ public class ServicioBanco {
             return horarios.atiende(unaFechaHora);
         }
     }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }

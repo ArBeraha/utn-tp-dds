@@ -12,8 +12,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({ "rangosHorario" }) // TODO: Sigue siendo necesario con
-											// el refactor?
+@JsonIgnoreProperties({ "id" })
 @Entity
 public class Horarios {
 	@Id

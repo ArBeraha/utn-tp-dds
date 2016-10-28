@@ -38,7 +38,6 @@ public class SucursalBanco extends PuntoDeInteres {
     public SucursalBanco(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
         palabrasClave = new HashSet<>();
-        //id = contador.incrementAndGet();
         this.horarios = new Horarios();
         LocalTime horaInicioLunesAViernes = new LocalTime(10, 0);
         LocalTime horaFinLunesAViernes = new LocalTime(15, 0);
