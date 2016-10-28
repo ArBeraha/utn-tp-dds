@@ -14,7 +14,7 @@ import javax.persistence.ManyToMany;
 @Entity
 public class AccionMultiple extends Accion {
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "accion_acciones")
 	private List<Accion> acciones;
 

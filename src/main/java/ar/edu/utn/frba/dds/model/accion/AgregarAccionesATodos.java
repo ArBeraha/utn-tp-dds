@@ -26,7 +26,7 @@ public class AgregarAccionesATodos extends Accion {
 
 			usuarios.forEach(unUsuario -> unUsuario.getAccionesDisponibles().addAll(acciones.stream()
 					.filter(x -> !unUsuario.getAccionesDisponibles().contains(x)).collect(Collectors.toList())));
-
+			App.getInstance().actualizarUsuarios();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;

@@ -439,5 +439,16 @@ public class App implements WithGlobalEntityManager {
 		entityManager().getTransaction().commit();
 		resultadosAcciones.add(resultadoAccion);
 	}
+	
+	public void actualizarUsuario(Usuario usuario){
+		entityManager().getTransaction().begin();
+		entityManager().merge(usuario);
+		entityManager().getTransaction().commit();
+	}
+	
+	public void actualizarUsuarios(){
+		usuarios.forEach(x -> actualizarUsuario(x));
+	}
+	
 
 }
