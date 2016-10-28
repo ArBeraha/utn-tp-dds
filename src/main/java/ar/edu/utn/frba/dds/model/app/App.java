@@ -69,7 +69,7 @@ public class App implements WithGlobalEntityManager {
 	// Constructor privado por el Singleton
 	private App() {
 		usuarios = entityManager().createQuery("FROM Usuario").getResultList();
-		setResultadosAcciones(new ArrayList<>());
+		resultadosAcciones = entityManager().createQuery("FROM ResultadoAccion").getResultList();
 		puntosDeInteres = populateDummyPOIs();
 		populateAcciones();
 		populateDummyUsers();
@@ -433,7 +433,10 @@ public class App implements WithGlobalEntityManager {
 		App.resultadosAcciones = resultadosAcciones;
 	}
 
-	public static void addResultadosAcciones(ResultadoAccion resultadoAccion) {
+	public void addResultadosAcciones(ResultadoAccion resultadoAccion) {
+		entityManager().getTransaction().begin();
+		entityManager().persist(resultadoAccion);
+		entityManager().getTransaction().commit();
 		resultadosAcciones.add(resultadoAccion);
 	}
 

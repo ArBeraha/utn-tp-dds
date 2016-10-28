@@ -1,7 +1,5 @@
 package ar.edu.utn.frba.dds.model.poi.parada.colectivo;
 
-import java.util.HashSet;
-
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;

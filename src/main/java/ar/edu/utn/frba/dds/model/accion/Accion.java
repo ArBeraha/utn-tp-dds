@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
@@ -26,7 +26,7 @@ public abstract class Accion {
 	public boolean executeWithReport(Usuario usuario, List<Integer> params) {
 		ResultadoAccion resultado = new ResultadoAccion(usuario, this, params);
 		boolean exito = execute(usuario, params);
-		resultado.setResultados(new DateTime(), exito);
+		resultado.setResultados(new LocalDateTime(), exito);
 		return exito;
 	}
 

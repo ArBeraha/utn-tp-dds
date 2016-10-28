@@ -35,7 +35,7 @@ public class LoginController {
             return new ResponseEntity<String>(jsonUsuario.toString(), HttpStatus.OK);
         } catch (LoginException e) {
             e.printStackTrace();
-            Map<String, String> errorResponse = new HashMap();
+            Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Login incorrecto");
             return new ResponseEntity<Map<String, String>>(errorResponse, HttpStatus.BAD_REQUEST);
         }

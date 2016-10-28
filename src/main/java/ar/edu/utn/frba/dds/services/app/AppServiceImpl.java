@@ -2,8 +2,6 @@ package ar.edu.utn.frba.dds.services.app;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
