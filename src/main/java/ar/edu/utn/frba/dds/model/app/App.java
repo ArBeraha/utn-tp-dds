@@ -4,6 +4,7 @@ import java.awt.Polygon;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.Stream;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils.MillisProvider;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -28,8 +30,10 @@ import ar.edu.utn.frba.dds.model.accion.BajaPoisInactivos;
 import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
 import ar.edu.utn.frba.dds.model.poi.Direccion;
+import ar.edu.utn.frba.dds.model.poi.Fecha;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.Horarios;
+import ar.edu.utn.frba.dds.model.poi.HorariosEspeciales;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
@@ -238,8 +242,13 @@ public class App {
 		ServicioCGP servicioRentas = new ServicioCGP();
 		servicioRentas.setNombre("Rentas");
 		Horarios horario = new Horarios();
-		horario.agregarRangoHorario(6, new RangoHorario(10, 0, 18, 0));
+		horario.agregarRangoHorario(6, new RangoHorario(10, 0, 15, 0));
+		horario.agregarRangoHorario(5, new RangoHorario(10, 0, 18, 0));
 		servicioRentas.setHorarios(horario);
+		HorariosEspeciales horarioEspecial = new HorariosEspeciales();
+		horarioEspecial.agregarRangoHorario(new LocalDate(2016,12,25), new RangoHorario(9,0,20,0));
+		horarioEspecial.agregarRangoHorario(new LocalDate(2017,1,1), new RangoHorario(10,0,13,0));
+		servicioRentas.setHorariosEspeciales(horarioEspecial);
 		ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
 		servicios.add(servicioRentas);
 		cgp.setServicios(servicios);
@@ -247,6 +256,10 @@ public class App {
 		palabras.add("CGP");
 		palabras.add("CGPDummy");
 		cgp.setPalabrasClave(palabras);
+		cgp.setDireccion("Medrano 953");
+		ArrayList<String> zonas = new ArrayList<>();
+		zonas.addAll(Arrays.asList("Caballito", "Almagro"));
+		cgp.setZonas(zonas);
 		
 		ParadaColectivo parada = new ParadaColectivo();
 		parada.setLinea("114");

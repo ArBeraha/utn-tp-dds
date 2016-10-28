@@ -22,9 +22,17 @@ public class ServicioCGP {
     public Horarios getHorarios() {
         return horarios;
     }
-    
+
     public void setHorarios(Horarios horarios) {
         this.horarios = horarios;
+    }
+
+    public HorariosEspeciales getHorariosEspeciales() {
+        return horariosEspeciales;
+    }
+
+    public void setHorariosEspeciales(HorariosEspeciales horariosEspeciales) {
+        this.horariosEspeciales = horariosEspeciales;
     }
 
     protected boolean estaDisponible() {
