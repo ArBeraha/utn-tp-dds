@@ -33,7 +33,6 @@ public class SucursalBanco extends PuntoDeInteres {
     private String tipo = TipoPoi.SUCURSAL_BANCO.toString();
 
     public SucursalBanco(){
-    	
     }
     
     public SucursalBanco(DateTimeProvider dateTimeProviderImpl) {
@@ -96,7 +95,7 @@ public class SucursalBanco extends PuntoDeInteres {
 
     @Override
     public boolean estaDisponible() {
-        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
+    	DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
         for (ServicioBanco servicio : servicios) {
             if (servicio.getHorarios().atiende(fechaHoraActual)) {
                 return true;
@@ -108,7 +107,7 @@ public class SucursalBanco extends PuntoDeInteres {
     public boolean estaDisponible(final String nombreServicioBanco) {
         for (ServicioBanco servicio : servicios) {
             if (servicio.getNombre() == nombreServicioBanco) {
-                return servicio.estaDisponible(this.dateTimeProvider.getDateTime()) && this.estaDisponible();
+                return servicio.estaDisponible(getDateTimeProvider().getDateTime()) && this.estaDisponible();
             }
         }
         return false;

@@ -40,7 +40,6 @@ import ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.model.security.Encoder;
-import ar.edu.utn.frba.dds.model.terminal.interactiva.TerminalInteractiva;
 import ar.edu.utn.frba.dds.model.user.Administrador;
 import ar.edu.utn.frba.dds.model.user.Terminal;
 import ar.edu.utn.frba.dds.model.user.TipoUsuario;
@@ -56,7 +55,6 @@ public class App implements WithGlobalEntityManager {
 
 	private static App instance;
 	private static List<PuntoDeInteres> puntosDeInteres;
-	private static List<TerminalInteractiva> terminales;
 	private static List<Usuario> usuarios;
 	private static List<ResultadoAccion> resultadosAcciones;
 
@@ -70,7 +68,6 @@ public class App implements WithGlobalEntityManager {
 
 	// Constructor privado por el Singleton
 	private App() {
-		terminales = new ArrayList<>();
 		usuarios = entityManager().createQuery("FROM Usuario").getResultList();
 		setResultadosAcciones(new ArrayList<>());
 		puntosDeInteres = populateDummyPOIs();
@@ -98,12 +95,6 @@ public class App implements WithGlobalEntityManager {
 
 	public void setPuntosDeInteres(final List<PuntoDeInteres> unosPuntosDeInteres) {
 		puntosDeInteres = unosPuntosDeInteres;
-	}
-
-	private static int agregarTerminal(Geolocalizacion geolocalizacion) {
-		TerminalInteractiva terminal = new TerminalInteractiva(geolocalizacion);
-		terminales.add(terminal);
-		return terminal.getId();
 	}
 
 	public Usuario agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
@@ -147,16 +138,20 @@ public class App implements WithGlobalEntityManager {
 		else
 			return null;
 	}
+	
+	public List<Terminal> getTerminales(){
+		return usuarios.stream().filter(x -> x.getTipoUsuario().getClass() == Terminal.class).map(y ->(Terminal) y.getTipoUsuario()).collect(Collectors.toList());
+	}
 
-	public TerminalInteractiva buscarTerminalPorId(final int idTerminal) {
-		List<TerminalInteractiva> terminal = terminales.stream()
+	public Terminal buscarTerminalPorId(final int idTerminal) {
+		List<Terminal> terminal = getTerminales().stream()
 				.filter(unaTerminal -> idTerminal == unaTerminal.getId()).collect(Collectors.toList());
 		return terminal.get(0);
 	}
 
 	public boolean esCercano(int idPoi, int idTerminal) {
 		PuntoDeInteres poi = buscarPuntoDeInteresPorId(idPoi);
-		TerminalInteractiva terminal = buscarTerminalPorId(idTerminal);
+		Terminal terminal = buscarTerminalPorId(idTerminal);
 		return poi.esCercano(terminal.getGeolocalizacion());
 	}
 
@@ -191,10 +186,6 @@ public class App implements WithGlobalEntityManager {
 	// guardados los POIs
 	public List<PuntoDeInteres> populateDummyPOIs() {
 		puntosDeInteres = entityManager().createQuery("FROM PuntoDeInteres").getResultList();
-
-		agregarTerminal(new Geolocalizacion(9, 9)); // ID 1 Cercano al CGP
-		agregarTerminal(new Geolocalizacion(12, 28)); // ID 2 Cercano al Local
-
 		LocalComercial local;
 		Horarios horarios = new Horarios();
 		Rubro rubroLibreria;
@@ -320,9 +311,9 @@ public class App implements WithGlobalEntityManager {
 
 	public void populateDummyUsers() {
 		if (entityManager().createQuery("FROM Usuario").getResultList().isEmpty()) {
-			agregarUsuario("terminalAbasto", "pwd", new Terminal());
-			agregarUsuario("terminalDOT", "pwd", new Terminal());
-			agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal());
+			agregarUsuario("terminalAbasto", "pwd", new Terminal(new Geolocalizacion(12,28))); // ID 1 Cercano al Local
+			agregarUsuario("terminalDOT", "pwd", new Terminal(new Geolocalizacion(9, 9))); // ID 2 Cercano al CGP
+			agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal(new Geolocalizacion(666, 666))); //ID 3 Cercano a ninguno
 			Usuario admin = agregarUsuario("admin", "1234", new Administrador());
 			admin.agregarAccion(AccionFactory.getAccion(Primitivas.ActualizarLocalesComerciales));
 			admin.agregarAccion(AccionFactory.getAccion(Primitivas.AgregarAccionesATodos));

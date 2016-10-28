@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Properties;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 
 import ar.edu.utn.frba.dds.model.user.Usuario;
@@ -25,16 +27,16 @@ public class Busqueda {
     private Integer cantidadResultados;
     private String fraseBuscada;
     private Double duracion;
-    private long fecha;
+    private LocalDateTime fecha;
     private String fechaFormateada;
     @OneToOne(fetch = FetchType.EAGER)
     private Usuario usuario;
 
     public Busqueda(String unaFraseBuscada, DateTime fechaHoraInicio, int idTerminal) {
-        fecha = fechaHoraInicio.getMillis();
+        fecha = fechaHoraInicio.toLocalDateTime();
         fraseBuscada = unaFraseBuscada;
         //terminal = idTerminal;
-        fechaFormateada = (new DateTime(fecha)).toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
+        fechaFormateada = fecha.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
         usuario = App.getInstance().buscarUsuarioPorId(idTerminal);
     }
 
@@ -48,7 +50,7 @@ public class Busqueda {
     }
     
     public Date getFecha() {
-        return new Date(fecha);
+        return fecha.toDate();
     }
 
     public Double getDuracion() {
@@ -68,7 +70,7 @@ public class Busqueda {
 	}
 
 	public void setFecha(DateTime fecha) {
-		this.fecha = fecha.getMillis();
+		this.fecha = fecha.toLocalDateTime();
 	}
 
 	public void setFraseBuscada(String fraseBuscada) {
@@ -95,7 +97,7 @@ public class Busqueda {
         Properties properties = PropertiesFactory.getAppProperties();
         Double maxSegundos = Double.valueOf(properties.getProperty("max.demora.busqueda.segundos"));
         cantidadResultados = resultados;
-        duracion = Double.valueOf(fechaFinBusqueda.getMillis() - fecha) / 1000;
+        duracion = Double.valueOf(fechaFinBusqueda.getMillis() - fecha.toDateTime().getMillis()) / 1000;
         if (duracion > maxSegundos) {
             //Notificar
             //Instanciamos el Sender
@@ -117,7 +119,7 @@ public class Busqueda {
 		this.usuario = usuario;
 	}
 
-	public void setFecha(long fecha) {
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
 }

@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 
 @Entity
 public class Administrador extends TipoUsuario {
-
+	
     public Administrador() {
         nombreTipoUsuario = "Administrador";
     }

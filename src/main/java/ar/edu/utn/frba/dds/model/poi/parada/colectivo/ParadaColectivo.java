@@ -14,8 +14,6 @@ public class ParadaColectivo extends PuntoDeInteres {
     private String tipo = TipoPoi.PARADA_COLECTIVO.toString();
 
     public ParadaColectivo() {
-        palabrasClave = new HashSet<>();
-       // id = contador.incrementAndGet();
     }
 
     public String getLinea() {

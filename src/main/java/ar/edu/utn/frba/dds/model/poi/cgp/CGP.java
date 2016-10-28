@@ -94,7 +94,7 @@ public class CGP extends PuntoDeInteres {
 
     @Override
     public boolean estaDisponible() {
-        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
+    	DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
         for (ServicioCGP servicio : servicios) {
             if (servicio.getHorarios().atiende(fechaHoraActual)) {
                 return true;
@@ -104,7 +104,7 @@ public class CGP extends PuntoDeInteres {
     }
 
     protected boolean estaDisponible(String nombreServicioCGP) {
-        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
+    	DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
         for (ServicioCGP servicio : servicios) {
             if (servicio.getNombre().toLowerCase() == nombreServicioCGP.toLowerCase()) {
                 return servicio.getHorarios().atiende(fechaHoraActual);

@@ -4,12 +4,15 @@ import java.util.Properties;
 
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class Geolocalizacion {
 
+	@Column(nullable = true)
 	private double latitud;
+	@Column(nullable = true)
 	private double longitud;
 
 	public Geolocalizacion() {
