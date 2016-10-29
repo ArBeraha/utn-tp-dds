@@ -358,12 +358,12 @@ public class App implements WithGlobalEntityManager {
 		AccionAnteBusqueda almacenarBusqueda = new AccionAnteBusqueda(); // id=2?
 		notificarAdmin.setNombre("Notificar Administrador por demora excesiva en Búsqueda");
 		almacenarBusqueda.setNombre("Almacenar resultados de las búsquedas");
-		notificarAdmin.setActivada(true);
-		almacenarBusqueda.setActivada(true);
 		entityManager().getTransaction().begin();
 		entityManager().persist(notificarAdmin);
 		entityManager().persist(almacenarBusqueda);
 		entityManager().getTransaction().commit();
+		notificarAdmin.setActivada(true);
+		almacenarBusqueda.setActivada(true);
 		accionesAnteBusqueda.addAll(Arrays.asList(notificarAdmin, almacenarBusqueda));
 	}
 
@@ -394,8 +394,8 @@ public class App implements WithGlobalEntityManager {
 	public List<Busqueda> historialPorUsuario(String nombreDeUsuario) {
 		List<Busqueda> historial = new ArrayList<>();
 		try {
-			historial = entityManager().createQuery("FROM Busqueda WHERE username='" + nombreDeUsuario + "'")
-					.getResultList();
+			int idUsuario = ((Usuario) entityManager().createQuery("FROM Usuario WHERE username='" + nombreDeUsuario + "'").getSingleResult()).getId();
+			historial = entityManager().createQuery("FROM Busqueda WHERE usuario_id=" + idUsuario).getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
