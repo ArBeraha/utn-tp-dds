@@ -3,15 +3,20 @@ package ar.edu.utn.frba.dds.model.app;
 import java.awt.Polygon;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.persistence.Convert;
+
 import org.joda.time.DateTime;
 
 import org.joda.time.LocalDate;
@@ -175,17 +180,29 @@ public class App implements WithGlobalEntityManager {
 		return poi.estaDisponible();
 	}
 
-	public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra, final DateTime fechaHoraInicio,
+	public List<PuntoDeInteres> buscarPuntoDeInteres(final String texto, final DateTime fechaHoraInicio,
 			int idTerminal) throws JsonParseException, JsonMappingException, IOException {
-		List<PuntoDeInteres> resultadoBusqueda = buscarPuntoDeInteresSinAlmacenarResultado(palabra);
+		
+		Set<PuntoDeInteres> resultadosFinales = new HashSet<>();
+		List<String> ors = Arrays.asList(texto.split(","));
+		for (String or : ors){
+			List<String> ands =  Arrays.asList(or.split(" "));
+			List<PuntoDeInteres> resultadosAND = new ArrayList<>();
+			resultadosAND.addAll(buscarPuntoDeInteresSinAlmacenarResultado(ands.get(0)));
+			for (int i = 1; i < ands.size(); i++) {
+				resultadosAND.retainAll(buscarPuntoDeInteresSinAlmacenarResultado(ands.get(i)));
+			}
+			resultadosFinales.addAll(resultadosAND);
+		}
+
 		if (AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS.isActivada()) {
-			Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio, idTerminal);
-			nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
+			Busqueda nuevaBusqueda = new Busqueda(texto, fechaHoraInicio, idTerminal);
+			nuevaBusqueda.setResultados(resultadosFinales.size(), new DateTime());
 			entityManager().getTransaction().begin();
 			entityManager().persist(nuevaBusqueda);
 			entityManager().getTransaction().commit();
 		}
-		return resultadoBusqueda;
+		return resultadosFinales.stream().collect(Collectors.toList());
 	}
 
 	public List<PuntoDeInteres> buscarPuntoDeInteresSinAlmacenarResultado(final String palabra)

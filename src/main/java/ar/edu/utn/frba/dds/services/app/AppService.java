@@ -11,7 +11,7 @@ import ar.edu.utn.frba.dds.model.user.Usuario;
 public interface AppService {
     public List<PuntoDeInteres> getPois();
     public boolean estaDisponible(int idPoi);
-    public List<PuntoDeInteres> getPois(String palabra, DateTime fecha, int idTerminal) throws IOException;
+    public List<PuntoDeInteres> getPois(String texto, DateTime fecha, int idTerminal) throws IOException;
     public boolean esCercano(int idPoi, int idTerminal);
     public PuntoDeInteres poi(int idPoi);
     public Usuario loginUser(String user, String pass) throws LoginException;
