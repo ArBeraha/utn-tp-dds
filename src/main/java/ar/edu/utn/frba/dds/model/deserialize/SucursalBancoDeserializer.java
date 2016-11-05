@@ -2,8 +2,10 @@ package ar.edu.utn.frba.dds.model.deserialize;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 
@@ -14,7 +16,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
@@ -34,8 +36,8 @@ public class SucursalBancoDeserializer extends JsonDeserializer<List<SucursalBan
         String banco;
         String sucursal;
         String gerente;
-        ArrayList<ServicioBanco> servicios;
-        ArrayList<String> palabrasClave = new ArrayList<>();
+        Set<ServicioBanco> servicios;
+        HashSet<String> palabrasClave = new HashSet<>();
         palabrasClave.add("banco");
         palabrasClave.add("sucursal");
         List<SucursalBanco> sucursales = new ArrayList<>();
@@ -44,7 +46,7 @@ public class SucursalBancoDeserializer extends JsonDeserializer<List<SucursalBan
             node = nodeIterator.next();
             //El constructor por defecto setea el horario por defecto de los bancos (10 a 15 de L a V)
             sucursalBanco = new SucursalBanco(new DateTimeProviderImpl(new DateTime()));
-            servicios = new ArrayList<>();
+            servicios = new HashSet<>();
             banco = node.get("banco").asText();
             sucursal = node.get("sucursal").asText();
             gerente = node.get("gerente").asText();

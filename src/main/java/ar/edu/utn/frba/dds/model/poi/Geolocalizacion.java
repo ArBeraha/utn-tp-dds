@@ -4,45 +4,63 @@ import java.util.Properties;
 
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Geolocalizacion {
 
-    private double latitud;
-    private double longitud;
+	@Column(nullable = true)
+	private double latitud;
+	@Column(nullable = true)
+	private double longitud;
 
-    public Geolocalizacion(final double unaLatitud, final double unaLongitud) {
-        latitud = unaLatitud;
-        longitud = unaLongitud;
-    }
+	public Geolocalizacion() {
 
-    public double getLatitud() {
-        return latitud;
-    }
+	}
 
-    public double getLongitud() {
-        return longitud;
-    }
+	public Geolocalizacion(final double unaLatitud, final double unaLongitud) {
+		latitud = unaLatitud;
+		longitud = unaLongitud;
+	}
 
-    public double calcularDistanciaEnCuadras(Geolocalizacion geolocalizacion) {
-        Properties properties = PropertiesFactory.getAppProperties();
+	public void setLatitud(double latitud) {
+		this.latitud = latitud;
+	}
 
-        double unidadCuadraEnMetros = Double.parseDouble(properties.getProperty("unidadCuadraEnMetros"));
-        double gradoLatitudEnMetros = Double.parseDouble(properties.getProperty("gradoLatitudEnMetros"));
-        double gradoLongitudEnMetros = Double.parseDouble(properties.getProperty("gradoLongitudEnMetros"));
+	public void setLongitud(double longitud) {
+		this.longitud = longitud;
+	}
 
-        double distanciaEntreLatitudes = Math.abs(geolocalizacion.getLatitud() - this.getLatitud());
-        double distanciaEntreLongitudes = Math.abs(geolocalizacion.getLongitud() - this.getLongitud());
-        double distanciaEnMetros = ((distanciaEntreLatitudes * gradoLatitudEnMetros)
-                + (distanciaEntreLongitudes * gradoLongitudEnMetros));
-        double distanciaEnCuadras = distanciaEnMetros / unidadCuadraEnMetros;
+	public double getLatitud() {
+		return latitud;
+	}
 
-        return distanciaEnCuadras;
-    }
+	public double getLongitud() {
+		return longitud;
+	}
 
-    @Override
-    public String toString() {
-        StringBuilder ret = new StringBuilder();
-        ret.append("Latitud=").append(latitud);
-        ret.append(". Longitud=").append(longitud);
-        return ret.toString();
-    }
+	public double calcularDistanciaEnCuadras(Geolocalizacion geolocalizacion) {
+		Properties properties = PropertiesFactory.getAppProperties();
+
+		double unidadCuadraEnMetros = Double.parseDouble(properties.getProperty("unidadCuadraEnMetros"));
+		double gradoLatitudEnMetros = Double.parseDouble(properties.getProperty("gradoLatitudEnMetros"));
+		double gradoLongitudEnMetros = Double.parseDouble(properties.getProperty("gradoLongitudEnMetros"));
+
+		double distanciaEntreLatitudes = Math.abs(geolocalizacion.getLatitud() - this.getLatitud());
+		double distanciaEntreLongitudes = Math.abs(geolocalizacion.getLongitud() - this.getLongitud());
+		double distanciaEnMetros = ((distanciaEntreLatitudes * gradoLatitudEnMetros)
+				+ (distanciaEntreLongitudes * gradoLongitudEnMetros));
+		double distanciaEnCuadras = distanciaEnMetros / unidadCuadraEnMetros;
+
+		return distanciaEnCuadras;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder ret = new StringBuilder();
+		ret.append("Latitud=").append(latitud);
+		ret.append(". Longitud=").append(longitud);
+		return ret.toString();
+	}
 }

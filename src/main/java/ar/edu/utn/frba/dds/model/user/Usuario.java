@@ -1,8 +1,14 @@
 package ar.edu.utn.frba.dds.model.user;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.user.error.ErrorHandler;
 import ar.edu.utn.frba.dds.model.user.error.NoHacerNada;
@@ -10,32 +16,36 @@ import ar.edu.utn.frba.dds.model.user.error.NoHacerNada;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({ "pass" })
+@Entity
 public class Usuario {
 
-    private static final AtomicInteger contador = new AtomicInteger(0);
+    //private static final AtomicInteger contador = new AtomicInteger(0);
     //TODO Este id es temporal para simular un ID de la base de datos, hasta que implementemos la misma
+    @Id @GeneratedValue
     private int id;
     private String username;
     private String pass;
+    //@Transient
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private TipoUsuario tipoUsuario;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ErrorHandler errorHandler;
     private String email;
 
     public Usuario() {
-        id = contador.incrementAndGet();
     }
 
     public Usuario(String unUsername, String unPassword, TipoUsuario unTipousuario) {
-        id = contador.incrementAndGet();
+        //id = contador.incrementAndGet();
         username = unUsername;
         pass = unPassword;
         setTipoUsuario(unTipousuario);
         errorHandler = new NoHacerNada();
     }
 
-    public static AtomicInteger getContador() {
-        return contador;
-    }
+//    public static AtomicInteger getContador() {
+//        return contador;
+//    }
 
     public int getId() {
         return id;
@@ -53,7 +63,11 @@ public class Usuario {
         return pass;
     }
 
-    public void setPass(String pass) {
+    public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setPass(String pass) {
         this.pass = pass;
     }
 
@@ -84,7 +98,11 @@ public class Usuario {
     }
 
     public List<Accion> getAccionesDisponibles() {
+    	// TODO: Sacara cuando realmente se persistan los tipo de usuario
+    	if (tipoUsuario !=null)
         return tipoUsuario.getAccionesDisponibles();
+    	else 
+    		return new ArrayList<Accion>();
     }
 
     public String getEmail() {

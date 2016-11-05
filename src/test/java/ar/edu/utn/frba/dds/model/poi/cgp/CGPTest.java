@@ -1,7 +1,8 @@
 package ar.edu.utn.frba.dds.model.poi.cgp;
 
 import java.awt.Polygon;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -10,11 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class CGPTest {
@@ -46,12 +47,12 @@ public class CGPTest {
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
         Horarios horario = new Horarios();
-        horario.agregarRangoHorario(6, new RangoHorario(10,0,18,0));
+        horario.agregarRangoHorario(new RangoHorario(6,10,0,18,0));
         servicioRentas.setHorarios(horario);
-        ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
+        Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
         servicios.add(servicioRentas);
         cgp.setServicios(servicios);
-        ArrayList<String> palabras = new ArrayList<String>();
+        HashSet<String> palabras = new HashSet<String>();
         palabras.add("CGP");
         cgp.setPalabrasClave(palabras);
     }

@@ -1,4 +1,24 @@
 <div ng-if="isUserLogged">
+    <!-- Modal -->
+    <div ng-if="showModal">
+        <div class="modal-dialog" id="modal">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" ng-click="cerrarModal()">&times;</button>
+              <h4 class="modal-title">{{modalHeader}}</h4>
+            </div>
+            <div class="modal-body">
+              <p>{{modalText}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" ng-click="cerrarModal()">Ok</button>
+            </div>
+          </div>
+          
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-12">
             <h4 class="text-center">Por favor, busque un punto de interés</h4>
@@ -6,7 +26,7 @@
     </div>
     <div class="row">
         <div id="custom-search-input">
-            <div class="input-group col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+            <div class="input-group col-xs-6 col-xs-offset-3">
                 <input type="text" class="search-query form-control" ng-model="textoBusqueda" key-enter="buscarPOI(textoBusqueda)" placeholder="Buscar" />
                 <span class="input-group-btn">
                     <button class="btn" type="button" ng-model="textoBusqueda" ng-click="buscarPOI(textoBusqueda)">
@@ -26,10 +46,67 @@
         <div class="span4"></div>
     </div>
     <div ng-repeat="poi in pois">
-        <div class="row">
-            <div class="input-group col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
-                <div class="text-center poi" ng-click="verInfo(poi)">
+        <div class="row" ng-if="poi.tipo.toLowerCase() === 'local comercial'">
+            <div class="input-group col-xs-6 col-xs-offset-3">
+                <div class="text-center poi">
+                    <img src="resources/img/local_icono.png" class="icono-poi">
                     <h4>{{poi.nombre}}</h4>
+                    <h4>Rubro: {{poi.rubro.nombre}}</h4>
+                    <h4>Direccion: {{poi.direccion}}</h4>
+                    <button type="submit" class="btn btn-default" ng-click="verInfo(poi)">Consultar cercanía y disponibilidad</button>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="poi.tipo.toLowerCase() === 'cgp'">
+            <div class="input-group col-xs-6 col-xs-offset-3">
+                <div class="text-center poi">
+                    <img src="resources/img/cgp_icono.png" class="icono-poi">
+                    <h4>{{poi.nombre}}</h4>
+                    <h4>Direccion: {{poi.direccion}}</h4>
+                    <h4>Zonas: </h4>
+                    <h6 ng-repeat="zona in poi.zonas">{{zona}}</h6>
+                    <h4>Servicios: </h4>
+                    <div ng-repeat="servicio in poi.servicios">
+                        <p>Nombre: {{servicio.nombre}}</p>
+                        <p>Horario</p>
+                        <div ng-repeat="intervalo in servicio.horarios.rangosHorario">
+                           {{getDia(intervalo.dia)}}: desde las {{addZeros(intervalo.horaInicio[0])}}:{{addZeros(intervalo.horaInicio[1])}}Hs. hasta las {{addZeros(intervalo.horaFin[0])}}:{{addZeros(intervalo.horaFin[1])}}Hs.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-default" ng-click="verInfo(poi)">Consultar cercanía y disponibilidad</button>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="poi.tipo.toLowerCase() === 'sucursal de banco'">
+            <div class="input-group col-xs-6 col-xs-offset-3">
+                <div class="text-center poi">
+                    <img src="resources/img/banco_icono.png" class="icono-poi">
+                    <h4>{{poi.nombre}}</h4>
+                    <h4>Direccion: {{poi.direccion}}</h4>
+                    <h4>Zonas: </h4>
+                    <h6 ng-repeat="zona in poi.zonas">{{zona}}</h6>
+                    <h4>Servicios: </h4>
+                    <div ng-repeat="servicio in poi.servicios">
+                        <p>Nombre: {{servicio.nombre}}</p>
+                        <p>Horario</p>
+                        <div ng-repeat="horario in getKeys(servicio.horarios.rangosHorario)">
+                            <div ng-repeat="intervalo in servicio.horarios.rangosHorario[horario]">
+                                <p>
+                                    {{getDia(horario)}}: desde las {{addZeros(intervalo.horaInicio[0])}}:{{addZeros(intervalo.horaInicio[1])}}Hs. hasta las {{addZeros(intervalo.horaFin[0])}}:{{addZeros(intervalo.horaFin[1])}}Hs.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-default" ng-click="verInfo(poi)">Consultar cercanía y disponibilidad</button>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="poi.tipo.toLowerCase() === 'parada de colectivo'">
+            <div class="input-group col-xs-6 col-xs-offset-3">
+                <div class="text-center poi">
+                    <img src="resources/img/parada_icono.png" class="icono-poi">
+                    <h4>Numero de linea: {{poi.linea}}</h4>
+                    <button type="submit" class="btn btn-default" ng-click="verInfo(poi)">Consultar cercanía y disponibilidad</button>
                 </div>
             </div>
         </div>

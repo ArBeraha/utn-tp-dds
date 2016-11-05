@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.model;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -44,7 +45,7 @@ public class AppTest {
         ArrayList<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
         pois.add(local);
         app.setPuntosDeInteres(pois);
-        ArrayList<String> palabras = new ArrayList<String>();
+        HashSet<String> palabras = new HashSet<String>();
         palabras.add("Local");
         local.setPalabrasClave(palabras);
     }
@@ -56,20 +57,20 @@ public class AppTest {
     @Test
     public void buscarYEncontrarPOIKiosco()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("kiosko", new DateTime(),1);
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteresSinAlmacenarResultado("kiosko");
         Assert.assertTrue(resultado.contains(local));
     }
 
     public void buscarYEncontrarPOIKioscoPorPalabraClave()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("loCal", new DateTime(),1);
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteresSinAlmacenarResultado("loCal");
         Assert.assertTrue(resultado.contains(local));
     }
 
     @Test
     public void buscarYNoEncontrarNingunPOI()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteres("futbol", new DateTime(),1);
+        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteresSinAlmacenarResultado("futbol");
         Assert.assertTrue(resultado.size() == 0);
     }
     

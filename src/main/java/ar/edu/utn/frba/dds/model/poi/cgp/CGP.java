@@ -1,31 +1,58 @@
 package ar.edu.utn.frba.dds.model.poi.cgp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
 
-public class CGP extends PuntoDeInteres {
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
-    private ArrayList<ServicioCGP> servicios;
+
+@JsonIgnoreProperties({ "comuna", "nombreDirector", "telefono", "dateTimeProvider", "geolocalizacion", "palabrasClave" })
+@Entity
+public class CGP extends PuntoDeInteres {
+	
+	
+	@OneToMany(fetch=FetchType.EAGER) @Cascade(value = CascadeType.ALL)
+	@JoinColumn(name = "idCGP", referencedColumnName = "id")
+    private Set<ServicioCGP> servicios;
+    @Embedded
     private Comuna comuna;
     private String tipo = TipoPoi.CGP.toString();
-    private List<String> zonas;
+    @ElementCollection @Cascade({CascadeType.ALL})
+    @CollectionTable(name = "cgp_zonas")
+    private Set<String> zonas;
     private String nombreDirector;
     private String telefono;
 
+    public CGP(){}
+    
     public CGP(DateTimeProvider dateTimeProviderImpl) {
         this.dateTimeProvider = dateTimeProviderImpl;
-        id = contador.incrementAndGet();
-        palabrasClave = new ArrayList<>();
+        //id = contador.incrementAndGet();
+        palabrasClave = new HashSet<>();
     }
 
-    public Comuna getComuna() {
+    public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public Comuna getComuna() {
         return comuna;
     }
 
@@ -33,11 +60,11 @@ public class CGP extends PuntoDeInteres {
         this.comuna = comuna;
     }
 
-    public ArrayList<ServicioCGP> getServicios() {
+    public Set<ServicioCGP> getServicios() {
         return servicios;
     }
 
-    public void setServicios(final ArrayList<ServicioCGP> servicios) {
+    public void setServicios(final Set<ServicioCGP> servicios) {
         this.servicios = servicios;
     }
 
@@ -45,11 +72,11 @@ public class CGP extends PuntoDeInteres {
         this.servicios.add(servicio);
     }
 
-    public List<String> getZonas() {
+    public Set<String> getZonas() {
         return zonas;
     }
 
-    public void setZonas(List<String> zonas) {
+    public void setZonas(Set<String> zonas) {
         this.zonas = zonas;
     }
 
@@ -71,7 +98,7 @@ public class CGP extends PuntoDeInteres {
 
     @Override
     public boolean estaDisponible() {
-        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
+    	DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
         for (ServicioCGP servicio : servicios) {
             if (servicio.getHorarios().atiende(fechaHoraActual)) {
                 return true;
@@ -81,7 +108,7 @@ public class CGP extends PuntoDeInteres {
     }
 
     protected boolean estaDisponible(String nombreServicioCGP) {
-        DateTime fechaHoraActual = this.dateTimeProvider.getDateTime();
+    	DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
         for (ServicioCGP servicio : servicios) {
             if (servicio.getNombre().toLowerCase() == nombreServicioCGP.toLowerCase()) {
                 return servicio.getHorarios().atiende(fechaHoraActual);

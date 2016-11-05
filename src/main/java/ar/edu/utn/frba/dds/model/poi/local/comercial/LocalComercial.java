@@ -1,100 +1,119 @@
 package ar.edu.utn.frba.dds.model.poi.local.comercial;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
-import ar.edu.utn.frba.dds.model.poi.HorariosEspeciales;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
+import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+
+@Entity
+@JsonIgnoreProperties({ "horarios", "horariosEspeciales", "dateTimeProvider","geolocalizacion","palabrasClave" })
 
 public class LocalComercial extends PuntoDeInteres {
 
-    private String nombre;
-    private Horarios horarios;
-    private Rubro rubro;
-    private HorariosEspeciales horariosEspeciales;
-    private String tipo = TipoPoi.LOCAL_COMERCIAL.toString();
+	private String nombre;
+	@Embedded
+	private Rubro rubro;
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Horarios horarios;
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private HorariosEspeciales horariosEspeciales;
+	private String tipo = TipoPoi.LOCAL_COMERCIAL.toString();
 
-    public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
-        this.dateTimeProvider = dateTimeProviderImpl;
-        horariosEspeciales = new HorariosEspeciales();
-        palabrasClave = new ArrayList<>();
-        id = contador.incrementAndGet();
-    }
+	public LocalComercial() {
+	}
 
-    public int getId() {
-        return id;
-    }
+	public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
+		this.dateTimeProvider = dateTimeProviderImpl;
+		horariosEspeciales = new HorariosEspeciales();
+		palabrasClave = new HashSet<>();
+	}
 
-    @Override
-    public String getNombre() {
-        return nombre;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setNombre(final String nombre) {
-        this.nombre = nombre;
-    }
+	public void setHorariosEspeciales(HorariosEspeciales horariosEspeciales) {
+		this.horariosEspeciales = horariosEspeciales;
+	}
 
-    public Rubro getRubro() {
-        return rubro;
-    }
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
-    public void setRubro(final Rubro rubro) {
-        this.rubro = rubro;
-    }
+	@Override
+	public String getNombre() {
+		return nombre;
+	}
 
-    public Horarios getHorarios() {
-        return horarios;
-    }
+	public void setNombre(final String nombre) {
+		this.nombre = nombre;
+	}
 
-    public void setHorarios(Horarios horarios) {
-        this.horarios = horarios;
-    }
+	public Rubro getRubro() {
+		return rubro;
+	}
 
-    public HorariosEspeciales getHorariosEspeciales() {
-        return horariosEspeciales;
-    }
+	public void setRubro(final Rubro rubro) {
+		this.rubro = rubro;
+	}
 
-    public void setHorariosEpeciales(HorariosEspeciales horariosEspeciales) {
-        this.horariosEspeciales = horariosEspeciales;
-    }
+	public Horarios getHorarios() {
+		return horarios;
+	}
 
-    public void agregarRangoHorario(int unDia, RangoHorario unRangoHorario) {
-        this.horarios.agregarRangoHorario(unDia, unRangoHorario);
-    }
+	public void setHorarios(Horarios horarios) {
+		this.horarios = horarios;
+	}
 
-    @Override
-    public boolean estaDisponible() {
-        DateTime fechaHoraActual = dateTimeProvider.getDateTime();
-        if (horariosEspeciales.contiene(fechaHoraActual)) {
-            return horariosEspeciales.atiende(fechaHoraActual);
-        } else {
-            return horarios.atiende(fechaHoraActual);
-        }
-    }
+	public HorariosEspeciales getHorariosEspeciales() {
+		return horariosEspeciales;
+	}
 
-    @Override
-    public boolean esCercano(final Geolocalizacion geolocalizacion) {
-        return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro()
-                .obtenerRadioCercania();
-    }
+	public void agregarRangoHorario(RangoHorario unRangoHorario) {
+		this.horarios.agregarRangoHorario(unRangoHorario);
+	}
 
-    @Override
-    public boolean tienePalabra(final String palabra) {
-        boolean nombreTienePalabra = nombre.toLowerCase().contains(palabra.toLowerCase());
-        boolean rubroTienePalabra = rubro.getNombre().toLowerCase().contains(palabra.toLowerCase());
-        boolean esPalabraClave = this.esPalabraClave(palabra);
-        return (nombreTienePalabra || rubroTienePalabra || esPalabraClave);
-    }
+	@Override
+	public boolean estaDisponible() {
+		DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
+		if (horariosEspeciales.contiene(fechaHoraActual)) {
+			return horariosEspeciales.atiende(fechaHoraActual);
+		} else {
+			return horarios.atiende(fechaHoraActual);
+		}
+	}
 
-    @Override
-    public String getTipo() {
-        return tipo;
-    }
+	@Override
+	public boolean esCercano(final Geolocalizacion geolocalizacion) {
+		return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro()
+				.obtenerRadioCercania();
+	}
+
+	@Override
+	public boolean tienePalabra(final String palabra) {
+		boolean nombreTienePalabra = nombre.toLowerCase().contains(palabra.toLowerCase());
+		boolean rubroTienePalabra = rubro.getNombre().toLowerCase().contains(palabra.toLowerCase());
+		boolean esPalabraClave = this.esPalabraClave(palabra);
+		return (nombreTienePalabra || rubroTienePalabra || esPalabraClave);
+	}
+
+	@Override
+	public String getTipo() {
+		return tipo;
+	}
 
 }

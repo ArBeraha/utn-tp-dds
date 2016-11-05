@@ -2,8 +2,6 @@ package ar.edu.utn.frba.dds.services.app;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,16 +34,16 @@ public class AppServiceImpl implements AppService {
     }
     
     @Override
-    public List<PuntoDeInteres> getPois(String palabra, DateTime fecha, int idTerminal) throws IOException {
+    public List<PuntoDeInteres> getPois(String texto, DateTime fecha, int idTerminal) throws IOException {
         try {
-            return app.buscarPuntoDeInteres(palabra, fecha, idTerminal);
+            return app.buscarPuntoDeInteres(texto, fecha, idTerminal);
         } catch (IOException e) {
             System.out.println("Se ha producido un error al buscar el punto de interés");
             e.printStackTrace();
             throw e;
         }
     }
-    
+
     @Override
     public boolean esCercano(int idPoi, int idTerminal) {
         return app.esCercano(idPoi, idTerminal);

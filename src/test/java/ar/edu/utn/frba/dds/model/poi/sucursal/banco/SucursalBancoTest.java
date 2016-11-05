@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.model.poi.sucursal.banco;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -12,8 +13,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
@@ -46,18 +47,17 @@ public class SucursalBancoTest {
         servicio.setNombre("Asesoramiento");
         geolocalizacionSucursal = new Geolocalizacion(12, 28);
         sucursal.setGeolocalizacion(geolocalizacionSucursal);
-        ArrayList<ServicioBanco> servicios = new ArrayList<ServicioBanco>();
+        Set<ServicioBanco> servicios = new HashSet<ServicioBanco>();
         servicios.add(servicio);
         Horarios horarioServicio = new Horarios();
         LocalTime horaInicio = new LocalTime(12, 0);
         LocalTime horaFin = new LocalTime(16, 0);
-        RangoHorario tardeLunesYMartes = new RangoHorario(horaInicio, horaFin);
-        horarioServicio.agregarRangoHorario(1, tardeLunesYMartes);
-        horarioServicio.agregarRangoHorario(2, tardeLunesYMartes);
+        horarioServicio.agregarRangoHorario(new RangoHorario(1, horaInicio, horaFin));
+        horarioServicio.agregarRangoHorario(new RangoHorario(2, horaInicio, horaFin));
         servicio.setHorarios(horarioServicio);
         sucursal.setServicios(servicios);
         
-        ArrayList<String> palabras = new ArrayList<String>();
+        HashSet<String> palabras = new HashSet<String>();
         palabras.add("Banco");
         sucursal.setPalabrasClave(palabras);
     }

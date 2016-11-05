@@ -23,7 +23,6 @@ public class LoginController {
     @Autowired
     AppService appService;
 
-    //TODO cómo tomo los parámetros en el request con SPRING MVC para un POST????
     @RequestMapping(value = { "/login" }, method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<?> login(@RequestParam("name") String user, @RequestParam("password") String pass) {
         try {
@@ -35,7 +34,7 @@ public class LoginController {
             return new ResponseEntity<String>(jsonUsuario.toString(), HttpStatus.OK);
         } catch (LoginException e) {
             e.printStackTrace();
-            Map<String, String> errorResponse = new HashMap();
+            Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Login incorrecto");
             return new ResponseEntity<Map<String, String>>(errorResponse, HttpStatus.BAD_REQUEST);
         }

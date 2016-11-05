@@ -1,19 +1,17 @@
 package ar.edu.utn.frba.dds.model.poi.parada.colectivo;
 
-import java.util.ArrayList;
-
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
+import javax.persistence.Entity;
 
+@Entity
 public class ParadaColectivo extends PuntoDeInteres {
 
     private String linea;
     private String tipo = TipoPoi.PARADA_COLECTIVO.toString();
 
     public ParadaColectivo() {
-        palabrasClave = new ArrayList<>();
-        id = contador.incrementAndGet();
     }
 
     public String getLinea() {
@@ -24,7 +22,11 @@ public class ParadaColectivo extends PuntoDeInteres {
         this.linea = linea;
     }
 
-    @Override
+    public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	@Override
     public boolean estaDisponible() {
         return true;
     }

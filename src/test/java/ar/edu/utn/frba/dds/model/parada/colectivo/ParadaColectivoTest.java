@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.model.parada.colectivo;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,7 +31,7 @@ public class ParadaColectivoTest {
         //setUp
         parada = new ParadaColectivo();
         parada.setLinea("103");
-        ArrayList<String> palabras = new ArrayList<String>();
+        HashSet<String> palabras = new HashSet<String>();
         palabras.add("Colectivo");
         parada.setPalabrasClave(palabras);
         geolocalizacionParada = new Geolocalizacion(12, 28);

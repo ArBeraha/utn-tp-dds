@@ -2,8 +2,6 @@ package ar.edu.utn.frba.dds.model.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import ar.edu.utn.frba.dds.model.app.App;
-
 public class Encoder {
 
     private static Encoder instance;

@@ -1,44 +1,58 @@
 package ar.edu.utn.frba.dds.model.app;
 
 import java.awt.Polygon;
-import java.io.File;
+
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Date;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.persistence.Convert;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils.MillisProvider;
+
+import org.joda.time.LocalDate;
+import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
+
 import org.joda.time.LocalTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.accion.AccionFactory;
 import ar.edu.utn.frba.dds.model.accion.ActualizarLocalesComerciales;
 import ar.edu.utn.frba.dds.model.accion.AgregarAccionesATodos;
 import ar.edu.utn.frba.dds.model.accion.BajaPoisInactivos;
 import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
+import ar.edu.utn.frba.dds.model.accion.Primitivas;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
+import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
+import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusquedasEnum;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
+
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorarioEspecial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
+import ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo;
+
+import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.model.security.Encoder;
-import ar.edu.utn.frba.dds.model.terminal.interactiva.TerminalInteractiva;
 import ar.edu.utn.frba.dds.model.user.Administrador;
 import ar.edu.utn.frba.dds.model.user.Terminal;
 import ar.edu.utn.frba.dds.model.user.TipoUsuario;
@@ -47,16 +61,16 @@ import ar.edu.utn.frba.dds.services.externo.ServicioConsultaBanco;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaBancoImpl;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGP;
 import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGPImpl;
-import ar.edu.utn.frba.dds.util.file.FileUtils;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-public class App {
+@SuppressWarnings("unchecked")
+public class App implements WithGlobalEntityManager {
 
 	private static App instance;
 	private static List<PuntoDeInteres> puntosDeInteres;
-	private static List<TerminalInteractiva> terminales;
 	private static List<Usuario> usuarios;
 	private static List<ResultadoAccion> resultadosAcciones;
+	private static List<AccionAnteBusqueda> accionesAnteBusqueda;
 
 	// Singleton
 	public static App getInstance() {
@@ -68,12 +82,16 @@ public class App {
 
 	// Constructor privado por el Singleton
 	private App() {
-		terminales = new ArrayList<>();
-		usuarios = new ArrayList<>();
-		setResultadosAcciones(new ArrayList<>());
+		usuarios = entityManager().createQuery("FROM Usuario").getResultList();
+		resultadosAcciones = entityManager().createQuery("FROM ResultadoAccion").getResultList();
 		puntosDeInteres = populateDummyPOIs();
 		populateAcciones();
 		populateDummyUsers();
+
+		if (entityManager().createQuery("FROM AccionAnteBusqueda").getResultList().isEmpty())
+			populateDummyAccionesAnteBusqueda();
+		else
+			accionesAnteBusqueda = entityManager().createQuery("FROM AccionAnteBusqueda").getResultList();
 
 		try {
 			this.agregarSucursalesBancoExternas();
@@ -98,24 +116,27 @@ public class App {
 		puntosDeInteres = unosPuntosDeInteres;
 	}
 
-	private static int agregarTerminal(Geolocalizacion geolocalizacion) {
-		TerminalInteractiva terminal = new TerminalInteractiva(geolocalizacion);
-		terminales.add(terminal);
-		return terminal.getId();
-	}
-
-	public static int agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
+	public Usuario agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
 		Encoder encoder = Encoder.getInstance();
 		Usuario usuario = new Usuario(username, encoder.encode(password), tipoUsuario);
+		entityManager().getTransaction().begin();
+		entityManager().persist(usuario);
+		entityManager().getTransaction().commit();
 		usuarios.add(usuario);
-		return usuario.getId();
+		return usuario;
 	}
 
 	public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
+		entityManager().getTransaction().begin();
+		entityManager().persist(pdi);
+		entityManager().getTransaction().commit();
 		puntosDeInteres.add(pdi);
 	}
 
 	public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
+		entityManager().getTransaction().begin();
+		entityManager().remove(pdi);
+		entityManager().getTransaction().commit();
 		puntosDeInteres.remove(pdi);
 	}
 
@@ -123,6 +144,9 @@ public class App {
 		pdi.setDireccion(pdiNuevo.getDireccion());
 		pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
 		pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
+		entityManager().getTransaction().begin();
+		entityManager().merge(pdi);
+		entityManager().getTransaction().commit();
 	}
 
 	public PuntoDeInteres buscarPuntoDeInteresPorId(final int idPoi) {
@@ -134,15 +158,20 @@ public class App {
 			return null;
 	}
 
-	public TerminalInteractiva buscarTerminalPorId(final int idTerminal) {
-		List<TerminalInteractiva> terminal = terminales.stream()
-				.filter(unaTerminal -> idTerminal == unaTerminal.getId()).collect(Collectors.toList());
+	public List<Terminal> getTerminales() {
+		return usuarios.stream().filter(x -> x.getTipoUsuario().getClass() == Terminal.class)
+				.map(y -> (Terminal) y.getTipoUsuario()).collect(Collectors.toList());
+	}
+
+	public Terminal buscarTerminalPorId(final int idTerminal) {
+		List<Terminal> terminal = getTerminales().stream().filter(unaTerminal -> idTerminal == unaTerminal.getId())
+				.collect(Collectors.toList());
 		return terminal.get(0);
 	}
 
 	public boolean esCercano(int idPoi, int idTerminal) {
 		PuntoDeInteres poi = buscarPuntoDeInteresPorId(idPoi);
-		TerminalInteractiva terminal = buscarTerminalPorId(idTerminal);
+		Terminal terminal = buscarTerminalPorId(idTerminal);
 		return poi.esCercano(terminal.getGeolocalizacion());
 	}
 
@@ -151,13 +180,29 @@ public class App {
 		return poi.estaDisponible();
 	}
 
-	public List<PuntoDeInteres> buscarPuntoDeInteres(final String palabra, final DateTime fechaHoraInicio,
+	public List<PuntoDeInteres> buscarPuntoDeInteres(final String texto, final DateTime fechaHoraInicio,
 			int idTerminal) throws JsonParseException, JsonMappingException, IOException {
-		// TODO: Registrar la busqueda como hecha por idTerminal
-		Busqueda nuevaBusqueda = new Busqueda(palabra, fechaHoraInicio, idTerminal);
-		List<PuntoDeInteres> resultadoBusqueda = buscarPuntoDeInteresSinAlmacenarResultado(palabra);
-		nuevaBusqueda.setResultados(resultadoBusqueda.size(), new DateTime());
-		return resultadoBusqueda;
+		
+		Set<PuntoDeInteres> resultadosFinales = new HashSet<>();
+		List<String> ors = Arrays.asList(texto.split(","));
+		for (String or : ors){
+			List<String> ands =  Arrays.asList(or.split(" "));
+			List<PuntoDeInteres> resultadosAND = new ArrayList<>();
+			resultadosAND.addAll(buscarPuntoDeInteresSinAlmacenarResultado(ands.get(0)));
+			for (int i = 1; i < ands.size(); i++) {
+				resultadosAND.retainAll(buscarPuntoDeInteresSinAlmacenarResultado(ands.get(i)));
+			}
+			resultadosFinales.addAll(resultadosAND);
+		}
+
+		if (AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS.isActivada()) {
+			Busqueda nuevaBusqueda = new Busqueda(texto, fechaHoraInicio, idTerminal);
+			nuevaBusqueda.setResultados(resultadosFinales.size(), new DateTime());
+			entityManager().getTransaction().begin();
+			entityManager().persist(nuevaBusqueda);
+			entityManager().getTransaction().commit();
+		}
+		return resultadosFinales.stream().collect(Collectors.toList());
 	}
 
 	public List<PuntoDeInteres> buscarPuntoDeInteresSinAlmacenarResultado(final String palabra)
@@ -173,12 +218,8 @@ public class App {
 
 	// TODO Esto queda public hasta que se implemente base de datos donde estén
 	// guardados los POIs
-	public static List<PuntoDeInteres> populateDummyPOIs() {
-		List<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
-
-		agregarTerminal(new Geolocalizacion(9, 9)); // ID 1 Cercano al CGP
-		agregarTerminal(new Geolocalizacion(12, 28)); // ID 2 Cercano al Local
-
+	public List<PuntoDeInteres> populateDummyPOIs() {
+		puntosDeInteres = entityManager().createQuery("FROM PuntoDeInteres").getResultList();
 		LocalComercial local;
 		Horarios horarios = new Horarios();
 		Rubro rubroLibreria;
@@ -189,20 +230,17 @@ public class App {
 		LocalTime horaFinLunesAViernes2 = new LocalTime(18, 30);
 		LocalTime horaInicioSabado = new LocalTime(10, 0);
 		LocalTime horaFinSabado = new LocalTime(13, 30);
-		RangoHorario manianaLunesAViernes = new RangoHorario(horaInicioLunesAViernes, horaFinLunesAViernes);
-		RangoHorario tardeLunesAViernes = new RangoHorario(horaInicioLunesAViernes2, horaFinLunesAViernes2);
-		RangoHorario horarioSabado = new RangoHorario(horaInicioSabado, horaFinSabado);
-		horarios.agregarRangoHorario(1, manianaLunesAViernes);
-		horarios.agregarRangoHorario(2, manianaLunesAViernes);
-		horarios.agregarRangoHorario(3, manianaLunesAViernes);
-		horarios.agregarRangoHorario(4, manianaLunesAViernes);
-		horarios.agregarRangoHorario(5, manianaLunesAViernes);
-		horarios.agregarRangoHorario(1, tardeLunesAViernes);
-		horarios.agregarRangoHorario(2, tardeLunesAViernes);
-		horarios.agregarRangoHorario(3, tardeLunesAViernes);
-		horarios.agregarRangoHorario(4, tardeLunesAViernes);
-		horarios.agregarRangoHorario(5, tardeLunesAViernes);
-		horarios.agregarRangoHorario(6, horarioSabado);
+		horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
 		local = new LocalComercial(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 13, 30, 0)));
 		// setUp para esCercano
 		rubroLibreria = new Rubro();
@@ -212,10 +250,14 @@ public class App {
 		local.setGeolocalizacion(geolocalizacionLocal);
 		local.setNombre("Regla y compás");
 		local.setRubro(rubroLibreria);
-		ArrayList<String> palabrasClave = new ArrayList<String>();
+		HashSet<String> palabrasClave = new HashSet<String>();
 		palabrasClave.add("Tienda");
 		local.setPalabrasClave(palabrasClave);
 		local.setHorarios(horarios);
+		HorariosEspeciales especial = new HorariosEspeciales();
+		especial.agregarRangoHorario(
+				new RangoHorarioEspecial(new LocalDate(2016, 10, 23), horaInicioLunesAViernes, horaFinLunesAViernes));
+		local.setHorariosEspeciales(especial);
 
 		CGP cgp;
 		Comuna comuna;
@@ -235,38 +277,111 @@ public class App {
 		ServicioCGP servicioRentas = new ServicioCGP();
 		servicioRentas.setNombre("Rentas");
 		Horarios horario = new Horarios();
-		horario.agregarRangoHorario(6, new RangoHorario(10, 0, 18, 0));
+		horario.agregarRangoHorario(new RangoHorario(5, 10, 0, 18, 0));
+		horario.agregarRangoHorario(new RangoHorario(6, 10, 0, 18, 0));
 		servicioRentas.setHorarios(horario);
-		ArrayList<ServicioCGP> servicios = new ArrayList<ServicioCGP>();
+		Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
 		servicios.add(servicioRentas);
 		cgp.setServicios(servicios);
-		ArrayList<String> palabras = new ArrayList<String>();
+		HashSet<String> palabras = new HashSet<String>();
 		palabras.add("CGP");
+		palabras.add("Chacabuco");
 		cgp.setPalabrasClave(palabras);
 
-		pois.add(local);
-		pois.add(cgp);
+		ParadaColectivo parada = new ParadaColectivo();
+		parada.setGeolocalizacion(new Geolocalizacion(12, 58));
+		parada.setLinea("103");
+		Set<String> pal = new HashSet<>();
+		pal.add("Colectivo");
+		pal.add("Bondi");
+		parada.setPalabrasClave(pal);
 
-		return pois;
+		SucursalBanco sucursal = new SucursalBanco(new DateTimeProviderImpl(new DateTime()));
+		sucursal.setBanco("Nacion");
+		ServicioBanco servicioB = new ServicioBanco();
+		servicioB.setNombre("Asesoramiento");
+		Geolocalizacion geolocalizacionSucursal = new Geolocalizacion(12, 28);
+		sucursal.setGeolocalizacion(geolocalizacionSucursal);
+		Set<ServicioBanco> servicios2 = new HashSet<ServicioBanco>();
+		servicios2.add(servicioB);
+		Horarios horarioServicio = new Horarios();
+		LocalTime horaInicio = new LocalTime(12, 0);
+		LocalTime horaFin = new LocalTime(16, 0);
+		horarioServicio.agregarRangoHorario(new RangoHorario(1, horaInicio, horaFin));
+		horarioServicio.agregarRangoHorario(new RangoHorario(2, horaInicio, horaFin));
+		servicioB.setHorarios(horarioServicio);
+		sucursal.setServicios(servicios2);
+
+		HashSet<String> palabras2 = new HashSet<String>();
+		palabras2.add("Banco");
+		sucursal.setPalabrasClave(palabras2);
+
+		agregarPuntoDeInteres(local);
+		agregarPuntoDeInteres(cgp);
+		agregarPuntoDeInteres(parada);
+		agregarPuntoDeInteres(sucursal);
+
+		return puntosDeInteres;
 	}
 
-	private static void populateAcciones() {
-		AccionFactory.acciones = new HashMap<Integer, Accion>();
-		AccionFactory.addAccion(new ActualizarLocalesComerciales());
-		AccionFactory.addAccion(new BajaPoisInactivos());
-		AccionFactory.addAccion(new AgregarAccionesATodos());
-		AccionFactory.addAccion(new DefinirProcesoMultiple());
-		List<Accion> multipleList = new ArrayList<Accion>();
-		multipleList.add(AccionFactory.getAccion(0));
-		multipleList.add(AccionFactory.getAccion(1));
-		AccionFactory.addAccionMultiple(multipleList);
+	private void populateAcciones() {
+		if (entityManager().createQuery("FROM Accion").getResultList().isEmpty()) {
+			Accion Accion1 = new ActualizarLocalesComerciales();
+			Accion Accion2 = new BajaPoisInactivos();
+			Accion Accion3 = new AgregarAccionesATodos();
+			Accion Accion4 = new DefinirProcesoMultiple();
+			AccionFactory.getInstance().addAccion(Accion1);
+			AccionFactory.getInstance().addAccion(Accion2);
+			AccionFactory.getInstance().addAccion(Accion3);
+			AccionFactory.getInstance().addAccion(Accion4);
+			List<Accion> multipleList = new ArrayList<Accion>();
+			multipleList.add(Accion1);
+			multipleList.add(Accion2);
+			AccionFactory.getInstance().addAccionMultiple(multipleList);
+		} else {
+			List<Accion> accs = entityManager().createQuery("FROM Accion").getResultList();
+			accs.forEach(x -> AccionFactory.getInstance().addAccion(x));
+		}
 	}
 
-	public static void populateDummyUsers() {
-		agregarUsuario("terminalAbasto", "pwd", new Terminal());
-		agregarUsuario("terminalDOT", "pwd", new Terminal());
-		agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal());
-		agregarUsuario("admin", "1234", new Administrador());
+	public void populateDummyUsers() {
+		if (entityManager().createQuery("FROM Usuario").getResultList().isEmpty()) {
+			agregarUsuario("terminalAbasto", "pwd", new Terminal(new Geolocalizacion(12, 28))); // ID
+																								// 1
+																								// Cercano
+																								// al
+																								// Local
+			agregarUsuario("terminalDOT", "pwd", new Terminal(new Geolocalizacion(9, 9))); // ID
+																							// 2
+																							// Cercano
+																							// al
+																							// CGP
+			agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal(new Geolocalizacion(666, 666))); // ID
+																												// 3
+																												// Cercano
+																												// a
+																												// ninguno
+			Usuario admin = agregarUsuario("admin", "1234", new Administrador());
+			admin.agregarAccion(AccionFactory.getAccion(Primitivas.ActualizarLocalesComerciales));
+			admin.agregarAccion(AccionFactory.getAccion(Primitivas.AgregarAccionesATodos));
+		}
+	}
+
+	// TODO Esto queda public hasta que se implemente base de datos donde estén
+	// guardadas las AccionesAnteBusqueda
+	public void populateDummyAccionesAnteBusqueda() {
+		accionesAnteBusqueda = new ArrayList<>();
+		AccionAnteBusqueda notificarAdmin = new AccionAnteBusqueda(); // id=1?
+		AccionAnteBusqueda almacenarBusqueda = new AccionAnteBusqueda(); // id=2?
+		notificarAdmin.setNombre("Notificar Administrador por demora excesiva en Búsqueda");
+		almacenarBusqueda.setNombre("Almacenar resultados de las búsquedas");
+		entityManager().getTransaction().begin();
+		entityManager().persist(notificarAdmin);
+		entityManager().persist(almacenarBusqueda);
+		entityManager().getTransaction().commit();
+		notificarAdmin.setActivada(true);
+		almacenarBusqueda.setActivada(true);
+		accionesAnteBusqueda.addAll(Arrays.asList(notificarAdmin, almacenarBusqueda));
 	}
 
 	private void agregarSucursalesBancoExternas() {
@@ -295,44 +410,29 @@ public class App {
 
 	public List<Busqueda> historialPorUsuario(String nombreDeUsuario) {
 		List<Busqueda> historial = new ArrayList<>();
-		File file;
 		try {
-			file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
-			historial = busquedas.stream()
-					.filter(x -> buscarUsuarioPorId(x.getTerminal()).getUsername().equals(nombreDeUsuario)).collect(Collectors.toList());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			int idUsuario = ((Usuario) entityManager().createQuery("FROM Usuario WHERE username='" + nombreDeUsuario + "'").getSingleResult()).getId();
+			historial = entityManager().createQuery("FROM Busqueda WHERE usuario_id=" + idUsuario).getResultList();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return historial;
 	}
 
 	public List<Busqueda> historialPorFecha(long desdeMilis, long hastaMilis) {
-		Date desde = new Date(desdeMilis);
-		Date hasta = new Date(hastaMilis);
 		List<Busqueda> historial = new ArrayList<>();
-		File file;
 		try {
-			file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
-			historial = busquedas;
-			if (desdeMilis != 0) // solo si se especifica fecha desde
-				historial = historial.stream().filter(x -> x.getFecha().after(desde)).collect(Collectors.toList());
-			if (hastaMilis != 0) // solo si se especifica fecha hasta
-				historial = historial.stream().filter(x -> x.getFecha().before(hasta)).collect(Collectors.toList());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			if (desdeMilis * hastaMilis != 0)
+				historial = entityManager()
+						.createQuery("FROM Busqueda WHERE fecha BETWEEN " + desdeMilis + " AND " + hastaMilis)
+						.getResultList();
+			else if (desdeMilis > 0)
+				historial = entityManager().createQuery("FROM Busqueda WHERE fecha >" + desdeMilis).getResultList();
+			else if (hastaMilis > 0)
+				historial = entityManager().createQuery("FROM Busqueda WHERE fecha <" + hastaMilis).getResultList();
+			else
+				historial = entityManager().createQuery("FROM Busqueda").getResultList();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return historial;
@@ -342,13 +442,7 @@ public class App {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando de Busquedas Reporte:");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
+			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda").getResultList();
 			reporte = busquedas.stream()
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
@@ -362,15 +456,9 @@ public class App {
 		Map<Integer, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas por terminal:");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
+			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda").getResultList();
 			reporte = busquedas.stream()
-					.collect(Collectors.groupingBy(busqueda -> busqueda.getTerminal(), Collectors.counting()));
+					.collect(Collectors.groupingBy(busqueda -> busqueda.getUsuario().getId(), Collectors.counting()));
 			reporte.forEach(
 					(terminal, cantidad) -> System.out.println("Terminal : " + terminal + " Cantidad : " + cantidad));
 		} catch (Exception e) {
@@ -383,14 +471,9 @@ public class App {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas de Terminal " + idTerminal + ": ");
-			File file = FileUtils.obtenerArchivoBusquedas();
-			ObjectMapper mapper = new ObjectMapper();
-			List<Busqueda> busquedas = new ArrayList<>();
-			if (file.length() > 0) {
-				busquedas = mapper.readValue(file, new TypeReference<List<Busqueda>>() {
-				});
-			}
-			reporte = busquedas.stream().filter(busqueda -> busqueda.getTerminal() == idTerminal)
+			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda WHERE terminal=" + idTerminal)
+					.getResultList();
+			reporte = busquedas.stream()
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
 		} catch (Exception e) {
@@ -413,8 +496,28 @@ public class App {
 		App.resultadosAcciones = resultadosAcciones;
 	}
 
-	public static void addResultadosAcciones(ResultadoAccion resultadoAccion) {
+	public void addResultadosAcciones(ResultadoAccion resultadoAccion) {
+		entityManager().getTransaction().begin();
+		entityManager().persist(resultadoAccion);
+		entityManager().getTransaction().commit();
 		resultadosAcciones.add(resultadoAccion);
 	}
 
+	public void actualizarUsuario(Usuario usuario) {
+		entityManager().getTransaction().begin();
+		entityManager().merge(usuario);
+		entityManager().getTransaction().commit();
+	}
+
+	public void actualizarUsuarios() {
+		usuarios.forEach(x -> actualizarUsuario(x));
+	}
+
+	public List<AccionAnteBusqueda> getAccionesAnteBusqueda() {
+		return accionesAnteBusqueda;
+	}
+
+	public void setAccionesAnteBusqueda(List<AccionAnteBusqueda> accionesAnteBusqueda) {
+		App.accionesAnteBusqueda = accionesAnteBusqueda;
+	}
 }

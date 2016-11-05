@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.model.poi.local.comercial;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -10,8 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.Horarios;
-import ar.edu.utn.frba.dds.model.poi.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
@@ -33,20 +33,17 @@ public class LocalComercialTest {
         LocalTime horaFinLunesAViernes2 = new LocalTime(18, 30);
         LocalTime horaInicioSabado = new LocalTime(10, 0);
         LocalTime horaFinSabado = new LocalTime(13, 30);
-        RangoHorario manianaLunesAViernes = new RangoHorario(horaInicioLunesAViernes, horaFinLunesAViernes);
-        RangoHorario tardeLunesAViernes = new RangoHorario(horaInicioLunesAViernes2, horaFinLunesAViernes2);
-        RangoHorario horarioSabado = new RangoHorario(horaInicioSabado, horaFinSabado);
-        horarios.agregarRangoHorario(1, manianaLunesAViernes);
-        horarios.agregarRangoHorario(2, manianaLunesAViernes);
-        horarios.agregarRangoHorario(3, manianaLunesAViernes);
-        horarios.agregarRangoHorario(4, manianaLunesAViernes);
-        horarios.agregarRangoHorario(5, manianaLunesAViernes);
-        horarios.agregarRangoHorario(1, tardeLunesAViernes);
-        horarios.agregarRangoHorario(2, tardeLunesAViernes);
-        horarios.agregarRangoHorario(3, tardeLunesAViernes);
-        horarios.agregarRangoHorario(4, tardeLunesAViernes);
-        horarios.agregarRangoHorario(5, tardeLunesAViernes);
-        horarios.agregarRangoHorario(6, horarioSabado);
+        horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes, horaFinLunesAViernes));
+		horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		horarios.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
         local = new LocalComercial(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 13, 30, 0)));
         // setUp para esCercano
         rubroLibreria = new Rubro();
@@ -63,9 +60,9 @@ public class LocalComercialTest {
     public void siendoUnaFechaFueraDelHorarioDeAtencionDeUnLocalNoDebeEstarDisponible() {
         LocalTime horaInicio = new LocalTime().withHourOfDay(13).withMinuteOfHour(15);
         LocalTime horaFin = new LocalTime().withHourOfDay(14);
-        RangoHorario rangoHorario = new RangoHorario(horaInicio, horaFin);
+        RangoHorario rangoHorario = new RangoHorario(6, horaInicio, horaFin);
         Horarios horario = new Horarios();
-        horario.agregarRangoHorario(6, rangoHorario);
+        horario.agregarRangoHorario(rangoHorario);
         this.local.setHorarios(horario);
         Assert.assertFalse(this.local.estaDisponible());
     }
@@ -97,7 +94,7 @@ public class LocalComercialTest {
     public void dadaUnaPalabraLibreriaEscolarTienePalabraDebeCoincidirConNombre() {
         local.setNombre("Regla y compás");
         local.setRubro(rubroLibreria);
-        ArrayList<String> palabrasClave = new ArrayList<String>();
+        HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);
         Assert.assertTrue(local.tienePalabra("reGla"));
     }
@@ -106,7 +103,7 @@ public class LocalComercialTest {
     public void dadaUnaPalabraContenidaEnElNombreDelRubroLibreriaEscolarDebeTenerLaPalabra() {
         local.setNombre("Regla y compás");
         local.setRubro(rubroLibreria);
-        ArrayList<String> palabrasClave = new ArrayList<String>();
+        HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);
         Assert.assertTrue(local.tienePalabra("breRIA"));
     }
@@ -115,7 +112,7 @@ public class LocalComercialTest {
     public void dadaUnaPalabraQueNoEsClaveNiDelRubroNiDelNombreLibreriaEscolarNoDebeTenerEsaPalabra() {
         local.setNombre("Regla y compás");
         local.setRubro(rubroLibreria);
-        ArrayList<String> palabrasClave = new ArrayList<String>();
+        HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);
         Assert.assertFalse(local.tienePalabra("futbol"));
     }
