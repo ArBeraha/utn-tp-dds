@@ -52,16 +52,16 @@ public class BusquedaController {
         return busquedaService.generarReporteBusquedasDeTerminal(idTerminal);
     }
 
-    @RequestMapping(value = { "/accionesBusqueda" }, method = RequestMethod.GET)
-    public @ResponseBody List<AccionAnteBusqueda> getAccionesBusqueda() {
-        return busquedaService.getAccionesBusqueda();
+    @RequestMapping(value = { "/accionesBusqueda/{idTerminal}" }, method = RequestMethod.GET)
+    public @ResponseBody List<AccionAnteBusqueda> getAccionesBusqueda(@PathVariable("idTerminal") int idTerminal) {
+        return busquedaService.getAccionesBusqueda(idTerminal);
     }
 
-    @RequestMapping(value = { "/accionesBusqueda" }, method = RequestMethod.POST)
-    public @ResponseBody ResponseEntity<?> setAccionBusqueda(@RequestBody List<AccionAnteBusqueda> accionesBusqueda) {
+    @RequestMapping(value = { "/accionesBusqueda/{idTerminal}" }, method = RequestMethod.POST)
+    public @ResponseBody ResponseEntity<?> setAccionBusqueda(@RequestBody List<AccionAnteBusqueda> accionesBusqueda, @PathVariable("idTerminal") int idTerminal) {
         try {
             for (AccionAnteBusqueda accion : accionesBusqueda) {
-                busquedaService.setAccionBusqueda(accion.getId(), accion.isActivada());
+                busquedaService.setAccionBusqueda(idTerminal, accion.getId(), accion.isActivada());
             }
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();

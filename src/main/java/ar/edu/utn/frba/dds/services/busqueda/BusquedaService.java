@@ -12,6 +12,6 @@ public interface BusquedaService {
 	public Map<String, Long> generarReporteBusquedasPorFecha();
 	public Map<Integer, Long> generarReporteBusquedasPorTerminal();
 	public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal);
-	public List<AccionAnteBusqueda> getAccionesBusqueda();
-    public void setAccionBusqueda(int idAccion, Boolean activado) throws Exception;
+	public List<AccionAnteBusqueda> getAccionesBusqueda(int idTerminal);
+    public void setAccionBusqueda(int idTerminal ,int idAccion, Boolean activado) throws Exception;
 }

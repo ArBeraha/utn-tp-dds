@@ -3,19 +3,14 @@ package ar.edu.utn.frba.dds.model.app;
 import java.awt.Polygon;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.persistence.Convert;
 
 import org.joda.time.DateTime;
 
@@ -24,8 +19,6 @@ import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 
 import org.joda.time.LocalTime;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.accion.AccionFactory;
 import ar.edu.utn.frba.dds.model.accion.ActualizarLocalesComerciales;
@@ -34,8 +27,6 @@ import ar.edu.utn.frba.dds.model.accion.BajaPoisInactivos;
 import ar.edu.utn.frba.dds.model.accion.DefinirProcesoMultiple;
 import ar.edu.utn.frba.dds.model.accion.Primitivas;
 import ar.edu.utn.frba.dds.model.accion.ResultadoAccion;
-import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
-import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusquedasEnum;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
@@ -70,7 +61,6 @@ public class App implements WithGlobalEntityManager {
 	private static List<PuntoDeInteres> puntosDeInteres;
 	private static List<Usuario> usuarios;
 	private static List<ResultadoAccion> resultadosAcciones;
-	private static List<AccionAnteBusqueda> accionesAnteBusqueda;
 
 	// Singleton
 	public static App getInstance() {
@@ -83,46 +73,40 @@ public class App implements WithGlobalEntityManager {
 	// Constructor privado por el Singleton
 	private App() {
 		usuarios = entityManager().createQuery("FROM Usuario").getResultList();
+
+		puntosDeInteres = new ArrayList<>();
+		if (entityManager().createQuery("FROM PuntoDeInteres").getResultList().isEmpty()) {
+			puntosDeInteres = populateDummyPOIs();
+			try {
+				// Los cargo solo al estar vacia la base para no duplicarlos con cada ejecución
+				// TODO: Como controlamos que existen en la base?
+				this.agregarSucursalesBancoExternas();
+				this.agregarCGPExternos();
+			} catch (Exception e) {
+				System.out.println("Se ha producido un error al consultar los servicios externos:");
+				for (StackTraceElement ste : e.getStackTrace()) {
+					System.out.println(ste.toString());
+				}
+			}
+		} 
+		else
+			puntosDeInteres = entityManager().createQuery("FROM PuntoDeInteres").getResultList();
+		
 		resultadosAcciones = entityManager().createQuery("FROM ResultadoAccion").getResultList();
-		puntosDeInteres = populateDummyPOIs();
+
 		populateAcciones();
 		populateDummyUsers();
 
-		if (entityManager().createQuery("FROM AccionAnteBusqueda").getResultList().isEmpty())
-			populateDummyAccionesAnteBusqueda();
-		else
-			accionesAnteBusqueda = entityManager().createQuery("FROM AccionAnteBusqueda").getResultList();
-
-		try {
-			this.agregarSucursalesBancoExternas();
-			this.agregarCGPExternos();
-		} catch (Exception e) {
-			System.out.println("Se ha producido un error al consultar los servicios externos:");
-			for (StackTraceElement ste : e.getStackTrace()) {
-				System.out.println(ste.toString());
-			}
-		}
 	}
 
-	public List<PuntoDeInteres> getPuntosDeInteres() {
-		return puntosDeInteres;
-	}
-
-	public List<Usuario> getUsuarios() {
-		return usuarios;
-	}
-
-	public void setPuntosDeInteres(final List<PuntoDeInteres> unosPuntosDeInteres) {
-		puntosDeInteres = unosPuntosDeInteres;
-	}
 
 	public Usuario agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
 		Encoder encoder = Encoder.getInstance();
 		Usuario usuario = new Usuario(username, encoder.encode(password), tipoUsuario);
+		usuarios.add(usuario);
 		entityManager().getTransaction().begin();
 		entityManager().persist(usuario);
 		entityManager().getTransaction().commit();
-		usuarios.add(usuario);
 		return usuario;
 	}
 
@@ -180,46 +164,11 @@ public class App implements WithGlobalEntityManager {
 		return poi.estaDisponible();
 	}
 
-	public List<PuntoDeInteres> buscarPuntoDeInteres(final String texto, final DateTime fechaHoraInicio,
-			int idTerminal) throws JsonParseException, JsonMappingException, IOException {
-		
-		Set<PuntoDeInteres> resultadosFinales = new HashSet<>();
-		List<String> ors = Arrays.asList(texto.split(","));
-		for (String or : ors){
-			List<String> ands =  Arrays.asList(or.split(" "));
-			List<PuntoDeInteres> resultadosAND = new ArrayList<>();
-			resultadosAND.addAll(buscarPuntoDeInteresSinAlmacenarResultado(ands.get(0)));
-			for (int i = 1; i < ands.size(); i++) {
-				resultadosAND.retainAll(buscarPuntoDeInteresSinAlmacenarResultado(ands.get(i)));
-			}
-			resultadosFinales.addAll(resultadosAND);
-		}
-
-		if (AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS.isActivada()) {
-			Busqueda nuevaBusqueda = new Busqueda(texto, fechaHoraInicio, idTerminal);
-			nuevaBusqueda.setResultados(resultadosFinales.size(), new DateTime());
-			entityManager().getTransaction().begin();
-			entityManager().persist(nuevaBusqueda);
-			entityManager().getTransaction().commit();
-		}
-		return resultadosFinales.stream().collect(Collectors.toList());
-	}
-
-	public List<PuntoDeInteres> buscarPuntoDeInteresSinAlmacenarResultado(final String palabra)
-			throws JsonParseException, JsonMappingException, IOException {
-		List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
-		for (PuntoDeInteres puntoDeInteres : puntosDeInteres) {
-			if (puntoDeInteres.tienePalabra(palabra)) {
-				resultadoBusqueda.add(puntoDeInteres);
-			}
-		}
-		return resultadoBusqueda;
-	}
-
 	// TODO Esto queda public hasta que se implemente base de datos donde estén
 	// guardados los POIs
 	public List<PuntoDeInteres> populateDummyPOIs() {
-		puntosDeInteres = entityManager().createQuery("FROM PuntoDeInteres").getResultList();
+		System.out.println("POPULANDO POIS");
+		System.out.println("POPULANDO LOCAL-----------------");
 		LocalComercial local;
 		Horarios horarios = new Horarios();
 		Rubro rubroLibreria;
@@ -258,7 +207,7 @@ public class App implements WithGlobalEntityManager {
 		especial.agregarRangoHorario(
 				new RangoHorarioEspecial(new LocalDate(2016, 10, 23), horaInicioLunesAViernes, horaFinLunesAViernes));
 		local.setHorariosEspeciales(especial);
-
+		System.out.println("POPULANDO CGP --------------------");
 		CGP cgp;
 		Comuna comuna;
 		Polygon superficie;
@@ -316,9 +265,13 @@ public class App implements WithGlobalEntityManager {
 		palabras2.add("Banco");
 		sucursal.setPalabrasClave(palabras2);
 
+		System.out.println("PERSISTIENDO LOCAL --------------------");
 		agregarPuntoDeInteres(local);
+		System.out.println("PERSISTIENDO cgp --------------------");
 		agregarPuntoDeInteres(cgp);
+		System.out.println("PERSISTIENDO parada --------------------");
 		agregarPuntoDeInteres(parada);
+		System.out.println("PERSISTIENDO sucursal --------------------");
 		agregarPuntoDeInteres(sucursal);
 
 		return puntosDeInteres;
@@ -367,28 +320,11 @@ public class App implements WithGlobalEntityManager {
 		}
 	}
 
-	// TODO Esto queda public hasta que se implemente base de datos donde estén
-	// guardadas las AccionesAnteBusqueda
-	public void populateDummyAccionesAnteBusqueda() {
-		accionesAnteBusqueda = new ArrayList<>();
-		AccionAnteBusqueda notificarAdmin = new AccionAnteBusqueda(); // id=1?
-		AccionAnteBusqueda almacenarBusqueda = new AccionAnteBusqueda(); // id=2?
-		notificarAdmin.setNombre("Notificar Administrador por demora excesiva en Búsqueda");
-		almacenarBusqueda.setNombre("Almacenar resultados de las búsquedas");
-		entityManager().getTransaction().begin();
-		entityManager().persist(notificarAdmin);
-		entityManager().persist(almacenarBusqueda);
-		entityManager().getTransaction().commit();
-		notificarAdmin.setActivada(true);
-		almacenarBusqueda.setActivada(true);
-		accionesAnteBusqueda.addAll(Arrays.asList(notificarAdmin, almacenarBusqueda));
-	}
-
 	private void agregarSucursalesBancoExternas() {
 		ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
 		try {
 			for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
-				puntosDeInteres.add(sucursalBancoExterna);
+				agregarPuntoDeInteres(sucursalBancoExterna);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -400,7 +336,7 @@ public class App implements WithGlobalEntityManager {
 		ServicioConsultaCGP servicioCGP = new ServicioConsultaCGPImpl();
 		try {
 			for (CGP cgpExterno : servicioCGP.getCentrosExternos("")) {
-				puntosDeInteres.add(cgpExterno);
+				agregarPuntoDeInteres(cgpExterno);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -411,7 +347,8 @@ public class App implements WithGlobalEntityManager {
 	public List<Busqueda> historialPorUsuario(String nombreDeUsuario) {
 		List<Busqueda> historial = new ArrayList<>();
 		try {
-			int idUsuario = ((Usuario) entityManager().createQuery("FROM Usuario WHERE username='" + nombreDeUsuario + "'").getSingleResult()).getId();
+			int idUsuario = ((Usuario) entityManager()
+					.createQuery("FROM Usuario WHERE username='" + nombreDeUsuario + "'").getSingleResult()).getId();
 			historial = entityManager().createQuery("FROM Busqueda WHERE usuario_id=" + idUsuario).getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -481,13 +418,26 @@ public class App implements WithGlobalEntityManager {
 		}
 		return reporte;
 	}
-
+	
 	public Usuario buscarUsuarioPorId(final int idUsuario) {
 		List<Usuario> usuario = usuarios.stream().filter(unaUsuario -> idUsuario == unaUsuario.getId())
 				.collect(Collectors.toList());
 		return usuario.get(0);
 	}
 
+	public List<PuntoDeInteres> getPuntosDeInteres() {
+		return puntosDeInteres;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setPuntosDeInteres(final List<PuntoDeInteres> unosPuntosDeInteres) {
+		puntosDeInteres = unosPuntosDeInteres;
+	}
+	
+	
 	public static List<ResultadoAccion> getResultadosAcciones() {
 		return resultadosAcciones;
 	}
@@ -511,13 +461,5 @@ public class App implements WithGlobalEntityManager {
 
 	public void actualizarUsuarios() {
 		usuarios.forEach(x -> actualizarUsuario(x));
-	}
-
-	public List<AccionAnteBusqueda> getAccionesAnteBusqueda() {
-		return accionesAnteBusqueda;
-	}
-
-	public void setAccionesAnteBusqueda(List<AccionAnteBusqueda> accionesAnteBusqueda) {
-		App.accionesAnteBusqueda = accionesAnteBusqueda;
 	}
 }

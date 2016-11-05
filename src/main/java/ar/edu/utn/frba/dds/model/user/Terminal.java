@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.model.user;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 
@@ -27,7 +28,7 @@ public class Terminal extends TipoUsuario {
     public void setGeolocalizacion(final Geolocalizacion geolocalizacion) {
         this.geolocalizacion = geolocalizacion;
     }
-
+    
     public boolean esCercano(final PuntoDeInteres poi) {
         return poi.esCercano(this.getGeolocalizacion());
     }

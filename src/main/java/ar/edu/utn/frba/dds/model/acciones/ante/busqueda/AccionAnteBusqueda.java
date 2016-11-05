@@ -13,9 +13,17 @@ public class AccionAnteBusqueda {
     private int id;
     private String nombre;
     private boolean activada;
+    private AccionAnteBusquedasEnum accionEnum;
 
     public AccionAnteBusqueda() {
     }
+    
+    public AccionAnteBusqueda(String nombre, boolean activada, AccionAnteBusquedasEnum accionEnum) {
+    	this.nombre=nombre;
+    	this.activada=activada;
+    	this.accionEnum = accionEnum;
+    }
+
 
     public int getId() {
         return id;
@@ -39,8 +47,16 @@ public class AccionAnteBusqueda {
 
     public void setActivada(boolean activada) {
         this.activada = activada;
-		App.getInstance().entityManager().getTransaction().begin();
-		App.getInstance().entityManager().merge(this);
-		App.getInstance().entityManager().getTransaction().commit();
+        App.getInstance().entityManager().getTransaction().begin();
+        App.getInstance().entityManager().merge(this);
+        App.getInstance().entityManager().getTransaction().commit();
     }
+
+	public AccionAnteBusquedasEnum getAccionEnum() {
+		return accionEnum;
+	}
+
+	public void setAccionEnum(AccionAnteBusquedasEnum accionEnum) {
+		this.accionEnum = accionEnum;
+	}
 }

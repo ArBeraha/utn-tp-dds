@@ -9,12 +9,10 @@ import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -44,6 +42,7 @@ public abstract class PuntoDeInteres {
 	@CollectionTable(name = "palabras")
 	protected Set<String> palabrasClave = new HashSet<String>();
 
+	
 	public void setId(int id) {
 		this.id = id;
 	}
