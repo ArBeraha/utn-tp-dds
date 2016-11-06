@@ -89,6 +89,13 @@ public class Busqueda {
 					body, false);
 			System.out.println("E-Mail enviado con éxito");
 		}
+		
+		if (usuario.tieneAccionAnteBusqueda(AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS)) {
+			App.getInstance().entityManager().getTransaction().begin();
+			App.getInstance().entityManager().persist(this);
+			App.getInstance().entityManager().getTransaction().commit();
+		} 
+		
 	}
 
 	public static List<PuntoDeInteres> buscarPorPalabra(String palabra) {

@@ -167,8 +167,6 @@ public class App implements WithGlobalEntityManager {
 	// TODO Esto queda public hasta que se implemente base de datos donde estén
 	// guardados los POIs
 	public List<PuntoDeInteres> populateDummyPOIs() {
-		System.out.println("POPULANDO POIS");
-		System.out.println("POPULANDO LOCAL-----------------");
 		LocalComercial local;
 		Horarios horarios = new Horarios();
 		Rubro rubroLibreria;
@@ -207,7 +205,7 @@ public class App implements WithGlobalEntityManager {
 		especial.agregarRangoHorario(
 				new RangoHorarioEspecial(new LocalDate(2016, 10, 23), horaInicioLunesAViernes, horaFinLunesAViernes));
 		local.setHorariosEspeciales(especial);
-		System.out.println("POPULANDO CGP --------------------");
+
 		CGP cgp;
 		Comuna comuna;
 		Polygon superficie;
@@ -265,13 +263,9 @@ public class App implements WithGlobalEntityManager {
 		palabras2.add("Banco");
 		sucursal.setPalabrasClave(palabras2);
 
-		System.out.println("PERSISTIENDO LOCAL --------------------");
 		agregarPuntoDeInteres(local);
-		System.out.println("PERSISTIENDO cgp --------------------");
 		agregarPuntoDeInteres(cgp);
-		System.out.println("PERSISTIENDO parada --------------------");
 		agregarPuntoDeInteres(parada);
-		System.out.println("PERSISTIENDO sucursal --------------------");
 		agregarPuntoDeInteres(sucursal);
 
 		return puntosDeInteres;

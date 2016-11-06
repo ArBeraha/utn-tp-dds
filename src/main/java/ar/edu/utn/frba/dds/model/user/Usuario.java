@@ -61,12 +61,6 @@ public class Usuario {
     
     public List<PuntoDeInteres> buscarPuntoDeInteres(String texto){
     	Busqueda nuevaBusqueda = new Busqueda(texto, this);
-		//if (tieneAccionAnteBusqueda(AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS)) {
-    	System.out.println("PERSISTIENDO");
-			App.getInstance().entityManager().getTransaction().begin();
-			App.getInstance().entityManager().persist(nuevaBusqueda);
-			App.getInstance().entityManager().getTransaction().commit();
-		//} 
     	return nuevaBusqueda.getResultados();
     }
     
