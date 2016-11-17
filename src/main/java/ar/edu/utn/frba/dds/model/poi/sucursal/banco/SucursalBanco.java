@@ -20,7 +20,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-@JsonIgnoreProperties({ "sucursal" , "gerente", "horarios", "dateTimeProvider", "geolocalizacion", "palabrasClave" })
+@JsonIgnoreProperties({ "sucursal" , "gerente", "dateTimeProvider", "geolocalizacion", "palabrasClave" })
 @Entity
 public class SucursalBanco extends PuntoDeInteres {
 

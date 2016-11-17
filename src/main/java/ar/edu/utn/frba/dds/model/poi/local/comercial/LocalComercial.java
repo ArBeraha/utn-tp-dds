@@ -12,7 +12,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
 @Entity
-@JsonIgnoreProperties({ "horarios", "horariosEspeciales", "dateTimeProvider","geolocalizacion","palabrasClave" })
+@JsonIgnoreProperties({ "dateTimeProvider","geolocalizacion","palabrasClave" })
 
 public class LocalComercial extends PuntoDeInteres {
 

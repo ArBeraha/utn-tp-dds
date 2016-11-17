@@ -97,14 +97,6 @@ public abstract class Servicio {
 		this.nombre = nombre;
 	}
 
-	public Set<RangoHorario> getRangosHorario() {
-		return horarios;
-	}
-
-	public void setRangosHorario(Set<RangoHorario> rangosHorario) {
-		this.horarios = rangosHorario;
-	}
-
 	public void setPalabrasClave(Set<String> palabrasClave) {
 		this.palabrasClave = palabrasClave;
 	}
@@ -128,5 +120,7 @@ public abstract class Servicio {
 	public void setHorariosEspeciales(Set<RangoHorarioEspecial> horariosEspeciales) {
 		this.horariosEspeciales = horariosEspeciales;
 	}
+
+
 
 }

@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 
 import org.joda.time.DateTime;
 
-@JsonIgnoreProperties({ "horarios","id" })
+@JsonIgnoreProperties({"id" })
 @Entity
 public class ServicioBanco extends Servicio {
 	
