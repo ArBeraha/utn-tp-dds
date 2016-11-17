@@ -19,6 +19,11 @@ app.config(function ($routeProvider) {
     .when('/admin/acciones', {
         templateUrl: 'configurar-acciones.html',
         controller: 'ConfigurarAccionesController',
+    })
+
+    .when('/admin/historial-busquedas', {
+        templateUrl: 'historial-busquedas.html',
+        controller: 'HistorialBusquedasController',
     });
 
 });
