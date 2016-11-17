@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;

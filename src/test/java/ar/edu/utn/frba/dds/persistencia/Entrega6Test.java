@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import ar.edu.utn.frba.dds.model.app.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.*;
-import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
@@ -72,13 +71,13 @@ public class Entrega6Test extends PersistenciaTest {
 	public void crearPoiPersistirloRecuperarloEliminarloVerificarExistencia() {
 
 		LocalComercial local;
-		Horarios horarios = new Horarios();
 		Rubro rubroLibreria;
 		Geolocalizacion geolocalizacionLocal;
 		LocalTime horaInicioSabado = new LocalTime(10, 0);
 		LocalTime horaFinSabado = new LocalTime(13, 30);
-		horarios.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
 		local = new LocalComercial(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 13, 30, 0)));
+		local.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
+		
 		rubroLibreria = new Rubro();
 		geolocalizacionLocal = new Geolocalizacion(12, 28);
 		rubroLibreria.setNombre("Libreria Escolar");
@@ -89,7 +88,6 @@ public class Entrega6Test extends PersistenciaTest {
 		HashSet<String> palabrasClave = new HashSet<String>();
 		palabrasClave.add("Tienda");
 		local.setPalabrasClave(palabrasClave);
-		local.setHorarios(horarios);
 
 		entityManager().persist(local);
 		int id = local.getId();

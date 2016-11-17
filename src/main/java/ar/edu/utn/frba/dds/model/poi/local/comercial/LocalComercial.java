@@ -1,23 +1,15 @@
 package ar.edu.utn.frba.dds.model.poi.local.comercial;
 
 import java.util.HashSet;
-
 import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.TipoPoi;
-import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
-import ar.edu.utn.frba.dds.model.poi.horario.HorariosEspeciales;
-import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProvider;
-import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
 
 @Entity
 @JsonIgnoreProperties({ "horarios", "horariosEspeciales", "dateTimeProvider","geolocalizacion","palabrasClave" })
@@ -27,10 +19,6 @@ public class LocalComercial extends PuntoDeInteres {
 	private String nombre;
 	@Embedded
 	private Rubro rubro;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Horarios horarios;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private HorariosEspeciales horariosEspeciales;
 	private String tipo = TipoPoi.LOCAL_COMERCIAL.toString();
 
 	public LocalComercial() {
@@ -38,16 +26,7 @@ public class LocalComercial extends PuntoDeInteres {
 
 	public LocalComercial(DateTimeProvider dateTimeProviderImpl) {
 		this.dateTimeProvider = dateTimeProviderImpl;
-		horariosEspeciales = new HorariosEspeciales();
 		palabrasClave = new HashSet<>();
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setHorariosEspeciales(HorariosEspeciales horariosEspeciales) {
-		this.horariosEspeciales = horariosEspeciales;
 	}
 
 	public void setTipo(String tipo) {
@@ -71,30 +50,10 @@ public class LocalComercial extends PuntoDeInteres {
 		this.rubro = rubro;
 	}
 
-	public Horarios getHorarios() {
-		return horarios;
-	}
-
-	public void setHorarios(Horarios horarios) {
-		this.horarios = horarios;
-	}
-
-	public HorariosEspeciales getHorariosEspeciales() {
-		return horariosEspeciales;
-	}
-
-	public void agregarRangoHorario(RangoHorario unRangoHorario) {
-		this.horarios.agregarRangoHorario(unRangoHorario);
-	}
-
 	@Override
 	public boolean estaDisponible() {
 		DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
-		if (horariosEspeciales.contiene(fechaHoraActual)) {
-			return horariosEspeciales.atiende(fechaHoraActual);
-		} else {
-			return horarios.atiende(fechaHoraActual);
-		}
+		return atiende(fechaHoraActual);
 	}
 
 	@Override

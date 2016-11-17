@@ -14,7 +14,6 @@ import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
-import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
@@ -46,9 +45,7 @@ public class CGPTest {
         cgp.setGeolocalizacion(geolocalizacionCGP);
         ServicioCGP servicioRentas = new ServicioCGP();
         servicioRentas.setNombre("Rentas");
-        Horarios horario = new Horarios();
-        horario.agregarRangoHorario(new RangoHorario(6,10,0,18,0));
-        servicioRentas.setHorarios(horario);
+        servicioRentas.agregarRangoHorario(new RangoHorario(6,10,0,18,0));
         Set<ServicioCGP> servicios = new HashSet<ServicioCGP>();
         servicios.add(servicioRentas);
         cgp.setServicios(servicios);
