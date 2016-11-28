@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -203,17 +204,6 @@ public class App implements WithGlobalEntityManager {
 		admin.agregarAccion(AccionFactory.getAccion(Primitivas.AgregarAccionesATodos));
 
 	}
-
-//	public void populateAcciones() {
-//		Accion Accion1 = new ActualizarLocalesComerciales();
-//		Accion Accion2 = new BajaPoisInactivos();
-//		Accion Accion3 = new AgregarAccionesATodos();
-//		Accion Accion4 = new DefinirProcesoMultiple();
-//		AccionFactory.getInstance().addAccion(Accion1);
-//		AccionFactory.getInstance().addAccion(Accion2);
-//		AccionFactory.getInstance().addAccion(Accion3);
-//		AccionFactory.getInstance().addAccion(Accion4);
-//	}
 	
 	public Usuario agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
 		Encoder encoder = Encoder.getInstance();
@@ -272,7 +262,10 @@ public class App implements WithGlobalEntityManager {
 		ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
 		try {
 			for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
-				agregarPuntoDeInteres(sucursalBancoExterna);
+				Stream<SucursalBanco> bancosExistentes = puntosDeInteres.stream().filter(x -> x.getClass() == SucursalBanco.class).map(x -> (SucursalBanco) x);
+				boolean esNuevo = bancosExistentes.noneMatch(x -> x.getSucursal()==sucursalBancoExterna.getSucursal() && x.getNombre()==sucursalBancoExterna.getNombre());
+				if (esNuevo)
+					agregarPuntoDeInteres(sucursalBancoExterna);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -284,7 +277,10 @@ public class App implements WithGlobalEntityManager {
 		ServicioConsultaCGP servicioCGP = new ServicioConsultaCGPImpl();
 		try {
 			for (CGP cgpExterno : servicioCGP.getCentrosExternos("")) {
-				agregarPuntoDeInteres(cgpExterno);
+				Stream<CGP> CGPExistentes = puntosDeInteres.stream().filter(x -> x.getClass() == CGP.class).map(x -> (CGP) x);
+				boolean esNuevo = CGPExistentes.noneMatch(x -> x.getComuna() == cgpExterno.getComuna() && x.getZonas().containsAll(cgpExterno.getZonas()));
+				if (esNuevo)
+					agregarPuntoDeInteres(cgpExterno);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -40,7 +40,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Busqueda {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -49,33 +49,31 @@ public class Busqueda {
 	private LocalDateTime fecha;
 	@OneToOne(fetch = FetchType.EAGER)
 	private Usuario usuario;
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<PuntoDeInteres> resultados = new HashSet<>();
 
-	// Constructor por default privado. Agregado para que lo use el mapper de
-	// Jackson a JSON
 	public Busqueda() {
 	}
-	
+
 	public Busqueda(String fraseBuscada) {
-		List<String> ors = Arrays.asList(fraseBuscada.split(","));
-		for (String or : ors) {
-			List<String> ands = Arrays.asList(or.split(" "));
-			List<PuntoDeInteres> resultadosAND = new ArrayList<>();
-			resultadosAND.addAll(buscarPorPalabra(ands.get(0)));
-			for (int i = 1; i < ands.size(); i++) {
-				resultadosAND.retainAll(buscarPorPalabra(ands.get(i)));
-			}
-			resultados.addAll(resultadosAND);
-		}
+		this.resultados = buscar(fraseBuscada);
 	}
 
 	public Busqueda(String fraseBuscada, Usuario usuario) {
+		this.resultados = buscar(fraseBuscada);
 		this.fecha = LocalDateTime.now();
 		this.fraseBuscada = fraseBuscada;
 		this.usuario = usuario;
 
+		if (usuario.tieneAccionAnteBusqueda(AccionAnteBusquedasEnum.NOTIFICAR_ADMINISTRADOR))
+			notificar();
+		if (usuario.tieneAccionAnteBusqueda(AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS))
+			almacenar();
+	}
+
+	public static Set<PuntoDeInteres> buscar(String fraseBuscada) {
 		List<String> ors = Arrays.asList(fraseBuscada.split(","));
+		Set<PuntoDeInteres> resultadoFinal = new HashSet<>();
 		for (String or : ors) {
 			List<String> ands = Arrays.asList(or.split(" "));
 			List<PuntoDeInteres> resultadosAND = new ArrayList<>();
@@ -83,57 +81,12 @@ public class Busqueda {
 			for (int i = 1; i < ands.size(); i++) {
 				resultadosAND.retainAll(buscarPorPalabra(ands.get(i)));
 			}
-			resultados.addAll(resultadosAND);
+			resultadoFinal.addAll(resultadosAND);
 		}
-
-		Properties properties = PropertiesFactory.getAppProperties();
-		Double maxSegundos = Double.valueOf(properties.getProperty("max.demora.busqueda.segundos"));
-		duracion = Double.valueOf(DateTime.now().getMillis() - fecha.toDateTime().getMillis()) / 1000;
-		if (usuario.tieneAccionAnteBusqueda(AccionAnteBusquedasEnum.NOTIFICAR_ADMINISTRADOR) && (duracion > maxSegundos)) {
-			MailSender mailSender = new MailSender();
-			String body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
-					+ " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
-			mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"),
-					body, false);
-			System.out.println("E-Mail enviado con éxito");
-		}
-		
-		if (usuario.tieneAccionAnteBusqueda(AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS)) {
-			App.getInstance().entityManager().getTransaction().begin();
-			App.getInstance().entityManager().persist(this);
-			App.getInstance().entityManager().getTransaction().commit();
-			
-			// MONGODB
-			try {
-				MongoClient client = new MongoClient(new ServerAddress("localhost"), MongoClientOptions.builder().serverSelectionTimeout(100).build());
-		        @SuppressWarnings("deprecation")
-				DB database = client.getDB("local");  
-		        
-		        DBCollection collection = database.getCollection("busquedas");
-		        //ObjectMapper mapper = new ObjectMapper();
-		        ObjectMapper mapper = new ObjectMapper();
-		        mapper.registerModule(new JodaModule());
-		        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-		        String json;
-				try {
-					json = mapper.writeValueAsString(this);
-			        System.out.println(json);
-			        DBObject dbobject= (DBObject) JSON.parse(json);
-			        dbobject.put("_id", this.id);
-			        collection.insert(dbobject);
-				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				client.close();
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-		} 
-		
+		return resultadoFinal;
 	}
 
-	public static List<PuntoDeInteres> buscarPorPalabra(String palabra) {
+	private static List<PuntoDeInteres> buscarPorPalabra(String palabra) {
 		List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
 		try {
 			for (PuntoDeInteres puntoDeInteres : App.getInstance().getPuntosDeInteres()) {
@@ -149,6 +102,56 @@ public class Busqueda {
 		return resultadoBusqueda;
 	}
 
+	private void notificar() {
+		Properties properties = PropertiesFactory.getAppProperties();
+		Double maxSegundos = Double.valueOf(properties.getProperty("max.demora.busqueda.segundos"));
+		duracion = Double.valueOf(DateTime.now().getMillis() - fecha.toDateTime().getMillis()) / 1000;
+		if (usuario.tieneAccionAnteBusqueda(AccionAnteBusquedasEnum.NOTIFICAR_ADMINISTRADOR)
+				&& (duracion > maxSegundos)) {
+			MailSender mailSender = new MailSender();
+			String body = "La búsqueda de '" + fraseBuscada + "' se ha demorado " + duracion
+					+ " segundos, siendo el máximo tolerado " + String.format("%.5f", maxSegundos);
+			mailSender.sendMail(properties.getProperty("admin.mail"), properties.getProperty("subject.mail.demora"),
+					body, false);
+			System.out.println("E-Mail enviado con éxito");
+		}
+	}
+
+	private void almacenar() {
+		// MYSQL
+		App.getInstance().entityManager().getTransaction().begin();
+		App.getInstance().entityManager().persist(this);
+		App.getInstance().entityManager().getTransaction().commit();
+		// MONGODB
+		try {
+			MongoClient client = new MongoClient(new ServerAddress("localhost"),
+					MongoClientOptions.builder().serverSelectionTimeout(100).build());
+			@SuppressWarnings("deprecation")
+			DB database = client.getDB("local");
+
+			DBCollection collection = database.getCollection("busquedas");
+			// ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new JodaModule());
+			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+			String json;
+			try {
+				json = mapper.writeValueAsString(this);
+				System.out.println(json);
+				DBObject dbobject = (DBObject) JSON.parse(json);
+				dbobject.put("_id", this.id);
+				collection.insert(dbobject);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			client.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+	}
+
 	public List<PuntoDeInteres> getResultados() {
 		return resultados.stream().collect(Collectors.toList());
 	}
@@ -156,7 +159,7 @@ public class Busqueda {
 	public void setResultados(Set<PuntoDeInteres> resultados) {
 		this.resultados = resultados;
 	}
-	
+
 	public Integer getCantidadResultados() {
 		return resultados.size();
 	}

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -58,20 +58,20 @@ public class AppTest {
     @Test
     public void buscarYEncontrarPOIKiosco()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("kiosko");
+        Set<PuntoDeInteres> resultado = Busqueda.buscar("kiosko");
         Assert.assertTrue(resultado.contains(local));
     }
 
     public void buscarYEncontrarPOIKioscoPorPalabraClave()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("loCal");
+        Set<PuntoDeInteres> resultado = Busqueda.buscar("loCal");
         Assert.assertTrue(resultado.contains(local));
     }
 
     @Test
     public void buscarYNoEncontrarNingunPOI()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("futbol");
+        Set<PuntoDeInteres> resultado = Busqueda.buscar("futbol");
         Assert.assertTrue(resultado.size() == 0);
     }
     
