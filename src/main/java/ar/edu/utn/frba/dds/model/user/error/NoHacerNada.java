@@ -12,7 +12,7 @@ public class NoHacerNada extends ErrorHandler {
 
     @Override
     public boolean handle(Usuario usuario, Accion accion, List<Integer> params) {
-        // TODO Auto-generated method stub
+        // No hacer nada
         return false;
     }
 

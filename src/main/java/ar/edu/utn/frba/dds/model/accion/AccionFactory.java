@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.model.accion;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,12 @@ public class AccionFactory implements WithGlobalEntityManager {
     public static HashMap<Integer, Accion> getAcciones(){
     	HashMap<Integer, Accion> map = new HashMap<>();
     	acciones.forEach(x -> map.put(x.getId(), x));
+    	return map;
+    }
+    
+    public static Map<Integer, String> getDescripciones(){
+        Map<Integer,String> map = new HashMap<>();
+        AccionFactory.getAcciones().forEach( (x,y) -> map.put(x, y.getNombre()));
     	return map;
     }
     

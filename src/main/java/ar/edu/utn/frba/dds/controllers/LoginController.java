@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,20 +12,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frba.dds.dao.DaoFactory;
+import ar.edu.utn.frba.dds.dao.user.UserDAO;
+import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.exceptions.LoginException;
 import ar.edu.utn.frba.dds.model.user.Usuario;
-import ar.edu.utn.frba.dds.services.app.AppService;
 
 @RestController
 public class LoginController {
 
-    @Autowired
-    AppService appService;
-
     @RequestMapping(value = { "/login" }, method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<?> login(@RequestParam("name") String user, @RequestParam("password") String pass) {
         try {
-            Usuario usuario = appService.loginUser(user, pass);
+    		UserDAO userDao = DaoFactory.getUserDao();
+    		Usuario usuario = userDao.login(user, pass, App.getInstance().getUsuarios());
             JSONObject jsonUsuario = new JSONObject();
             jsonUsuario.accumulate("id", usuario.getId());
             jsonUsuario.accumulate("username", usuario.getUsername());

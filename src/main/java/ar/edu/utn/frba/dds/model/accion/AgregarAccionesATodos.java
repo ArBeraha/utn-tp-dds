@@ -38,6 +38,7 @@ public class AgregarAccionesATodos extends Accion {
 	public boolean undo(Usuario usuario, List<Integer> params) {
 		List<Accion> acciones = params.stream().map(ids -> AccionFactory.getAccion(ids)).collect(Collectors.toList());
 		App.getInstance().getUsuarios().forEach(unUsuario -> unUsuario.getAccionesDisponibles().removeAll(acciones));
-		return false;
+		App.getInstance().actualizarUsuario(usuario);
+		return true;
 	}
 }
