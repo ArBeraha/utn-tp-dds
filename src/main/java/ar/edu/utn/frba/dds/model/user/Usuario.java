@@ -18,11 +18,12 @@ import javax.persistence.OneToOne;
 import ar.edu.utn.frba.dds.model.accion.Accion;
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusquedasEnum;
-import ar.edu.utn.frba.dds.model.app.Busqueda;
+import ar.edu.utn.frba.dds.model.busqueda.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.user.error.ErrorHandler;
 import ar.edu.utn.frba.dds.model.user.error.NoHacerNada;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({ "pass" })
@@ -91,6 +92,7 @@ public class Usuario {
         this.pass = pass;
     }
 
+	@JsonIgnore
     public TipoUsuario getTipoUsuario() {
         return tipoUsuario;
     }
@@ -117,6 +119,7 @@ public class Usuario {
         tipoUsuario.addAccionesDisponibles(acciones);
     }
 
+    @JsonIgnore
     public List<Accion> getAccionesDisponibles() {
     	// TODO: Sacara cuando realmente se persistan los tipo de usuario
     	if (tipoUsuario !=null)
@@ -133,6 +136,7 @@ public class Usuario {
         this.email = email;
     }
 
+    @JsonIgnore
     public ErrorHandler getErrorHandler() {
         return errorHandler;
     }
@@ -141,6 +145,7 @@ public class Usuario {
         this.errorHandler = errorHandler;
     }
 
+    @JsonIgnore
 	public Set<AccionAnteBusqueda> getAccionesAnteBusqueda() {
 		return accionesAnteBusqueda;
 	}

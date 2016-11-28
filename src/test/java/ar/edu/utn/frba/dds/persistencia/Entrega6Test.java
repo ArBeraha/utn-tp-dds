@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ar.edu.utn.frba.dds.model.app.Busqueda;
+import ar.edu.utn.frba.dds.model.busqueda.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.*;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;

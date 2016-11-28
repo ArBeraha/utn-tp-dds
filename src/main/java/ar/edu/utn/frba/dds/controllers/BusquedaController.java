@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mongodb.DBObject;
+
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
-import ar.edu.utn.frba.dds.model.app.Busqueda;
 import ar.edu.utn.frba.dds.services.busqueda.BusquedaService;
 
 @RestController
@@ -25,16 +26,14 @@ public class BusquedaController {
     BusquedaService busquedaService;
 
     // Endpoint que devuelve el historial por nombre de usuario
-    @RequestMapping(value = { "/historial/{nombreDeUsuario}" }, method = RequestMethod.GET)
-    public @ResponseBody List<Busqueda> getHistorialPorUsuario(@PathVariable("nombreDeUsuario") String nombreDeUsuario) {
-        return busquedaService.getHistorialPorUsuario(nombreDeUsuario);
-    }
-
-    // Endpoint que devuelve el historial por fecha
     @RequestMapping(value = { "/historial/{desde}/{hasta}" }, method = RequestMethod.GET)
-    public @ResponseBody List<Busqueda> getHistorialPorFecha(@PathVariable("desde") long desde,
-            @PathVariable("hasta") long hasta) {
-        return busquedaService.getHistorialPorFecha(desde, hasta);
+    public @ResponseBody List<DBObject> getHistorialPorFecha(@PathVariable("desde") long desde, @PathVariable("hasta") long hasta) {
+        return busquedaService.getHistorial(desde, hasta, "");
+    }
+    
+    @RequestMapping(value = { "/historial/{desde}/{hasta}/{nombreDeUsuario}" }, method = RequestMethod.GET)
+    public @ResponseBody List<DBObject> getHistorialPorUsuario(@PathVariable("desde") long desde, @PathVariable("hasta") long hasta, @PathVariable("nombreDeUsuario") String nombreDeUsuario) {
+        return busquedaService.getHistorial(desde, hasta, nombreDeUsuario);
     }
 
     @RequestMapping(value = { "/reportePorFecha" }, method = RequestMethod.GET)
