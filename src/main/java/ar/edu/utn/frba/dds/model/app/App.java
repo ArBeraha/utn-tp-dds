@@ -16,10 +16,10 @@ import ar.edu.utn.frba.dds.model.user.Usuario;
 public class App implements WithGlobalEntityManager {
 
 	private static App instance;
-	private static List<PuntoDeInteres> puntosDeInteres = new ArrayList<>(); ;
+	private static List<PuntoDeInteres> puntosDeInteres = new ArrayList<>();;
 	private static List<Usuario> usuarios = new ArrayList<>();
 	private static List<ResultadoAccion> resultadosAcciones = new ArrayList<>();
-	
+
 	// Singleton
 	public static App getInstance() {
 		if (instance == null) {
@@ -30,9 +30,6 @@ public class App implements WithGlobalEntityManager {
 
 	// Constructor privado por el Singleton
 	private App() {
-		puntosDeInteres = new ArrayList<>();
-		usuarios = new ArrayList<>();
-		
 		// Carga de Usuarios
 		DaoFactory.getUserDao().start();
 		// Carga de Acciones
@@ -42,19 +39,17 @@ public class App implements WithGlobalEntityManager {
 		// Carga de ResultadoAcciones
 		resultadosAcciones = entityManager().createQuery("FROM ResultadoAccion").getResultList();
 	}
-	
+
 	public Usuario agregarUsuario(String username, String password, TipoUsuario tipoUsuario) {
 		return DaoFactory.getUserDao().agregarUsuario(username, password, tipoUsuario);
 	}
 
 	public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
 		DaoFactory.getPoiDao().agregarPuntoDeInteres(pdi);
-		puntosDeInteres.add(pdi);
 	}
 
 	public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
 		DaoFactory.getPoiDao().eliminarPuntoDeInteres(pdi);
-		puntosDeInteres.remove(pdi);
 	}
 
 	public void modificarPuntoDeInteres(PuntoDeInteres pdi, PuntoDeInteres pdiNuevo) {
@@ -94,7 +89,6 @@ public class App implements WithGlobalEntityManager {
 		resultadosAcciones.add(resultadoAccion);
 	}
 
-
 	public static List<PuntoDeInteres> getPuntosDeInteres() {
 		return puntosDeInteres;
 	}
@@ -102,7 +96,7 @@ public class App implements WithGlobalEntityManager {
 	public static List<Usuario> getUsuarios() {
 		return usuarios;
 	}
-	
+
 	public static void setUsuarios(List<Usuario> usuarios) {
 		App.usuarios = usuarios;
 	}

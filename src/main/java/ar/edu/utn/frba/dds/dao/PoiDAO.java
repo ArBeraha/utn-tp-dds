@@ -32,45 +32,54 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 @SuppressWarnings("unchecked")
 public class PoiDAO implements WithGlobalEntityManager {
-	
-	public void start(){
+
+	public void start() {
 		if (isEmpty())
 			populatePois();
 		else
 			App.setPuntosDeInteres(getPoisPersistidos());
 		agregarNuevosPoisExternos();
 	}
-	
+
 	public List<PuntoDeInteres> getPoisPersistidos() {
 		return entityManager().createQuery("FROM PuntoDeInteres").getResultList();
 	}
-	
+
 	public boolean isEmpty() {
 		return entityManager().createQuery("FROM PuntoDeInteres").getResultList().isEmpty();
 	}
-	
-	public void agregarNuevosPoisExternos(){
-		getNuevosPoisExternos().forEach(x -> App.getInstance().agregarPuntoDeInteres(x));
+
+	public void agregarNuevosPoisExternos() {
+		getNuevosPoisExternos().forEach(x -> agregarPuntoDeInteres(x));
+
 	}
-	
+
 	public Set<PuntoDeInteres> getNuevosPoisExternos() {
 		Set<PuntoDeInteres> nuevosPoi = new HashSet<>();
 		nuevosPoi.addAll(getNuevosBancosExternos());
 		nuevosPoi.addAll(getNuevosCGPExternos());
 		return nuevosPoi;
 	}
-	
-	private Set<PuntoDeInteres> getNuevosBancosExternos(){
+
+	private Set<PuntoDeInteres> getNuevosBancosExternos() {
 		Set<PuntoDeInteres> nuevosBancos = new HashSet<>();
-		List<SucursalBanco> bancosExistentes = App.getPuntosDeInteres().stream().filter(x -> x.getClass() == SucursalBanco.class).map(x -> (SucursalBanco) x).collect(Collectors.toList());
+		List<SucursalBanco> bancosExistentes = App.getPuntosDeInteres().stream()
+				.filter(x -> x.getClass() == SucursalBanco.class).map(x -> (SucursalBanco) x)
+				.collect(Collectors.toList());
 		ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
 		try {
-			for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {				
-				for (SucursalBanco sucursalExistente : bancosExistentes){
-					boolean esNuevo = (sucursalBancoExterna.getSucursal() == sucursalExistente.getSucursal()) && (sucursalBancoExterna.getNombre() == sucursalExistente.getNombre());
-					if (esNuevo)
-						nuevosBancos.add(sucursalBancoExterna);
+			boolean esNuevo = true;
+			for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
+				for (SucursalBanco sucursalExistente : bancosExistentes) {
+					if ((sucursalBancoExterna.getSucursal() == sucursalExistente.getSucursal())
+							&& (sucursalBancoExterna.getNombre() == sucursalExistente.getNombre())) {
+						esNuevo = false;
+						break;
+					}
+
 				}
+				if (esNuevo)
+					nuevosBancos.add(sucursalBancoExterna);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -78,18 +87,24 @@ public class PoiDAO implements WithGlobalEntityManager {
 		}
 		return nuevosBancos;
 	}
-	
-	private Set<PuntoDeInteres> getNuevosCGPExternos(){
+
+	private Set<PuntoDeInteres> getNuevosCGPExternos() {
 		Set<PuntoDeInteres> nuevosCGP = new HashSet<>();
 		ServicioConsultaCGP servicioCGP = new ServicioConsultaCGPImpl();
-		List<CGP> CGPExistentes = App.getPuntosDeInteres().stream().filter(x -> x.getClass() == CGP.class).map(x -> (CGP) x).collect(Collectors.toList());
+		List<CGP> CGPExistentes = App.getPuntosDeInteres().stream().filter(x -> x.getClass() == CGP.class)
+				.map(x -> (CGP) x).collect(Collectors.toList());
 		try {
+			boolean esNuevo = true;
 			for (CGP cgpExterno : servicioCGP.getCentrosExternos("")) {
-				for (CGP cgpExistente : CGPExistentes){
-					boolean esNuevo = (cgpExistente.getComuna() == cgpExterno.getComuna()) && cgpExistente.getZonas().containsAll(cgpExterno.getZonas());
-					if (esNuevo)
-						nuevosCGP.add(cgpExterno);
+				for (CGP cgpExistente : CGPExistentes) {
+					if ((cgpExistente.getComuna() == cgpExterno.getComuna())
+							&& cgpExistente.getZonas().containsAll(cgpExterno.getZonas())) {
+						esNuevo = false;
+						break;
+					}
 				}
+				if (esNuevo)
+					nuevosCGP.add(cgpExterno);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -193,17 +208,19 @@ public class PoiDAO implements WithGlobalEntityManager {
 		agregarPuntoDeInteres(parada);
 		agregarPuntoDeInteres(sucursal);
 	}
-	
+
 	public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
 		entityManager().getTransaction().begin();
 		entityManager().persist(pdi);
 		entityManager().getTransaction().commit();
+		App.getPuntosDeInteres().add(pdi);
 	}
 
 	public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
 		entityManager().getTransaction().begin();
 		entityManager().remove(pdi);
 		entityManager().getTransaction().commit();
+		App.getPuntosDeInteres().remove(pdi);
 	}
 
 	public void modificarPuntoDeInteres(PuntoDeInteres pdi, PuntoDeInteres pdiNuevo) {
@@ -215,5 +232,4 @@ public class PoiDAO implements WithGlobalEntityManager {
 		entityManager().getTransaction().commit();
 	}
 
-	
 }
