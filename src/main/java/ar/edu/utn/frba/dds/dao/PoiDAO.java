@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.dao;
 
 import java.awt.Polygon;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +50,6 @@ public class PoiDAO implements WithGlobalEntityManager {
 
 	public void agregarNuevosPoisExternos() {
 		getNuevosPoisExternos().forEach(x -> agregarPuntoDeInteres(x));
-
 	}
 
 	public Set<PuntoDeInteres> getNuevosPoisExternos() {
@@ -81,7 +79,7 @@ public class PoiDAO implements WithGlobalEntityManager {
 				if (esNuevo)
 					nuevosBancos.add(sucursalBancoExterna);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -106,7 +104,7 @@ public class PoiDAO implements WithGlobalEntityManager {
 				if (esNuevo)
 					nuevosCGP.add(cgpExterno);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
