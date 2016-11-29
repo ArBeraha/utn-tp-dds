@@ -89,7 +89,7 @@ public class Busqueda {
 	private static List<PuntoDeInteres> buscarPorPalabra(String palabra) {
 		List<PuntoDeInteres> resultadoBusqueda = new ArrayList<PuntoDeInteres>();
 		try {
-			for (PuntoDeInteres puntoDeInteres : App.getInstance().getPuntosDeInteres()) {
+			for (PuntoDeInteres puntoDeInteres : App.getPuntosDeInteres()) {
 				if (puntoDeInteres.tienePalabra(palabra)) {
 					resultadoBusqueda.add(puntoDeInteres);
 				}

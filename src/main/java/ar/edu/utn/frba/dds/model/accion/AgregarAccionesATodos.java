@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.model.accion;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 import javax.persistence.Entity;
@@ -20,13 +21,13 @@ public class AgregarAccionesATodos extends Accion {
 	public boolean execute(Usuario usuario, List<Integer> params) {
 		System.out.println("Ejecutando Accion: Agregar Acciones a todos los Usuarios");
 		try {
-			List<Usuario> usuarios = App.getInstance().getUsuarios();
+			List<Usuario> usuarios = App.getUsuarios();
 			List<Accion> acciones = params.stream().map(ids -> AccionFactory.getAccion(ids))
 					.collect(Collectors.toList());
 
 			usuarios.forEach(unUsuario -> unUsuario.getAccionesDisponibles().addAll(acciones.stream()
 					.filter(x -> !unUsuario.getAccionesDisponibles().contains(x)).collect(Collectors.toList())));
-			App.getInstance().actualizarUsuarios();
+			DaoFactory.getUserDao().actualizarUsuarios();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -37,8 +38,8 @@ public class AgregarAccionesATodos extends Accion {
 	@Override
 	public boolean undo(Usuario usuario, List<Integer> params) {
 		List<Accion> acciones = params.stream().map(ids -> AccionFactory.getAccion(ids)).collect(Collectors.toList());
-		App.getInstance().getUsuarios().forEach(unUsuario -> unUsuario.getAccionesDisponibles().removeAll(acciones));
-		App.getInstance().actualizarUsuario(usuario);
+		App.getUsuarios().forEach(unUsuario -> unUsuario.getAccionesDisponibles().removeAll(acciones));
+		DaoFactory.getUserDao().actualizarUsuarios();
 		return true;
 	}
 }

@@ -24,14 +24,12 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class AppTest {
 
-    private App app;
     private LocalComercial local;
 
     @Before
     public void setUp() throws Exception {
         //setUp para estaDisponible
         //        terminal = new TerminalInteractiva();
-        app = App.getInstance();
 
         /*
          * Si se llega a precisar pasar una hora específica se tendrá que
@@ -45,7 +43,7 @@ public class AppTest {
         local.setRubro(rubro);
         ArrayList<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
         pois.add(local);
-        app.setPuntosDeInteres(pois);
+        App.setPuntosDeInteres(pois);
         HashSet<String> palabras = new HashSet<String>();
         palabras.add("Local");
         local.setPalabrasClave(palabras);

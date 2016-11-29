@@ -22,7 +22,7 @@ public class POIController {
 
     @RequestMapping(value = { "/pois" }, method = RequestMethod.GET)
     public @ResponseBody List<PuntoDeInteres> getAllPois() {
-        return app.getPuntosDeInteres();
+        return App.getPuntosDeInteres();
     }
 
     @RequestMapping(value = { "/pois/{idTerminal}/{textoBusqueda}" }, method = RequestMethod.GET)

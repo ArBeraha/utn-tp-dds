@@ -8,5 +8,13 @@ public class DaoFactory {
     public static UserDAO getUserDao() {
         return new UserDAOImpl();
     }
+    
+    public static PoiDAO getPoiDao(){
+    	return new PoiDAO();
+    }
+    
+    public static AccionDAO getAccionDao(){
+    	return new AccionDAO();
+    }
 
 }

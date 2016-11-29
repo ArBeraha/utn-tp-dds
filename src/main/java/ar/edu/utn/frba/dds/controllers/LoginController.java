@@ -25,7 +25,7 @@ public class LoginController {
     public @ResponseBody ResponseEntity<?> login(@RequestParam("name") String user, @RequestParam("password") String pass) {
         try {
     		UserDAO userDao = DaoFactory.getUserDao();
-    		Usuario usuario = userDao.login(user, pass, App.getInstance().getUsuarios());
+    		Usuario usuario = userDao.login(user, pass, App.getUsuarios());
             JSONObject jsonUsuario = new JSONObject();
             jsonUsuario.accumulate("id", usuario.getId());
             jsonUsuario.accumulate("username", usuario.getUsername());

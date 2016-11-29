@@ -22,7 +22,7 @@ public class AccionTest {
         usuario = app.agregarUsuario("Pepito","qwerty",new Terminal());
         System.out.println(AccionFactory.getAcciones().size());
         AccionFactory.getAcciones().forEach( (x,y) -> System.out.println(y.getNombre()));
-        App.getInstance().getUsuarios().forEach(x -> System.out.println(x.getUsername()+"["+x.getId()+"]"));
+        App.getUsuarios().forEach(x -> System.out.println(x.getUsername()+"["+x.getId()+"]"));
 
         
     }
