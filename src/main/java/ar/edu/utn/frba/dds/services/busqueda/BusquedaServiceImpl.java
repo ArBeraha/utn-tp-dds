@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,14 +45,15 @@ public class BusquedaServiceImpl implements BusquedaService {
     }
 
     @Override
-    public List<AccionAnteBusqueda> getAccionesBusqueda() {
-        return App.getInstance().getAccionesAnteBusqueda();
+    public List<AccionAnteBusqueda> getAccionesBusqueda(int idTerminal) {
+    	System.out.println("llego del id terminal numero:" + idTerminal);
+        return App.getInstance().buscarUsuarioPorId(idTerminal).getAccionesAnteBusqueda().stream().collect(Collectors.toList());
     }
 
     @Override
-    public void setAccionBusqueda(int idAccion, Boolean activado) throws Exception {
+    public void setAccionBusqueda(int idTerminal, int idAccion, Boolean activado) throws Exception {
         try{
-        Optional<AccionAnteBusqueda> accionBusqueda = App.getInstance().getAccionesAnteBusqueda().stream().filter(accBusq -> accBusq.getId() == idAccion).findFirst();
+        Optional<AccionAnteBusqueda> accionBusqueda = App.getInstance().buscarUsuarioPorId(idTerminal).getAccionesAnteBusqueda().stream().filter(accBusq -> accBusq.getId() == idAccion).findFirst();
         accionBusqueda.get().setActivada(activado);
         } catch (NoSuchElementException nse) {
             nse.printStackTrace();

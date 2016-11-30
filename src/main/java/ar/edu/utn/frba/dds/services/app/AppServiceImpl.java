@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.dao.user.UserDAO;
 import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.model.app.Busqueda;
 import ar.edu.utn.frba.dds.model.exceptions.LoginException;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.user.Usuario;
@@ -16,49 +17,44 @@ import ar.edu.utn.frba.dds.model.user.Usuario;
 @Service("appService")
 @Transactional
 public class AppServiceImpl implements AppService {
-    
-    App app;
-    
-    public AppServiceImpl(){
-        app = App.getInstance();
-    }
 
-    @Override
-    public List<PuntoDeInteres> getPois() {
-        return app.getPuntosDeInteres();
-    }
-    
-    @Override
-    public boolean estaDisponible(int idPoi) {
-        return app.estaDisponible(idPoi);
-    }
-    
-    @Override
-    public List<PuntoDeInteres> getPois(String texto, DateTime fecha, int idTerminal) throws IOException {
-        try {
-            return app.buscarPuntoDeInteres(texto, fecha, idTerminal);
-        } catch (IOException e) {
-            System.out.println("Se ha producido un error al buscar el punto de interés");
-            e.printStackTrace();
-            throw e;
-        }
-    }
+	App app;
 
-    @Override
-    public boolean esCercano(int idPoi, int idTerminal) {
-        return app.esCercano(idPoi, idTerminal);
-    }
-    
-    @Override
-    public PuntoDeInteres poi(int idPoi) {
-        return app.buscarPuntoDeInteresPorId(idPoi);
-    }
+	public AppServiceImpl() {
+		app = App.getInstance();
+	}
 
-    //TODO Esto cuando tengamos BD no le va a pasar la lista de usuarios de la app.
-    // El UserDAO va a ir a la base a buscar los usuarios
-    @Override
-    public Usuario loginUser(String user, String pass) throws LoginException {
-        UserDAO userDao = DaoFactory.getUserDao();
-        return userDao.login(user, pass, app.getUsuarios());
-    }
+	@Override
+	public List<PuntoDeInteres> getPois() {
+		return app.getPuntosDeInteres();
+	}
+
+	@Override
+	public boolean estaDisponible(int idPoi) {
+		return app.estaDisponible(idPoi);
+	}
+
+	@Override
+	public List<PuntoDeInteres> getPois(String texto, DateTime fecha, int idTerminal) throws IOException {
+		return app.buscarUsuarioPorId(idTerminal).buscarPuntoDeInteres(texto);
+	}
+
+	@Override
+	public boolean esCercano(int idPoi, int idTerminal) {
+		return app.esCercano(idPoi, idTerminal);
+	}
+
+	@Override
+	public PuntoDeInteres poi(int idPoi) {
+		return app.buscarPuntoDeInteresPorId(idPoi);
+	}
+
+	// TODO Esto cuando tengamos BD no le va a pasar la lista de usuarios de la
+	// app.
+	// El UserDAO va a ir a la base a buscar los usuarios
+	@Override
+	public Usuario loginUser(String user, String pass) throws LoginException {
+		UserDAO userDao = DaoFactory.getUserDao();
+		return userDao.login(user, pass, app.getUsuarios());
+	}
 }

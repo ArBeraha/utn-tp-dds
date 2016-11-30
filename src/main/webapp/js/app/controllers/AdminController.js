@@ -9,4 +9,8 @@ app.controller('AdminController', ['$scope', '$cookies', '$location', function (
         $location.url('/admin/acciones');
     };
 
+    $scope.historialDeBusquedas = function () {
+        $location.url('/admin/historial-busquedas');
+    };
+
 }]);

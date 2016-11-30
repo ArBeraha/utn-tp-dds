@@ -1,15 +1,26 @@
 package ar.edu.utn.frba.dds.model.user;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
 import ar.edu.utn.frba.dds.model.accion.Accion;
+import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
+import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusquedasEnum;
+import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.model.app.Busqueda;
+import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.user.error.ErrorHandler;
 import ar.edu.utn.frba.dds.model.user.error.NoHacerNada;
 
@@ -31,7 +42,10 @@ public class Usuario {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ErrorHandler errorHandler;
     private String email;
-
+    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "idUsuario", referencedColumnName = "id")
+    private Set<AccionAnteBusqueda> accionesAnteBusqueda = new HashSet<>();
+    
     public Usuario() {
     }
 
@@ -41,11 +55,18 @@ public class Usuario {
         pass = unPassword;
         setTipoUsuario(unTipousuario);
         errorHandler = new NoHacerNada();
+        accionesAnteBusqueda.add(new AccionAnteBusqueda("Almacenar resultados de las búsquedas",true, AccionAnteBusquedasEnum.ALMACENAR_RESULTADOS));
+        accionesAnteBusqueda.add(new AccionAnteBusqueda("Notificar Administrador por demora excesiva en Búsqueda",true, AccionAnteBusquedasEnum.NOTIFICAR_ADMINISTRADOR));
     }
-
-//    public static AtomicInteger getContador() {
-//        return contador;
-//    }
+    
+    public List<PuntoDeInteres> buscarPuntoDeInteres(String texto){
+    	Busqueda nuevaBusqueda = new Busqueda(texto, this);
+    	return nuevaBusqueda.getResultados();
+    }
+    
+    public boolean tieneAccionAnteBusqueda(AccionAnteBusquedasEnum accionEnum){
+    	return accionesAnteBusqueda.stream().filter(x -> x.getAccionEnum() == accionEnum).collect(Collectors.toList()).get(0).isActivada();
+    }
 
     public int getId() {
         return id;
@@ -120,4 +141,12 @@ public class Usuario {
     public void setErrorHandler(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
     }
+
+	public Set<AccionAnteBusqueda> getAccionesAnteBusqueda() {
+		return accionesAnteBusqueda;
+	}
+
+	public void setAccionesAnteBusqueda(Set<AccionAnteBusqueda> accionesAnteBusqueda) {
+		this.accionesAnteBusqueda = accionesAnteBusqueda;
+	}
 }

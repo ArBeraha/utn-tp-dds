@@ -17,7 +17,4 @@ public enum AccionAnteBusquedasEnum {
 		return id;
 	}
 	
-	public boolean isActivada(){
-		return App.getInstance().getAccionesAnteBusqueda().stream().filter(x -> x.getId() == id).collect(Collectors.toList()).get(0).isActivada();
-	}
 }

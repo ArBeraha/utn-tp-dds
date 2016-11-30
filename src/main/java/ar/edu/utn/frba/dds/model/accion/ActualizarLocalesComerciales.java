@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.model.app.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
@@ -40,8 +41,7 @@ public class ActualizarLocalesComerciales extends Accion {
 			BufferedReader buffer = new BufferedReader(file);
 			while ((cadena = buffer.readLine()) != null) {
 				String[] subCadena = cadena.split(";");
-				List<PuntoDeInteres> resultado = App.getInstance()
-						.buscarPuntoDeInteresSinAlmacenarResultado(subCadena[0]);
+				List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra(subCadena[0]);
 				if (resultado.size() == 0) {
 					LocalComercial nuevoLocal = new LocalComercial(new DateTimeProviderImpl(new DateTime()));
 					nuevoLocal.setNombre(subCadena[0]);

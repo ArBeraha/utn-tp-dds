@@ -92,16 +92,16 @@ public class LocalComercialTest {
 
     @Test
     public void dadaUnaPalabraLibreriaEscolarTienePalabraDebeCoincidirConNombre() {
-        local.setNombre("Regla y compás");
+        local.setNombre("Reglas y compás");
         local.setRubro(rubroLibreria);
         HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);
-        Assert.assertTrue(local.tienePalabra("reGla"));
+        Assert.assertTrue(local.tienePalabra("reGlas"));
     }
 
     @Test
     public void dadaUnaPalabraContenidaEnElNombreDelRubroLibreriaEscolarDebeTenerLaPalabra() {
-        local.setNombre("Regla y compás");
+        local.setNombre("Reglas y compás");
         local.setRubro(rubroLibreria);
         HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);
@@ -110,7 +110,7 @@ public class LocalComercialTest {
 
     @Test
     public void dadaUnaPalabraQueNoEsClaveNiDelRubroNiDelNombreLibreriaEscolarNoDebeTenerEsaPalabra() {
-        local.setNombre("Regla y compás");
+        local.setNombre("Reglas y compás");
         local.setRubro(rubroLibreria);
         HashSet<String> palabrasClave = new HashSet<String>();
         local.setPalabrasClave(palabrasClave);

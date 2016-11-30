@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.model.app.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
@@ -57,20 +58,20 @@ public class AppTest {
     @Test
     public void buscarYEncontrarPOIKiosco()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteresSinAlmacenarResultado("kiosko");
+        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("kiosko");
         Assert.assertTrue(resultado.contains(local));
     }
 
     public void buscarYEncontrarPOIKioscoPorPalabraClave()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteresSinAlmacenarResultado("loCal");
+        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("loCal");
         Assert.assertTrue(resultado.contains(local));
     }
 
     @Test
     public void buscarYNoEncontrarNingunPOI()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = app.buscarPuntoDeInteresSinAlmacenarResultado("futbol");
+        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("futbol");
         Assert.assertTrue(resultado.size() == 0);
     }
     
