@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.dao.user.UserDAO;
 import ar.edu.utn.frba.dds.model.app.App;
-import ar.edu.utn.frba.dds.model.app.Busqueda;
 import ar.edu.utn.frba.dds.model.exceptions.LoginException;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
+import ar.edu.utn.frba.dds.model.user.Terminal;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
 @Service("appService")
@@ -31,7 +31,7 @@ public class AppServiceImpl implements AppService {
 
 	@Override
 	public boolean estaDisponible(int idPoi) {
-		return app.estaDisponible(idPoi);
+		return app.buscarPuntoDeInteresPorId(idPoi).estaDisponible();
 	}
 
 	@Override
@@ -41,7 +41,9 @@ public class AppServiceImpl implements AppService {
 
 	@Override
 	public boolean esCercano(int idPoi, int idTerminal) {
-		return app.esCercano(idPoi, idTerminal);
+		PuntoDeInteres poi = app.buscarPuntoDeInteresPorId(idPoi);
+		Terminal terminal = app.buscarTerminalPorId(idTerminal);
+		return poi.esCercano(terminal.getGeolocalizacion());
 	}
 
 	@Override

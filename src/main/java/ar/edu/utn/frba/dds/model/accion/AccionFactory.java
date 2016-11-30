@@ -49,4 +49,15 @@ public class AccionFactory implements WithGlobalEntityManager {
     	return map;
     }
     
+    public static void populate(){
+		Accion Accion1 = new ActualizarLocalesComerciales();
+		Accion Accion2 = new BajaPoisInactivos();
+		Accion Accion3 = new AgregarAccionesATodos();
+		Accion Accion4 = new DefinirProcesoMultiple();
+		AccionFactory.getInstance().addAccion(Accion1);
+		AccionFactory.getInstance().addAccion(Accion2);
+		AccionFactory.getInstance().addAccion(Accion3);
+		AccionFactory.getInstance().addAccion(Accion4);
+    }
+    
 }

@@ -1,8 +1,7 @@
-package ar.edu.utn.frba.dds.model.app;
+package ar.edu.utn.frba.dds.model.busqueda;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -12,30 +11,39 @@ import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
+import com.mongodb.ServerAddress;
+import com.mongodb.util.JSON;
+
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusquedasEnum;
+import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
 import ar.edu.utn.frba.dds.util.mail.MailSender;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-//@JsonIgnoreProperties({ "fecha" })
 @Entity
 public class Busqueda {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private Integer cantidadResultados;
 	private String fraseBuscada;
 	private Double duracion;
 	private LocalDateTime fecha;
@@ -94,6 +102,33 @@ public class Busqueda {
 			App.getInstance().entityManager().getTransaction().begin();
 			App.getInstance().entityManager().persist(this);
 			App.getInstance().entityManager().getTransaction().commit();
+			
+			// MONGODB
+			try {
+				MongoClient client = new MongoClient(new ServerAddress("localhost"), MongoClientOptions.builder().serverSelectionTimeout(100).build());
+		        @SuppressWarnings("deprecation")
+				DB database = client.getDB("local");  
+		        
+		        DBCollection collection = database.getCollection("busquedas");
+		        //ObjectMapper mapper = new ObjectMapper();
+		        ObjectMapper mapper = new ObjectMapper();
+		        mapper.registerModule(new JodaModule());
+		        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		        String json;
+				try {
+					json = mapper.writeValueAsString(this);
+			        System.out.println(json);
+			        DBObject dbobject= (DBObject) JSON.parse(json);
+			        dbobject.put("_id", this.id);
+			        collection.insert(dbobject);
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				client.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 		} 
 		
 	}
@@ -122,13 +157,8 @@ public class Busqueda {
 		this.resultados = resultados;
 	}
 	
-	
 	public Integer getCantidadResultados() {
-		return cantidadResultados;
-	}
-
-	public Date getFecha() {
-		return fecha.toDate();
+		return resultados.size();
 	}
 
 	public Double getDuracion() {
@@ -147,20 +177,12 @@ public class Busqueda {
 		this.id = id;
 	}
 
-	public void setFecha(DateTime fecha) {
-		this.fecha = fecha.toLocalDateTime();
-	}
-
 	public void setFraseBuscada(String fraseBuscada) {
 		this.fraseBuscada = fraseBuscada;
 	}
 
 	public String getFechaFormateada() {
 		return fecha.toString(DateTimeFormat.forPattern("dd/MM/yyyy"));
-	}
-
-	public void setCantidadResultados(Integer cantidadResultados) {
-		this.cantidadResultados = cantidadResultados;
 	}
 
 	public void setDuracion(Double duracion) {
@@ -177,5 +199,9 @@ public class Busqueda {
 
 	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
+	}
+
+	public LocalDateTime getFecha() {
+		return fecha;
 	}
 }

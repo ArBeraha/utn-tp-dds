@@ -53,6 +53,10 @@
                     <h4>{{poi.nombre}}</h4>
                     <h4>Rubro: {{poi.rubro.nombre}}</h4>
                     <h4>Direccion: {{poi.direccion}}</h4>
+                    <p>Horario</p>
+                    <div ng-repeat="intervalo in poi.horarios">
+                    	{{getDia(intervalo.dia)}}: desde las {{addZeros(intervalo.horaInicio[0])}}:{{addZeros(intervalo.horaInicio[1])}}Hs. hasta las {{addZeros(intervalo.horaFin[0])}}:{{addZeros(intervalo.horaFin[1])}}Hs.
+                    </div>
                     <button type="submit" class="btn btn-default" ng-click="verInfo(poi)">Consultar cercanía y disponibilidad</button>
                 </div>
             </div>
@@ -69,7 +73,7 @@
                     <div ng-repeat="servicio in poi.servicios">
                         <p>Nombre: {{servicio.nombre}}</p>
                         <p>Horario</p>
-                        <div ng-repeat="intervalo in servicio.horarios.rangosHorario">
+                        <div ng-repeat="intervalo in servicio.horarios">
                            {{getDia(intervalo.dia)}}: desde las {{addZeros(intervalo.horaInicio[0])}}:{{addZeros(intervalo.horaInicio[1])}}Hs. hasta las {{addZeros(intervalo.horaFin[0])}}:{{addZeros(intervalo.horaFin[1])}}Hs.
                         </div>
                     </div>
@@ -89,12 +93,8 @@
                     <div ng-repeat="servicio in poi.servicios">
                         <p>Nombre: {{servicio.nombre}}</p>
                         <p>Horario</p>
-                        <div ng-repeat="horario in getKeys(servicio.horarios.rangosHorario)">
-                            <div ng-repeat="intervalo in servicio.horarios.rangosHorario[horario]">
-                                <p>
-                                    {{getDia(horario)}}: desde las {{addZeros(intervalo.horaInicio[0])}}:{{addZeros(intervalo.horaInicio[1])}}Hs. hasta las {{addZeros(intervalo.horaFin[0])}}:{{addZeros(intervalo.horaFin[1])}}Hs.
-                                </p>
-                            </div>
+                        <div ng-repeat="intervalo in servicio.horarios">
+                           {{getDia(intervalo.dia)}}: desde las {{addZeros(intervalo.horaInicio[0])}}:{{addZeros(intervalo.horaInicio[1])}}Hs. hasta las {{addZeros(intervalo.horaFin[0])}}:{{addZeros(intervalo.horaFin[1])}}Hs.
                         </div>
                     </div>
                     <button type="submit" class="btn btn-default" ng-click="verInfo(poi)">Consultar cercanía y disponibilidad</button>

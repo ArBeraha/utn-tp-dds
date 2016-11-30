@@ -3,7 +3,7 @@
 	<persistence-unit name="db" transaction-type="RESOURCE_LOCAL">
 	    <!-- 	<provider>org.hibernate.ejb.HibernatePersistence</provider>-->
 	 <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> 
-		<class>ar.edu.utn.frba.dds.model.app.Busqueda</class>
+		<class>ar.edu.utn.frba.dds.model.busqueda.Busqueda</class>
 		<class>ar.edu.utn.frba.dds.model.poi.Geolocalizacion</class>
 		<class>ar.edu.utn.frba.dds.model.poi.PuntoDeInteres</class>
 		<class>ar.edu.utn.frba.dds.model.poi.cgp.CGP</class>

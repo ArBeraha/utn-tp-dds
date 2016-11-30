@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
@@ -32,7 +31,6 @@ public class SucursalBancoDeserializer extends JsonDeserializer<List<SucursalBan
         JsonNode nodeServicio;
         SucursalBanco sucursalBanco;
         ServicioBanco servicioBanco;
-        Horarios horarios = new Horarios();
         String banco;
         String sucursal;
         String gerente;
@@ -55,7 +53,6 @@ public class SucursalBancoDeserializer extends JsonDeserializer<List<SucursalBan
                 nodeServicio = nodeServiciosIterator.next();
                 servicioBanco = new ServicioBanco();
                 servicioBanco.setNombre(nodeServicio.asText());
-                servicioBanco.setHorarios(horarios);
                 servicios.add(servicioBanco);
             }
             sucursalBanco.setBanco(banco);
