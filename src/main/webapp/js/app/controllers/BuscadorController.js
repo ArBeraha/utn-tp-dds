@@ -13,7 +13,7 @@ app.controller('BuscadorController', ['$scope', '$cookies', 'toaster', 'BuscarPO
     $scope.buscarPOI = function (texto) {
         if (texto !== undefined && texto !== '') {
             texto.trim();
-            var promise = BuscarPOIService.buscarPOI(texto);
+            var promise = BuscarPOIService.buscarPOI(usuario.id, texto);
             LoadingBackdrop.show();
             promise.then(function (response) {
                 $scope.pois = response.data;
