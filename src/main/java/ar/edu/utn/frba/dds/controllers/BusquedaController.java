@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.DBObject;
-
+import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
 import ar.edu.utn.frba.dds.model.app.App;
-import ar.edu.utn.frba.dds.model.busqueda.Historial;
 import ar.edu.utn.frba.dds.model.busqueda.Reporte;
 
 @RestController
@@ -27,12 +26,12 @@ public class BusquedaController {
     // Endpoint que devuelve el historial por nombre de usuario
     @RequestMapping(value = { "/historial/{desde}/{hasta}" }, method = RequestMethod.GET)
     public @ResponseBody List<DBObject> getHistorialPorFecha(@PathVariable("desde") long desde, @PathVariable("hasta") long hasta) {
-        return Historial.getHistorial(desde, hasta, "");
+        return DaoFactory.getBusquedaDao().getBusquedasPersistidasMongo(desde, hasta, "");
     }
     
     @RequestMapping(value = { "/historial/{desde}/{hasta}/{nombreDeUsuario}" }, method = RequestMethod.GET)
     public @ResponseBody List<DBObject> getHistorialPorUsuario(@PathVariable("desde") long desde, @PathVariable("hasta") long hasta, @PathVariable("nombreDeUsuario") String nombreDeUsuario) {
-        return Historial.getHistorial(desde, hasta, nombreDeUsuario);
+        return DaoFactory.getBusquedaDao().getBusquedasPersistidasMongo(desde, hasta, nombreDeUsuario);
     }
 
     @RequestMapping(value = { "/reportePorFecha" }, method = RequestMethod.GET)
@@ -52,13 +51,13 @@ public class BusquedaController {
 
     @RequestMapping(value = { "/accionesBusqueda/{idTerminal}" }, method = RequestMethod.GET)
     public @ResponseBody List<AccionAnteBusqueda> getAccionesBusqueda(@PathVariable("idTerminal") int idTerminal) {
-    	return App.getInstance().buscarUsuarioPorId(idTerminal).getAccionesAnteBusqueda().stream().collect(Collectors.toList());
+    	return App.buscarUsuarioPorId(idTerminal).getAccionesAnteBusqueda().stream().collect(Collectors.toList());
     }
 
     @RequestMapping(value = { "/accionesBusqueda/{idTerminal}" }, method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<?> setAccionBusqueda(@RequestBody List<AccionAnteBusqueda> accionesBusqueda, @PathVariable("idTerminal") int idTerminal) {
         try {
-        	App.getInstance().buscarUsuarioPorId(idTerminal).modificarAccionesAnteBusqueda(accionesBusqueda);
+        	App.buscarUsuarioPorId(idTerminal).modificarAccionesAnteBusqueda(accionesBusqueda);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("Error", e.getMessage());

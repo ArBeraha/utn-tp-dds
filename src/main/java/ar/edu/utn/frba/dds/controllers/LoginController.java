@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frba.dds.dao.DaoFactory;
-import ar.edu.utn.frba.dds.dao.user.UserDAO;
-import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.dao.UserDAO;
 import ar.edu.utn.frba.dds.model.exceptions.LoginException;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
@@ -25,7 +24,7 @@ public class LoginController {
     public @ResponseBody ResponseEntity<?> login(@RequestParam("name") String user, @RequestParam("password") String pass) {
         try {
     		UserDAO userDao = DaoFactory.getUserDao();
-    		Usuario usuario = userDao.login(user, pass, App.getUsuarios());
+    		Usuario usuario = userDao.login(user, pass);
             JSONObject jsonUsuario = new JSONObject();
             jsonUsuario.accumulate("id", usuario.getId());
             jsonUsuario.accumulate("username", usuario.getUsername());

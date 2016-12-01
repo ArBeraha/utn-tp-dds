@@ -14,17 +14,15 @@ import ar.edu.utn.frba.dds.model.user.Usuario;
 public class AccionTest {
 	
 	private Usuario usuario;
-    private App app;
+//    private App app;
     
     @Before
     public void setUp() throws Exception {
-        app = App.getInstance();
-        usuario = app.agregarUsuario("Pepito","qwerty",new Terminal());
+//        app = App.getInstance();
+        usuario = App.agregarUsuario("Pepito","qwerty",new Terminal());
         System.out.println(AccionFactory.getAcciones().size());
         AccionFactory.getAcciones().forEach( (x,y) -> System.out.println(y.getNombre()));
         App.getUsuarios().forEach(x -> System.out.println(x.getUsername()+"["+x.getId()+"]"));
-
-        
     }
     
     @Test

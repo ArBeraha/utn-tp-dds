@@ -22,7 +22,7 @@ public class AccionController {
 	// Endpoint que devuelve las acciones disponibles de un usuario
 	@RequestMapping(value = { "/accion/{idUsuario}" }, method = RequestMethod.GET)
 	public @ResponseBody Map<Integer, String> getAllAcciones(@PathVariable("idUsuario") int idUsuario) {
-		List<Accion> acciones = App.getInstance().buscarUsuarioPorId(idUsuario).getTipoUsuario()
+		List<Accion> acciones = App.buscarUsuarioPorId(idUsuario).getTipoUsuario()
 				.getAccionesDisponibles();
 		return acciones.stream().collect(Collectors.toMap(Accion::getId, Accion::getNombre));
 	}
@@ -32,7 +32,7 @@ public class AccionController {
 	public @ResponseBody boolean execute(@PathVariable("idAccion") int idAccion,
 			@PathVariable("idUsuario") int idUsuario) throws Exception {
 		Accion accion = AccionFactory.getAccion(idAccion);
-		Usuario usuario = App.getInstance().buscarUsuarioPorId(idUsuario);
+		Usuario usuario = App.buscarUsuarioPorId(idUsuario);
 		return usuario.ejecutarAccion(accion, new ArrayList<Integer>());
 	}
 
@@ -42,14 +42,14 @@ public class AccionController {
 	public @ResponseBody boolean executeParams(@PathVariable("idAccion") int idAccion,
 			@PathVariable("idUsuario") int idUsuario, @PathVariable("params") List<Integer> params) throws Exception {
 		Accion accion = AccionFactory.getAccion(idAccion);
-		Usuario usuario = App.getInstance().buscarUsuarioPorId(idUsuario);
+		Usuario usuario = App.buscarUsuarioPorId(idUsuario);
 		return usuario.ejecutarAccion(accion, params);
 	}
 
 	// Endpoint para ejecutar undo de la ultima accion ejecutada
 	@RequestMapping(value = { "/undo/{idUsuario}" }, method = RequestMethod.GET)
 	public @ResponseBody boolean undo(@PathVariable("idUsuario") int idUsuario) throws Exception {
-		return App.getInstance().buscarUsuarioPorId(idUsuario).undo();
+		return App.buscarUsuarioPorId(idUsuario).undo();
 	}
 
 	// Endpoint para visualizar las acciones disponibles en el sistema

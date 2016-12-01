@@ -11,18 +11,8 @@ import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.ServerAddress;
-import com.mongodb.util.JSON;
 
+import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusquedasEnum;
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
@@ -118,38 +108,7 @@ public class Busqueda {
 	}
 
 	private void almacenar() {
-		// MYSQL
-		App.getInstance().entityManager().getTransaction().begin();
-		App.getInstance().entityManager().persist(this);
-		App.getInstance().entityManager().getTransaction().commit();
-		// MONGODB
-		try {
-			MongoClient client = new MongoClient(new ServerAddress("localhost"),
-					MongoClientOptions.builder().serverSelectionTimeout(100).build());
-			@SuppressWarnings("deprecation")
-			DB database = client.getDB("local");
-
-			DBCollection collection = database.getCollection("busquedas");
-			// ObjectMapper mapper = new ObjectMapper();
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JodaModule());
-			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-			String json;
-			try {
-				json = mapper.writeValueAsString(this);
-				System.out.println(json);
-				DBObject dbobject = (DBObject) JSON.parse(json);
-				dbobject.put("_id", this.id);
-				collection.insert(dbobject);
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			client.close();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
+		DaoFactory.getBusquedaDao().persistir(this);
 	}
 
 	public List<PuntoDeInteres> getResultados() {

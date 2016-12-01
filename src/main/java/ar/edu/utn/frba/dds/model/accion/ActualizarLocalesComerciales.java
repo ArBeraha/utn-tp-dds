@@ -53,7 +53,7 @@ public class ActualizarLocalesComerciales extends Accion {
 					rubro.setRadioCercania(Integer.parseInt(properties.getProperty("radio.default.locales.comerciales")));
 					
 					nuevoLocal.setRubro(rubro);
-					App.getInstance().agregarPuntoDeInteres(nuevoLocal);
+					App.agregarPuntoDeInteres(nuevoLocal);
 					System.out.println("Se agregó el local comercial " + subCadena[0]);
 				} else {
 					LocalComercial local = (LocalComercial) resultado.get(0);

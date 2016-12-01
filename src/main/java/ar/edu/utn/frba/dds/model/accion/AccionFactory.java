@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
+import ar.edu.utn.frba.dds.dao.DaoFactory;
 
-public class AccionFactory implements WithGlobalEntityManager {
+public class AccionFactory {
     public static Set<Accion> acciones = new HashSet<>();
     
     private static AccionFactory instance;
@@ -32,11 +32,9 @@ public class AccionFactory implements WithGlobalEntityManager {
         return acciones.stream().filter(x -> x.getId() == primitiva.getId()).collect(Collectors.toList()).get(0);
     }
     
-    public Accion addAccion(Accion accion){
+    public static Accion addAccion(Accion accion){
         acciones.add(accion);
-        entityManager().getTransaction().begin();
-        entityManager().persist(accion);
-        entityManager().getTransaction().commit();;
+        DaoFactory.getAccionDao().persistir(accion);
         return accion;
     }
     public Accion addAccionMultiple(List<Accion> acciones){
@@ -54,17 +52,6 @@ public class AccionFactory implements WithGlobalEntityManager {
         Map<Integer,String> map = new HashMap<>();
         AccionFactory.getAcciones().forEach( (x,y) -> map.put(x, y.getNombre()));
     	return map;
-    }
-    
-    public static void populate(){
-		Accion Accion1 = new ActualizarLocalesComerciales();
-		Accion Accion2 = new BajaPoisInactivos();
-		Accion Accion3 = new AgregarAccionesATodos();
-		Accion Accion4 = new DefinirProcesoMultiple();
-		AccionFactory.getInstance().addAccion(Accion1);
-		AccionFactory.getInstance().addAccion(Accion2);
-		AccionFactory.getInstance().addAccion(Accion3);
-		AccionFactory.getInstance().addAccion(Accion4);
     }
     
 }

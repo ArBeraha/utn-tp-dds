@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.dao.DaoFactory;
 
 @Entity
 public class AccionAnteBusqueda {
@@ -23,7 +23,6 @@ public class AccionAnteBusqueda {
     	this.activada=activada;
     	this.accionEnum = accionEnum;
     }
-
 
     public int getId() {
         return id;
@@ -47,9 +46,7 @@ public class AccionAnteBusqueda {
 
     public void setActivada(boolean activada) {
         this.activada = activada;
-        App.getInstance().entityManager().getTransaction().begin();
-        App.getInstance().entityManager().merge(this);
-        App.getInstance().entityManager().getTransaction().commit();
+        DaoFactory.getDao().actualizar(this);
     }
 
 	public AccionAnteBusquedasEnum getAccionEnum() {

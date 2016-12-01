@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 
+import ar.edu.utn.frba.dds.model.accion.BajaInactividad;
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
@@ -30,8 +30,9 @@ import ar.edu.utn.frba.dds.services.externo.ServicioConsultaCGPImpl;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 @SuppressWarnings("unchecked")
-public class PoiDAO implements WithGlobalEntityManager {
+public class PoiDAO extends DAO {
 
+	@Override
 	public void start() {
 		if (isEmpty())
 			populatePois();
@@ -49,7 +50,7 @@ public class PoiDAO implements WithGlobalEntityManager {
 	}
 
 	public void agregarNuevosPoisExternos() {
-		getNuevosPoisExternos().forEach(x -> agregarPuntoDeInteres(x));
+		getNuevosPoisExternos().forEach(x -> App.agregarPuntoDeInteres(x));
 	}
 
 	public Set<PuntoDeInteres> getNuevosPoisExternos() {
@@ -66,18 +67,10 @@ public class PoiDAO implements WithGlobalEntityManager {
 				.collect(Collectors.toList());
 		ServicioConsultaBanco servicioBanco = new ServicioConsultaBancoImpl();
 		try {
-			boolean esNuevo = true;
-			for (SucursalBanco sucursalBancoExterna : servicioBanco.getBancosExternos("", "")) {
-				for (SucursalBanco sucursalExistente : bancosExistentes) {
-					if ((sucursalBancoExterna.getSucursal() == sucursalExistente.getSucursal())
-							&& (sucursalBancoExterna.getNombre() == sucursalExistente.getNombre())) {
-						esNuevo = false;
-						break;
-					}
-
-				}
-				if (esNuevo)
-					nuevosBancos.add(sucursalBancoExterna);
+			for (SucursalBanco externa : servicioBanco.getBancosExternos("", "")) {
+				if (bancosExistentes.stream().noneMatch(
+						x -> x.getBanco().equals(externa.getBanco()) && x.getSucursal().equals(externa.getSucursal())))
+					nuevosBancos.add(externa);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -92,16 +85,10 @@ public class PoiDAO implements WithGlobalEntityManager {
 		List<CGP> CGPExistentes = App.getPuntosDeInteres().stream().filter(x -> x.getClass() == CGP.class)
 				.map(x -> (CGP) x).collect(Collectors.toList());
 		try {
-			boolean esNuevo = true;
 			for (CGP cgpExterno : servicioCGP.getCentrosExternos("")) {
-				for (CGP cgpExistente : CGPExistentes) {
-					if ((cgpExistente.getComuna() == cgpExterno.getComuna())
-							&& cgpExistente.getZonas().containsAll(cgpExterno.getZonas())) {
-						esNuevo = false;
-						break;
-					}
-				}
-				if (esNuevo)
+				if (CGPExistentes.stream()
+						.noneMatch(x -> x.getComuna().getNumeroComuna() == cgpExterno.getComuna().getNumeroComuna()
+								&& x.getZonas().equals(cgpExterno.getZonas())))
 					nuevosCGP.add(cgpExterno);
 			}
 		} catch (Exception e) {
@@ -109,6 +96,20 @@ public class PoiDAO implements WithGlobalEntityManager {
 			e.printStackTrace();
 		}
 		return nuevosCGP;
+	}
+
+	public void eliminarPorInactividad(PuntoDeInteres pdi, BajaInactividad baja) {
+		entityManager().getTransaction().begin();
+		entityManager().remove(pdi);
+		entityManager().persist(baja);
+		entityManager().getTransaction().commit();
+	}
+
+	public void modificar(PuntoDeInteres pdi, PuntoDeInteres pdiNuevo) {
+		pdi.setDireccion(pdiNuevo.getDireccion());
+		pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
+		pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
+		super.actualizar(pdi);
 	}
 
 	private void populatePois() {
@@ -201,33 +202,10 @@ public class PoiDAO implements WithGlobalEntityManager {
 		palabras2.add("Banco");
 		sucursal.setPalabrasClave(palabras2);
 
-		agregarPuntoDeInteres(local);
-		agregarPuntoDeInteres(cgp);
-		agregarPuntoDeInteres(parada);
-		agregarPuntoDeInteres(sucursal);
-	}
-
-	public void agregarPuntoDeInteres(PuntoDeInteres pdi) {
-		entityManager().getTransaction().begin();
-		entityManager().persist(pdi);
-		entityManager().getTransaction().commit();
-		App.getPuntosDeInteres().add(pdi);
-	}
-
-	public void eliminarPuntoDeInteres(PuntoDeInteres pdi) {
-		entityManager().getTransaction().begin();
-		entityManager().remove(pdi);
-		entityManager().getTransaction().commit();
-		App.getPuntosDeInteres().remove(pdi);
-	}
-
-	public void modificarPuntoDeInteres(PuntoDeInteres pdi, PuntoDeInteres pdiNuevo) {
-		pdi.setDireccion(pdiNuevo.getDireccion());
-		pdi.setGeolocalizacion(pdiNuevo.getGeolocalizacion());
-		pdi.setPalabrasClave(pdiNuevo.getPalabrasClave());
-		entityManager().getTransaction().begin();
-		entityManager().merge(pdi);
-		entityManager().getTransaction().commit();
+		App.agregarPuntoDeInteres(local);
+		App.agregarPuntoDeInteres(cgp);
+		App.agregarPuntoDeInteres(parada);
+		App.agregarPuntoDeInteres(sucursal);
 	}
 
 }
