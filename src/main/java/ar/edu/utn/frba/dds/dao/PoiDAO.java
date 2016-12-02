@@ -45,6 +45,14 @@ public class PoiDAO extends DAO {
 		return entityManager().createQuery("FROM PuntoDeInteres").getResultList();
 	}
 
+	public PuntoDeInteres getPoiPersistidoPorId(int idPoi) {
+		return (PuntoDeInteres) entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + idPoi).getSingleResult();
+	}
+
+	public List<PuntoDeInteres> getPoisPersistidosPorId(int idPoi) {
+		return entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + idPoi).getResultList();
+	}
+
 	public boolean isEmpty() {
 		return entityManager().createQuery("FROM PuntoDeInteres").getResultList().isEmpty();
 	}

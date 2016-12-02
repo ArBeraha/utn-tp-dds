@@ -59,6 +59,10 @@ public class UserDAO extends DAO {
 		App.getUsuarios().forEach(x -> super.actualizar(x));
 	}
 
+	public Usuario getUsuarioPersistidoPorId(int id) {
+		return (Usuario) entityManager().createQuery("FROM Usuario WHERE id =" + id).getSingleResult();
+	}
+
 	private void populateUsers() {
 		// ID 1 Cercano al Local
 		agregarUsuario("terminalAbasto", "pwd", new Terminal(new Geolocalizacion(12, 28)));

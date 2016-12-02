@@ -27,65 +27,71 @@ public class BusquedaDAO extends DAO {
 	public void start() {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
-	public void persistir(Object obj){
+	public void persistir(Object obj) {
 		// Persistencia MYSQL
 		super.persistir(obj);
 		// Persistencia en MongoDB
 		Busqueda busqueda = (Busqueda) obj;
-		try {
-			MongoClient client = new MongoClient(new ServerAddress("localhost"),
-					MongoClientOptions.builder().serverSelectionTimeout(100).build());
-			@SuppressWarnings("deprecation")
-			DB database = client.getDB("local");
-
-			DBCollection collection = database.getCollection("busquedas");
-			// ObjectMapper mapper = new ObjectMapper();
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JodaModule());
-			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-			String json;
+		if (busqueda.getUsuario() != null)
 			try {
-				json = mapper.writeValueAsString(busqueda);
-				System.out.println(json);
-				DBObject dbobject = (DBObject) JSON.parse(json);
-				dbobject.put("_id", busqueda.getId());
-				collection.insert(dbobject);
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				MongoClient client = new MongoClient(new ServerAddress("localhost"),
+						MongoClientOptions.builder().serverSelectionTimeout(100).build());
+				@SuppressWarnings("deprecation")
+				DB database = client.getDB("local");
+
+				DBCollection collection = database.getCollection("busquedas");
+				// ObjectMapper mapper = new ObjectMapper();
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.registerModule(new JodaModule());
+				mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+				String json;
+				try {
+					json = mapper.writeValueAsString(busqueda);
+					System.out.println(json);
+					DBObject dbobject = (DBObject) JSON.parse(json);
+					dbobject.put("_id", busqueda.getId());
+					collection.insert(dbobject);
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				client.close();
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
-			client.close();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 	}
-	
-	public List<Busqueda> getBusquedasPersistidas(){
+
+	public List<Busqueda> getBusquedasPersistidas() {
 		return entityManager().createQuery("FROM Busqueda").getResultList();
 	}
-	
-	public List<Busqueda> getBusquedasPersistidasPorUsuario(int idUser){
+
+	public Busqueda getBusquedaPersistidaPorId(int id) {
+		return (Busqueda) entityManager().createQuery("FROM Busqueda WHERE id =" + id).getSingleResult();
+	}
+
+	public List<Busqueda> getBusquedasPersistidasPorUsuario(int idUser) {
 		return entityManager().createQuery("FROM Busqueda WHERE usuario_id=" + idUser).getResultList();
 	}
-	
-	public List<DBObject> getBusquedasPersistidasMongo(long desdeMilis, long hastaMilis, String nombreDeUsuario){
+
+	public List<DBObject> getBusquedasPersistidasMongo(long desdeMilis, long hastaMilis, String nombreDeUsuario) {
 		DateTime desdeMilisDateTime = new DateTime(desdeMilis);
 		DateTime hastaMilisDateTime = new DateTime(hastaMilis);
 		List<BasicDBObject> condiciones = new ArrayList<BasicDBObject>();
 		if (nombreDeUsuario != "")
-			condiciones.add(new BasicDBObject("usuario.username",nombreDeUsuario));
+			condiciones.add(new BasicDBObject("usuario.username", nombreDeUsuario));
 		BasicDBObject queryFecha = new BasicDBObject();
-		
-		BasicDBObject rango = new BasicDBObject("$gt", desdeMilisDateTime.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")));
-		if (hastaMilis>0)		
+
+		BasicDBObject rango = new BasicDBObject("$gt",
+				desdeMilisDateTime.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")));
+		if (hastaMilis > 0)
 			rango.append("$lt", hastaMilisDateTime.toString(DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")));
 		queryFecha.put("fecha", rango);
 		condiciones.add(queryFecha);
 		BasicDBObject queryFinal = new BasicDBObject();
-		queryFinal.put("$and",condiciones);
-	
+		queryFinal.put("$and", condiciones);
+
 		List<DBObject> historial = new ArrayList<>();
 		try {
 			MongoClient client = new MongoClient(new ServerAddress("localhost"));
@@ -95,7 +101,7 @@ public class BusquedaDAO extends DAO {
 			DBCursor cursor = collection.find(queryFinal);
 			historial = cursor.toArray();
 			client.close();
-		} catch(Exception e){
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		historial.forEach(x -> x.removeField("_id"));
