@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ar.edu.utn.frba.dds.BaseTest;
 import ar.edu.utn.frba.dds.dao.BusquedaDAO;
 import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.dao.PoiDAO;
@@ -25,12 +26,13 @@ import ar.edu.utn.frba.dds.model.user.Administrador;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-public class Entrega6Test {
+public class Entrega6Test extends BaseTest {
 
-	private int idPoi;
 	private PoiDAO poiDao;
 	private BusquedaDAO busquedaDao;
 	private UserDAO userDao;
+	
+	private int idPoi;
 
 	@Before
 	public void init() {
@@ -140,6 +142,6 @@ public class Entrega6Test {
 		Usuario usuarioRecuperadoSegundo = userDao.getUsuarioPersistidoPorId(id);
 
 		Assert.assertEquals(usuarioRecuperadoSegundo.getUsername(), "NuevoNombre");
-
+		userDao.eliminar(usuario);
 	}
 }

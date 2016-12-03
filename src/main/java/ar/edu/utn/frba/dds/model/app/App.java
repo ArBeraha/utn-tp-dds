@@ -28,6 +28,7 @@ public class App {
 
 	// Constructor privado por el Singleton
 	private App() {
+		App.instance = this;
 		DaoFactory.startAll();
 	}
 

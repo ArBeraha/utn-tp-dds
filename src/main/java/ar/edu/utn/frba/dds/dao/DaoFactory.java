@@ -3,9 +3,9 @@ package ar.edu.utn.frba.dds.dao;
 public class DaoFactory {
 
 	public static void startAll() {
+		getAccionDao().start();
 		getUserDao().start();
 		getPoiDao().start();
-		getAccionDao().start();
 		getResultadoAccionDao().start();
 		getBusquedaDao().start();
 	}

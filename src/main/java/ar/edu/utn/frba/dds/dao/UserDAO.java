@@ -65,11 +65,12 @@ public class UserDAO extends DAO {
 
 	private void populateUsers() {
 		// ID 1 Cercano al Local
-		agregarUsuario("terminalAbasto", "pwd", new Terminal(new Geolocalizacion(12, 28)));
 		// ID 2 Cercano al CGP
-		agregarUsuario("terminalDOT", "pwd", new Terminal(new Geolocalizacion(9, 9)));
 		// ID 3 Cercano a ninguno
-		agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal(new Geolocalizacion(666, 666)));
+		
+		App.agregarUsuario("terminalAbasto", "pwd", new Terminal(new Geolocalizacion(12, 28))); 
+		App.agregarUsuario("terminalDOT", "pwd", new Terminal(new Geolocalizacion(9, 9)));
+		App.agregarUsuario("terminalCementerioRecoleta", "pwd", new Terminal(new Geolocalizacion(666, 666)));
 
 		Usuario admin = App.agregarUsuario("admin", "1234", new Administrador());
 		admin.agregarAccion(AccionFactory.getAccion(Primitivas.ActualizarLocalesComerciales));
