@@ -1,7 +1,5 @@
 package ar.edu.utn.frba.dds.services.busqueda;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -11,42 +9,39 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mongodb.DBObject;
+
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
 import ar.edu.utn.frba.dds.model.app.App;
-import ar.edu.utn.frba.dds.model.app.Busqueda;
+import ar.edu.utn.frba.dds.model.busqueda.Historial;
+import ar.edu.utn.frba.dds.model.busqueda.Reporte;
 
 @Service("busquedaService")
 @Transactional
 public class BusquedaServiceImpl implements BusquedaService {
 
     @Override
-    public List<Busqueda> getHistorialPorUsuario(String nombreDeUsuario) {
-        return App.getInstance().historialPorUsuario(nombreDeUsuario);
-    }
-
-    @Override
-    public List<Busqueda> getHistorialPorFecha(long desde, long hasta) {
-        return App.getInstance().historialPorFecha(desde, hasta);
+    public List<DBObject> getHistorial(long desde, long hasta, String nombreDeUsuario) {
+        return Historial.getHistorial(desde, hasta, nombreDeUsuario);
     }
 
     @Override
     public Map<String, Long> generarReporteBusquedasPorFecha() {
-        return App.getInstance().generarReporteBusquedasPorFecha();
+        return new Reporte().busquedasPorFecha();
     }
 
     @Override
     public Map<Integer, Long> generarReporteBusquedasPorTerminal() {
-        return App.getInstance().generarReporteBusquedasPorTerminal();
+        return new Reporte().busquedasPorTerminal();
     }
 
     @Override
     public Map<String, Long> generarReporteBusquedasDeTerminal(int idTerminal) {
-        return App.getInstance().generarReporteBusquedasDeTerminal(idTerminal);
+        return new Reporte().busquedasDeTerminal(idTerminal);
     }
 
     @Override
     public List<AccionAnteBusqueda> getAccionesBusqueda(int idTerminal) {
-    	System.out.println("llego del id terminal numero:" + idTerminal);
         return App.getInstance().buscarUsuarioPorId(idTerminal).getAccionesAnteBusqueda().stream().collect(Collectors.toList());
     }
 

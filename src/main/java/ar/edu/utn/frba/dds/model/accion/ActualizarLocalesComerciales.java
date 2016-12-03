@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 
 import ar.edu.utn.frba.dds.model.app.App;
-import ar.edu.utn.frba.dds.model.app.Busqueda;
+import ar.edu.utn.frba.dds.model.busqueda.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;

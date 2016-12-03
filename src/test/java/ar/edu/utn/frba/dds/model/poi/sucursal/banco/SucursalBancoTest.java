@@ -13,7 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
@@ -49,12 +48,10 @@ public class SucursalBancoTest {
         sucursal.setGeolocalizacion(geolocalizacionSucursal);
         Set<ServicioBanco> servicios = new HashSet<ServicioBanco>();
         servicios.add(servicio);
-        Horarios horarioServicio = new Horarios();
         LocalTime horaInicio = new LocalTime(12, 0);
         LocalTime horaFin = new LocalTime(16, 0);
-        horarioServicio.agregarRangoHorario(new RangoHorario(1, horaInicio, horaFin));
-        horarioServicio.agregarRangoHorario(new RangoHorario(2, horaInicio, horaFin));
-        servicio.setHorarios(horarioServicio);
+        servicio.agregarRangoHorario(new RangoHorario(1, horaInicio, horaFin));
+        servicio.agregarRangoHorario(new RangoHorario(2, horaInicio, horaFin));
         sucursal.setServicios(servicios);
         
         HashSet<String> palabras = new HashSet<String>();

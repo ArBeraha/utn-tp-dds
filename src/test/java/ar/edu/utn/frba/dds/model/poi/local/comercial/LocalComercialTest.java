@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
-import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
@@ -18,7 +17,6 @@ import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
 public class LocalComercialTest {
 
-    private Horarios horarios;
     private LocalComercial local;
     private Rubro rubroLibreria;
     private Geolocalizacion geolocalizacionLocal;
@@ -26,25 +24,24 @@ public class LocalComercialTest {
     @Before
     public void setUp() throws Exception {
         // setUp para estaDisponible
-        horarios = new Horarios();
         LocalTime horaInicioLunesAViernes = new LocalTime(9, 0);
         LocalTime horaFinLunesAViernes = new LocalTime(13, 0);
         LocalTime horaInicioLunesAViernes2 = new LocalTime(15, 0);
         LocalTime horaFinLunesAViernes2 = new LocalTime(18, 30);
         LocalTime horaInicioSabado = new LocalTime(10, 0);
         LocalTime horaFinSabado = new LocalTime(13, 30);
-        horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes, horaFinLunesAViernes));
-		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes, horaFinLunesAViernes));
-		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes, horaFinLunesAViernes));
-		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes, horaFinLunesAViernes));
-		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes, horaFinLunesAViernes));
-		horarios.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes2, horaFinLunesAViernes2));
-		horarios.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes2, horaFinLunesAViernes2));
-		horarios.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes2, horaFinLunesAViernes2));
-		horarios.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes2, horaFinLunesAViernes2));
-		horarios.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes2, horaFinLunesAViernes2));
-		horarios.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
         local = new LocalComercial(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 13, 30, 0)));
+        local.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes, horaFinLunesAViernes));
+        local.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes, horaFinLunesAViernes));
+        local.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes, horaFinLunesAViernes));
+        local.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes, horaFinLunesAViernes));
+        local.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes, horaFinLunesAViernes));
+        local.agregarRangoHorario(new RangoHorario(1, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+        local.agregarRangoHorario(new RangoHorario(2, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		local.agregarRangoHorario(new RangoHorario(3, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		local.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		local.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes2, horaFinLunesAViernes2));
+		local.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
         // setUp para esCercano
         rubroLibreria = new Rubro();
         geolocalizacionLocal = new Geolocalizacion(12, 28);
@@ -57,22 +54,17 @@ public class LocalComercialTest {
     }
 
     @Test
-    public void siendoUnaFechaFueraDelHorarioDeAtencionDeUnLocalNoDebeEstarDisponible() {
-        LocalTime horaInicio = new LocalTime().withHourOfDay(13).withMinuteOfHour(15);
-        LocalTime horaFin = new LocalTime().withHourOfDay(14);
-        RangoHorario rangoHorario = new RangoHorario(6, horaInicio, horaFin);
-        Horarios horario = new Horarios();
-        horario.agregarRangoHorario(rangoHorario);
-        this.local.setHorarios(horario);
-        Assert.assertFalse(this.local.estaDisponible());
+    public void siendoUnaFechadentroDelHorarioDeAtencionDeUnLocalDebeEstarDisponible() {
+    	local.setDateTimeProvider(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 12, 00, 0)));
+        Assert.assertTrue(this.local.estaDisponible());
     }
 
     @Test
-    public void siendoUnaFechadentroDelHorarioDeAtencionDeUnLocalDebeEstarDisponible() {
-        this.local.setHorarios(this.horarios);
+    public void siendoUnaFechaFueraDelHorarioDeAtencionDeUnLocalNoDebeEstarDisponible() {
+    	local.setDateTimeProvider(new DateTimeProviderImpl(new DateTime(2016, 11, 17, 20, 30, 0)));
         Assert.assertFalse(this.local.estaDisponible());
     }
-
+    
     // Da alrededor de 3000 cuadras de distancia. No es Cercano.
     @Test
     public void dadaUnaGeolocalizacionFueraDelRangoLibreriaEscolarNoDebeSerCercana() {

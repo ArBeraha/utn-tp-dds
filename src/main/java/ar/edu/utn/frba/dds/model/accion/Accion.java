@@ -57,5 +57,4 @@ public abstract class Accion {
 	public String getMensajeError() {
 		return mensajeError;
 	}
-
 }

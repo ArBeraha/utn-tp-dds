@@ -22,7 +22,6 @@ import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
 import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
-import ar.edu.utn.frba.dds.model.poi.horario.Horarios;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
@@ -54,17 +53,15 @@ public class CentroDeserializer extends JsonDeserializer<List<CGP>> {
             while (nodeServiciosIterator.hasNext()) {
                 JsonNode nodeServicio = nodeServiciosIterator.next();
                 ServicioCGP servicioCGP = new ServicioCGP();
-                Horarios horarios = new Horarios();
                 Iterator<JsonNode> nodeHorariosIterator = nodeServicio.get("horarios").elements();
                 //Cada horario del ServicioCGP
                 while (nodeHorariosIterator.hasNext()) {
                     JsonNode nodeHorario = nodeHorariosIterator.next();
                     RangoHorario rangoHorario = new RangoHorario(nodeHorario.get("diaSemana").asInt(), nodeHorario.get("horaDesde").asInt(),
                             nodeHorario.get("minutosDesde").asInt(), nodeHorario.get("horaHasta").asInt(), nodeHorario.get("minutosHasta").asInt());
-                    horarios.agregarRangoHorario(rangoHorario);
+                    servicioCGP.agregarRangoHorario(rangoHorario);
                 }
                 servicioCGP.setNombre(nodeServicio.get("nombre").asText());
-                servicioCGP.setHorarios(horarios);
                 servicios.add(servicioCGP);
             }
             cgp.setComuna(comuna);

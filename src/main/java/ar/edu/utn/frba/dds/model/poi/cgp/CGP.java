@@ -48,6 +48,48 @@ public class CGP extends PuntoDeInteres {
         palabrasClave = new HashSet<>();
     }
 
+    @Override
+    public boolean estaDisponible() {
+    	DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
+        for (ServicioCGP servicio : servicios) {
+            if (servicio.atiende(fechaHoraActual)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean tienePalabra(final String palabra) {
+        boolean servicioTienePalabra = serviciosTienenPalabra(palabra);
+        boolean esPalabraClave = this.esPalabraClave(palabra);
+        return (servicioTienePalabra || esPalabraClave);
+    }
+
+    private boolean serviciosTienenPalabra(final String palabra) {
+        for (ServicioCGP servicio : servicios) {
+            if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean esCercano(final Geolocalizacion geolocalizacion) {
+        return this.getComuna().incluyeGeolocalizacion(geolocalizacion);
+    }
+
+    @Override
+    public String getNombre() {
+        return "CGP de la comuna N° " + comuna.getNumeroComuna();
+    }
+
+    @Override
+    public String getTipo() {
+        return tipo;
+    }
+    
     public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
@@ -94,58 +136,6 @@ public class CGP extends PuntoDeInteres {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    @Override
-    public boolean estaDisponible() {
-    	DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
-        for (ServicioCGP servicio : servicios) {
-            if (servicio.getHorarios().atiende(fechaHoraActual)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected boolean estaDisponible(String nombreServicioCGP) {
-    	DateTime fechaHoraActual = getDateTimeProvider().getDateTime();
-        for (ServicioCGP servicio : servicios) {
-            if (servicio.getNombre().toLowerCase() == nombreServicioCGP.toLowerCase()) {
-                return servicio.getHorarios().atiende(fechaHoraActual);
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean tienePalabra(final String palabra) {
-        boolean servicioTienePalabra = serviciosTienenPalabra(palabra);
-        boolean esPalabraClave = this.esPalabraClave(palabra);
-        return (servicioTienePalabra || esPalabraClave);
-    }
-
-    private boolean serviciosTienenPalabra(final String palabra) {
-        for (ServicioCGP servicio : servicios) {
-            if (servicio.getNombre().toLowerCase().contains(palabra.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean esCercano(final Geolocalizacion geolocalizacion) {
-        return this.getComuna().incluyeGeolocalizacion(geolocalizacion);
-    }
-
-    @Override
-    public String getNombre() {
-        return "CGP de la comuna N° " + comuna.getNumeroComuna();
-    }
-
-    @Override
-    public String getTipo() {
-        return tipo;
     }
 
 }
