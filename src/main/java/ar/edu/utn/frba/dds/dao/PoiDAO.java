@@ -155,7 +155,7 @@ public class PoiDAO extends DAO {
 		palabrasClave.add("Tienda");
 		local.setPalabrasClave(palabrasClave);
 		local.agregarRangoHorario(
-				new RangoHorarioEspecial(new LocalDate(2016, 10, 23), horaInicioLunesAViernes, horaFinLunesAViernes));
+				new RangoHorarioEspecial(new LocalDate(2016, 10, 23), horaInicioLunesAViernes, horaFinLunesAViernes, true));
 
 		CGP cgp;
 		Comuna comuna;

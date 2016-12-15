@@ -17,7 +17,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
@@ -70,15 +69,11 @@ public abstract class Servicio {
 		});
 		horariosEspeciales.add(unRangoHorario);
 	}	
-	
-	public boolean contiene(final DateTime fechaHora) {
-		LocalDate fecha = fechaHora.toLocalDate();
-		return horariosEspeciales.stream().anyMatch(x -> x.getFecha() == fecha);
-	}
 
 	public boolean atiende(final DateTime fechaHoraActual) {
 		LocalDateTime fechaHora = fechaHoraActual.toLocalDateTime();
-		return horarios.stream().anyMatch(x -> x.incluye(fechaHora)) || horariosEspeciales.stream().anyMatch(x -> x.incluye(fechaHora));
+		return (horarios.stream().anyMatch(x -> x.incluye(fechaHora)) || horariosEspeciales.stream().filter(x -> x.isAbierto()).anyMatch(x -> x.incluye(fechaHora))) 
+				&& horariosEspeciales.stream().filter(x -> !x.isAbierto()).noneMatch(x -> x.incluye(fechaHora));
 	}
 	
 	public int getId() {
