@@ -4,6 +4,56 @@
             <h4 class="text-center">Historial de Búsquedas</h4>
         </div>
     </div>
+    <div class="row">
+        <div class="col-xs-offset-4 col-xs-4">
+            <div class="form-group">
+                <label for="nombreUsuario">Usuario</label>
+                <input type="text" id="nombreUsuario" class="form-control" key-enter="validar()">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="fechaDesde">Desde</label>
+                    <p class="input-group">
+                        <input type="text" id="fechaDesde" class="form-control" ng-model="fecha.desde" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" close-text="Cerrar" alt-input-formats="altInputFormats" ng-change="validarFechaDesde()" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="fechaHasta">Hasta</label>
+                    <p class="input-group">
+                        <input type="text" id="Hasta" class="form-control" ng-model="fecha.hasta" uib-datepicker-popup="{{format}}" is-open="popup2.opened" datepicker-options="dateOptions" close-text="Cerrar" alt-input-formats="altInputFormats" ng-change="validarFechaHasta()" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="validar()">Buscar</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-4 col-xs-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Parámetros</th>
+                        <th>POIs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <div ng-if="!isAdmin">
     <div class="row">

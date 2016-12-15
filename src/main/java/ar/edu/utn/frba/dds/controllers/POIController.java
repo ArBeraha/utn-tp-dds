@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.controllers;
 
 import java.io.IOException;
 import java.util.List;
+
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,16 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.services.app.AppService;
 import ar.edu.utn.frba.dds.services.poi.CGPService;
-import ar.edu.utn.frba.dds.services.poi.TerminalInteractivaService;
 
 @RestController
 public class POIController {
 
     @Autowired
     CGPService cgpService;
-
-    @Autowired //TODO Evaluar si permanece
-    TerminalInteractivaService terminalInteractivaService;
 
     @Autowired
     AppService appService;
