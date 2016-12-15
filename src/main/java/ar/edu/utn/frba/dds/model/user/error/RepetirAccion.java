@@ -12,7 +12,7 @@ public class RepetirAccion extends ErrorHandler {
 
     private int repeticiones = 5;
 
-    @Override
+	@Override
     public boolean handle(Usuario usuario, Accion accion, List<Integer> params) {
         for (int i = 0; i < repeticiones; i++) {
             if (accion.execute(usuario, params))
@@ -20,5 +20,13 @@ public class RepetirAccion extends ErrorHandler {
         }
         return false;
     }
+	
+    public int getRepeticiones() {
+		return repeticiones;
+	}
+
+	public void setRepeticiones(int repeticiones) {
+		this.repeticiones = repeticiones;
+	}
 
 }

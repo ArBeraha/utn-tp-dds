@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ar.edu.utn.frba.dds.BaseTest;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.cgp.CGP;
 import ar.edu.utn.frba.dds.model.poi.cgp.Comuna;
@@ -17,7 +18,7 @@ import ar.edu.utn.frba.dds.model.poi.cgp.ServicioCGP;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-public class CGPTest {
+public class CGPTest extends BaseTest {
 
     private CGP cgp;
     private Comuna comuna;

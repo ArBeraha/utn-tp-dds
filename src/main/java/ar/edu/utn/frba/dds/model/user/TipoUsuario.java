@@ -20,7 +20,7 @@ public abstract class TipoUsuario {
 	protected int id;
     protected String nombreTipoUsuario;
 
-	@ManyToMany(fetch=FetchType.EAGER) //@Cascade(value = CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name = "idTipoUsuario", referencedColumnName = "id")
     protected List<Accion> accionesDisponibles = new ArrayList<>();
 

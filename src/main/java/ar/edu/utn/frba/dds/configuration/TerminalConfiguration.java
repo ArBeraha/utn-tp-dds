@@ -13,11 +13,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.fasterxml.jackson.datatype.joda.JodaMapper;
 
+import ar.edu.utn.frba.dds.model.app.App;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "ar.edu.utn.frba.dds")
 public class TerminalConfiguration extends WebMvcConfigurerAdapter {
 
+	App app;
+	public TerminalConfiguration(){
+		app = App.getInstance();
+	}
+	
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("/");

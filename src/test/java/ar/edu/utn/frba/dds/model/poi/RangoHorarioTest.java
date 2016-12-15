@@ -5,9 +5,10 @@ import org.joda.time.LocalTime;
 import org.junit.Assert;
 import org.junit.Test;
 
+import ar.edu.utn.frba.dds.BaseTest;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 
-public class RangoHorarioTest {
+public class RangoHorarioTest extends BaseTest {
 
     @Test
     public void dadaUnaHoraDentroDeUnRangoDeberiaEstarIncluidaEnElRango() {

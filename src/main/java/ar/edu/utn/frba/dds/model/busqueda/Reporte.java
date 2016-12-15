@@ -7,16 +7,17 @@ import java.util.stream.Collectors;
 
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 
-@SuppressWarnings("unchecked")
+import ar.edu.utn.frba.dds.dao.DaoFactory;
+
 public class Reporte implements WithGlobalEntityManager {
 
-	public  Map<Integer, Long> busquedasPorTerminal() {
-		Map<Integer, Long> reporte = new HashMap<>();
+	public  Map<String, Long> busquedasPorTerminal() {
+		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas por terminal:");
-			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda").getResultList();
+			List<Busqueda> busquedas = DaoFactory.getBusquedaDao().getBusquedasPersistidas();
 			reporte = busquedas.stream()
-					.collect(Collectors.groupingBy(busqueda -> busqueda.getUsuario().getId(), Collectors.counting()));
+					.collect(Collectors.groupingBy(busqueda -> busqueda.getUsuario().getUsername(), Collectors.counting()));
 			reporte.forEach(
 					(terminal, cantidad) -> System.out.println("Terminal : " + terminal + " Cantidad : " + cantidad));
 		} catch (Exception e) {
@@ -29,7 +30,7 @@ public class Reporte implements WithGlobalEntityManager {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando de Busquedas Reporte:");
-			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda").getResultList();
+			List<Busqueda> busquedas = DaoFactory.getBusquedaDao().getBusquedasPersistidas();
 			reporte = busquedas.stream()
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
@@ -44,8 +45,7 @@ public class Reporte implements WithGlobalEntityManager {
 		Map<String, Long> reporte = new HashMap<>();
 		try {
 			System.out.println("Generando Reporte de Busquedas de Terminal " + idTerminal + ": ");
-			List<Busqueda> busquedas = entityManager().createQuery("FROM Busqueda WHERE terminal=" + idTerminal)
-					.getResultList();
+			List<Busqueda> busquedas = DaoFactory.getBusquedaDao().getBusquedasPersistidasPorUsuario(idTerminal);
 			reporte = busquedas.stream()
 					.collect(Collectors.groupingBy(busqueda -> busqueda.getFechaFormateada(), Collectors.counting()));
 			reporte.forEach((fecha, cantidad) -> System.out.println("Fecha : " + fecha + " Cantidad : " + cantidad));
