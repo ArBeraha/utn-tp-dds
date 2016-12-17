@@ -27,8 +27,7 @@ app.controller('BuscadorController', ['$scope', '$cookies', 'toaster', 'BuscarPO
     };
 
     $scope.verInfo = function (poi) {
-        //alert("Se envía el id: " + poi.id + " al backend");
-        var esCercanopromise = BuscarPOIService.esCercano(poi.id);
+        var esCercanopromise = BuscarPOIService.esCercano(usuario.id, poi.id);
         var estaDisponiblepromise = BuscarPOIService.estaDisponible(poi.id);
         var esCercano;
         var estaDisponible;
