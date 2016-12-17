@@ -5,6 +5,9 @@ app.controller('HistorialBusquedasController', ['$scope', '$cookies', '$http', '
     var usuario = $cookies.getObject('user');
     $scope.isAdmin = (usuario !== undefined && usuario.tipo.toLowerCase() === "administrador");
 
+    $scope.showModal = false;
+    $scope.modalHeader = "Detalle POIs";
+    $scope.poiNames = [];
     $scope.nombreUsuario = {};
     $scope.fecha = {};
 
@@ -111,6 +114,19 @@ app.controller('HistorialBusquedasController', ['$scope', '$cookies', '$http', '
         } else {
             toaster.error("Complete alguno de los campos!");
         }
+    };
+
+    $scope.mostrarListaPois = function (resultado) {
+        var resultados = resultado.resultados;
+        for (var i = 0; i < resultados.length; i++) {
+            $scope.poiNames.push(resultados[i].nombre);
+        }
+        $scope.showModal = true;
+    };
+
+    $scope.cerrarModal = function () {
+        $scope.showModal = false;
+        $scope.poiNames = [];
     };
 
 }]);
