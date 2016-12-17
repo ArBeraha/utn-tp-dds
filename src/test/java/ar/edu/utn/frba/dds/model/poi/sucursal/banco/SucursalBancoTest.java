@@ -6,31 +6,21 @@ import java.util.Set;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ar.edu.utn.frba.dds.BaseTest;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.ServicioBanco;
 import ar.edu.utn.frba.dds.model.poi.sucursal.banco.SucursalBanco;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-public class SucursalBancoTest {
+public class SucursalBancoTest extends BaseTest{
 
     private SucursalBanco sucursal;
     private Geolocalizacion geolocalizacionSucursal;
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
 
     @Before
     public void setUp() throws Exception {

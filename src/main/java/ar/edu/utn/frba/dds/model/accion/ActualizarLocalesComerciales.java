@@ -41,7 +41,7 @@ public class ActualizarLocalesComerciales extends Accion {
 			BufferedReader buffer = new BufferedReader(file);
 			while ((cadena = buffer.readLine()) != null) {
 				String[] subCadena = cadena.split(";");
-				List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra(subCadena[0]);
+				List<PuntoDeInteres> resultado = Busqueda.buscar(subCadena[0]).stream().collect(Collectors.toList());
 				if (resultado.size() == 0) {
 					LocalComercial nuevoLocal = new LocalComercial(new DateTimeProviderImpl(new DateTime()));
 					nuevoLocal.setNombre(subCadena[0]);
@@ -50,9 +50,10 @@ public class ActualizarLocalesComerciales extends Accion {
 					nuevoLocal.setPalabrasClave(this.obtenerPalabrasClave(subCadena[1]));
 					Rubro rubro = new Rubro();
 					rubro.setNombre("Default");
-					rubro.setRadioCercania(5);
+					rubro.setRadioCercania(Integer.parseInt(properties.getProperty("radio.default.locales.comerciales")));
+					
 					nuevoLocal.setRubro(rubro);
-					App.getInstance().agregarPuntoDeInteres(nuevoLocal);
+					App.agregarPuntoDeInteres(nuevoLocal);
 					System.out.println("Se agregó el local comercial " + subCadena[0]);
 				} else {
 					LocalComercial local = (LocalComercial) resultado.get(0);

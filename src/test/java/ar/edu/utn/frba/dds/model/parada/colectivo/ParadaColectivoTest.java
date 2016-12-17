@@ -9,10 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ar.edu.utn.frba.dds.BaseTest;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.parada.colectivo.ParadaColectivo;
 
-public class ParadaColectivoTest {
+public class ParadaColectivoTest extends BaseTest {
     
     private ParadaColectivo parada;
     private Geolocalizacion geolocalizacionParada;

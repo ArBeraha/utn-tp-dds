@@ -11,6 +11,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ar.edu.utn.frba.dds.BaseTest;
+import ar.edu.utn.frba.dds.dao.BusquedaDAO;
+import ar.edu.utn.frba.dds.dao.DaoFactory;
+import ar.edu.utn.frba.dds.dao.PoiDAO;
+import ar.edu.utn.frba.dds.dao.UserDAO;
 import ar.edu.utn.frba.dds.model.busqueda.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.*;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
@@ -21,15 +26,19 @@ import ar.edu.utn.frba.dds.model.user.Administrador;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
+public class Entrega6Test extends BaseTest {
 
-public class Entrega6Test extends PersistenciaTest {
-
+	private PoiDAO poiDao;
+	private BusquedaDAO busquedaDao;
+	private UserDAO userDao;
+	
 	private int idPoi;
 
 	@Before
-	@Override
 	public void init() {
-		super.init();
+		poiDao = DaoFactory.getPoiDao();
+		busquedaDao = DaoFactory.getBusquedaDao();
+		userDao = DaoFactory.getUserDao();
 
 		ParadaColectivo parada = new ParadaColectivo();
 		parada.setGeolocalizacion(new Geolocalizacion(12, 58));
@@ -37,11 +46,11 @@ public class Entrega6Test extends PersistenciaTest {
 		Set<String> pal = new HashSet<>();
 		pal.add("Test");
 		parada.setPalabrasClave(pal);
-		entityManager().persist(parada);
+		poiDao.persistir(parada);
 		idPoi = parada.getId();
 	}
 
-	//ENTREGA 6 - Conjunto de pruebas unitarias:
+	// ENTREGA 6 - Conjunto de pruebas unitarias:
 
 	/*
 	 * Obtener un POI, modificar sus coordenadas geográficas, persistirlo,
@@ -50,15 +59,14 @@ public class Entrega6Test extends PersistenciaTest {
 	 */
 	@Test
 	public void obtenerPoiModificarCoordenadasPersistirloRecuperarloVerificarlas() {
-		ParadaColectivo poi = (ParadaColectivo) entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + idPoi)
-				.getSingleResult();
+		ParadaColectivo poi = (ParadaColectivo) poiDao.getPoiPersistidoPorId(idPoi);
 
 		Geolocalizacion nuevaGeolocalizacion = new Geolocalizacion(5, 5);
 		poi.setGeolocalizacion(nuevaGeolocalizacion);
 
-		entityManager().merge(poi);
+		poiDao.actualizar(poi);
 
-		poi = (ParadaColectivo) entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + idPoi).getSingleResult();
+		poi = (ParadaColectivo) poiDao.getPoiPersistidoPorId(idPoi);
 
 		Assert.assertEquals(poi.getGeolocalizacion(), nuevaGeolocalizacion);
 	}
@@ -77,7 +85,7 @@ public class Entrega6Test extends PersistenciaTest {
 		LocalTime horaFinSabado = new LocalTime(13, 30);
 		local = new LocalComercial(new DateTimeProviderImpl(new DateTime(2016, 05, 20, 13, 30, 0)));
 		local.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
-		
+
 		rubroLibreria = new Rubro();
 		geolocalizacionLocal = new Geolocalizacion(12, 28);
 		rubroLibreria.setNombre("Libreria Escolar");
@@ -89,15 +97,14 @@ public class Entrega6Test extends PersistenciaTest {
 		palabrasClave.add("Tienda");
 		local.setPalabrasClave(palabrasClave);
 
-		entityManager().persist(local);
+		poiDao.persistir(local);
 		int id = local.getId();
 
-		local = (LocalComercial) entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + id).getSingleResult();
+		local = (LocalComercial) poiDao.getPoiPersistidoPorId(id);
 
-		entityManager().remove(local);
+		poiDao.eliminar(local);
 
-		Assert.assertTrue(entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + local.getId()).getResultList()
-				.isEmpty());
+		Assert.assertTrue(poiDao.getPoisPersistidosPorId(local.getId()).isEmpty());
 	}
 
 	/*
@@ -110,11 +117,10 @@ public class Entrega6Test extends PersistenciaTest {
 		Busqueda busqueda = new Busqueda("regla");
 		List<PuntoDeInteres> referencias = busqueda.getResultados();
 
-		entityManager().persist(busqueda);
+		busquedaDao.persistir(busqueda);
 		int id = busqueda.getId();
 
-		Busqueda busquedaRecuperada = (Busqueda) entityManager().createQuery("FROM Busqueda WHERE id =" + id)
-				.getSingleResult();
+		Busqueda busquedaRecuperada = busquedaDao.getBusquedaPersistidaPorId(id);
 
 		Assert.assertTrue(referencias.size() == busquedaRecuperada.getResultados().size());
 		Assert.assertTrue(referencias.containsAll(busquedaRecuperada.getResultados()));
@@ -127,20 +133,15 @@ public class Entrega6Test extends PersistenciaTest {
 	 */
 	@Test
 	public void altaUsuarioPersistirloRecuperarloModificarNombreRecuperarloVerificarNombre() {
-		Usuario usuario = new Usuario("DummyUser", "DummyPass", new Administrador());
-		entityManager().persist(usuario);
+		Usuario usuario = userDao.agregarUsuario("DummyUser", "DummyPass", new Administrador());
 		int id = usuario.getId();
 
-		Usuario usuarioRecuperadoPrimero = (Usuario) entityManager().createQuery("FROM Usuario WHERE id =" + id)
-				.getSingleResult();
-
+		Usuario usuarioRecuperadoPrimero = userDao.getUsuarioPersistidoPorId(id);
 		usuarioRecuperadoPrimero.setUsername("NuevoNombre");
-		entityManager().merge(usuarioRecuperadoPrimero);
-
-		Usuario usuarioRecuperadoSegundo = (Usuario) entityManager().createQuery("FROM Usuario WHERE id =" + id)
-				.getSingleResult();
+		userDao.actualizar(usuarioRecuperadoPrimero);
+		Usuario usuarioRecuperadoSegundo = userDao.getUsuarioPersistidoPorId(id);
 
 		Assert.assertEquals(usuarioRecuperadoSegundo.getUsername(), "NuevoNombre");
-
+		userDao.eliminar(usuario);
 	}
 }

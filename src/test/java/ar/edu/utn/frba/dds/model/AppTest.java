@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -15,6 +15,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import ar.edu.utn.frba.dds.BaseTest;
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.busqueda.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
@@ -22,16 +23,14 @@ import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-public class AppTest {
+public class AppTest extends BaseTest{
 
-    private App app;
     private LocalComercial local;
 
     @Before
     public void setUp() throws Exception {
         //setUp para estaDisponible
         //        terminal = new TerminalInteractiva();
-        app = App.getInstance();
 
         /*
          * Si se llega a precisar pasar una hora específica se tendrá que
@@ -45,7 +44,7 @@ public class AppTest {
         local.setRubro(rubro);
         ArrayList<PuntoDeInteres> pois = new ArrayList<PuntoDeInteres>();
         pois.add(local);
-        app.setPuntosDeInteres(pois);
+        App.setPuntosDeInteres(pois);
         HashSet<String> palabras = new HashSet<String>();
         palabras.add("Local");
         local.setPalabrasClave(palabras);
@@ -58,20 +57,20 @@ public class AppTest {
     @Test
     public void buscarYEncontrarPOIKiosco()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("kiosko");
+        Set<PuntoDeInteres> resultado = Busqueda.buscar("kiosko");
         Assert.assertTrue(resultado.contains(local));
     }
 
     public void buscarYEncontrarPOIKioscoPorPalabraClave()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("loCal");
+        Set<PuntoDeInteres> resultado = Busqueda.buscar("loCal");
         Assert.assertTrue(resultado.contains(local));
     }
 
     @Test
     public void buscarYNoEncontrarNingunPOI()
             throws JsonParseException, JsonMappingException, UnknownHostException, IOException {
-        List<PuntoDeInteres> resultado = Busqueda.buscarPorPalabra("futbol");
+        Set<PuntoDeInteres> resultado = Busqueda.buscar("futbol");
         Assert.assertTrue(resultado.size() == 0);
     }
     

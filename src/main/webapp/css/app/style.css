@@ -101,3 +101,12 @@ body {
     left: 0;
     right: 0;
 }
+
+#tablaBusquedas {
+    margin-top: 20px;
+    background-color: #FFFFFF;
+}
+
+#encabezadoTablaBusquedas {
+    background-color: #AAAAAA;
+}

@@ -1,11 +1,14 @@
-app.controller('HistorialBusquedasController', ['$scope', '$cookies', 'toaster', function ($scope, $cookies, toaster) {
+app.controller('HistorialBusquedasController', ['$scope', '$cookies', '$http', 'toaster', 'LoadingBackdrop', function ($scope, $cookies, $http, toaster, LoadingBackdrop) {
 
     'use strict';
 
     var usuario = $cookies.getObject('user');
     $scope.isAdmin = (usuario !== undefined && usuario.tipo.toLowerCase() === "administrador");
 
+    $scope.nombreUsuario = {};
     $scope.fecha = {};
+
+    $scope.noHayResultados = false;
 
     $scope.fechaHastaMax = new Date();
     $scope.fechaDesdeMax = new Date();
@@ -71,16 +74,42 @@ app.controller('HistorialBusquedasController', ['$scope', '$cookies', 'toaster',
     }
 
     $scope.validarFechaDesde = function () {
-        if ($scope.fecha.desde > $scope.fecha.hasta) {
+        if ($scope.fecha.hasta !== null && $scope.fecha.desde > $scope.fecha.hasta) {
             $scope.fecha.desde = null;
             toaster.error('La fecha inicial no puede ser mayor a la fecha final');
         }
     };
 
     $scope.validarFechaHasta = function () {
-        if ($scope.fecha.hasta < $scope.fecha.desde) {
+        if ($scope.fecha.desde !== null && $scope.fecha.hasta < $scope.fecha.desde) {
             $scope.fecha.hasta = null;
             toaster.error('La fecha final no puede ser menor a la fecha inicial');
+        }
+    };
+
+    $scope.submit = function () {
+        var fechaDesde;
+        var fechaHasta;
+        fechaDesde = ($scope.fecha.desde === null || $scope.fecha.desde === undefined) ? 0 : new Date($scope.fecha.desde.setHours(0, 0, 0, 0)).getTime();
+        fechaHasta = ($scope.fecha.hasta === null || $scope.fecha.hasta === undefined) ? 0 : new Date($scope.fecha.hasta.setHours(23, 59, 59, 99)).getTime();
+
+        if ((fechaDesde !== 0 && fechaDesde !== undefined) || (fechaHasta !== 0 && fechaHasta !== undefined) || ($scope.nombreUsuario.value !== "" && $scope.nombreUsuario.value !== undefined)) {
+            var promise = $http.get('/DDS2016/historial/' + fechaDesde + '/' + fechaHasta + '/' + nombreUsuario.value);
+            LoadingBackdrop.show();
+            promise.then(function (response) {
+                $scope.resultados = response.data;
+                if ($scope.resultados.length === 0) {
+                    $scope.noHayResultados = true;
+                } else {
+                    $scope.noHayResultados = false;
+                }
+                LoadingBackdrop.hide();
+            }, function (response) {
+                toaster.error('Hubo un problema al obtener el historial');
+                LoadingBackdrop.hide();
+            });
+        } else {
+            toaster.error("Complete alguno de los campos!");
         }
     };
 

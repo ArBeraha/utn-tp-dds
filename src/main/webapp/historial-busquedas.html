@@ -8,13 +8,13 @@
         <div class="col-xs-offset-4 col-xs-4">
             <div class="form-group">
                 <label for="nombreUsuario">Usuario</label>
-                <input type="text" id="nombreUsuario" class="form-control" key-enter="validar()">
+                <input type="text" id="nombreUsuario" ng-model="nombreUsuario.value" class="form-control" key-enter="submit()">
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="fechaDesde">Desde</label>
                     <p class="input-group">
-                        <input type="text" id="fechaDesde" class="form-control" ng-model="fecha.desde" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" close-text="Cerrar" alt-input-formats="altInputFormats" ng-change="validarFechaDesde()" />
+                        <input type="text" id="fechaDesde" class="form-control" ng-model="fecha.desde" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" close-text="Cerrar" clear-text="Borrar" current-text="Hoy" alt-input-formats="altInputFormats" ng-change="validarFechaDesde()" ng-readonly="true" />
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
                         </span>
@@ -24,20 +24,20 @@
                 <div class="col-md-6">
                     <label for="fechaHasta">Hasta</label>
                     <p class="input-group">
-                        <input type="text" id="Hasta" class="form-control" ng-model="fecha.hasta" uib-datepicker-popup="{{format}}" is-open="popup2.opened" datepicker-options="dateOptions" close-text="Cerrar" alt-input-formats="altInputFormats" ng-change="validarFechaHasta()" />
+                        <input type="text" id="Hasta" class="form-control" ng-model="fecha.hasta" uib-datepicker-popup="{{format}}" is-open="popup2.opened" datepicker-options="dateOptions" close-text="Cerrar" clear-text="Borrar" current-text="Hoy" alt-input-formats="altInputFormats" ng-change="validarFechaHasta()" ng-readonly="true" />
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
                         </span>
                     </p>
                 </div>
             </div>
-            <button type="submit" class="btn btn-default" ng-click="validar()">Buscar</button>
+            <button type="submit" class="btn btn-default" ng-click="submit()">Buscar</button>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-if="resultados.length > 1">
         <div class="col-xs-offset-4 col-xs-4">
-            <table class="table">
-                <thead>
+            <table class="table" id="tablaBusquedas">
+                <thead id="encabezadoTablaBusquedas">
                     <tr>
                         <th>Fecha</th>
                         <th>Usuario</th>
@@ -45,13 +45,20 @@
                         <th>POIs</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody ng-repeat="resultado in resultados">
                     <tr>
-                        <th>
-                        </th>
+                        <th>{{resultado.fecha | date : "dd/MM/yy"}}</th>
+                        <th>{{resultado.usuario.username}}</th>
+                        <th>{{resultado.fraseBuscada}}</th>
+                        <th>{{resultado.resultados.length}}</th>
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="row" ng-if="noHayResultados">
+        <div class="col-xs-12">
+            <h4 class="text-center">No se encontraron resultados</h4>
         </div>
     </div>
 </div>

@@ -12,7 +12,7 @@ import javax.persistence.Transient;
 
 import org.joda.time.LocalDateTime;
 
-import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
 @Entity
@@ -44,7 +44,7 @@ public class ResultadoAccion {
         this.exito = exito;
         if (exito == false)
             mensaje = accion.getMensajeError();
-        App.getInstance().addResultadosAcciones(this);
+        DaoFactory.getResultadoAccionDao().addResultadosAcciones(this);
     }
 
     public boolean undo() {

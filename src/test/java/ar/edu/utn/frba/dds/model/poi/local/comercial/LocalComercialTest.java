@@ -3,19 +3,22 @@ package ar.edu.utn.frba.dds.model.poi.local.comercial;
 import java.util.HashSet;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ar.edu.utn.frba.dds.BaseTest;
 import ar.edu.utn.frba.dds.model.poi.Geolocalizacion;
 import ar.edu.utn.frba.dds.model.poi.horario.RangoHorario;
+import ar.edu.utn.frba.dds.model.poi.horario.RangoHorarioEspecial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.LocalComercial;
 import ar.edu.utn.frba.dds.model.poi.local.comercial.Rubro;
 import ar.edu.utn.frba.dds.util.time.DateTimeProviderImpl;
 
-public class LocalComercialTest {
+public class LocalComercialTest extends BaseTest {
 
     private LocalComercial local;
     private Rubro rubroLibreria;
@@ -42,11 +45,15 @@ public class LocalComercialTest {
 		local.agregarRangoHorario(new RangoHorario(4, horaInicioLunesAViernes2, horaFinLunesAViernes2));
 		local.agregarRangoHorario(new RangoHorario(5, horaInicioLunesAViernes2, horaFinLunesAViernes2));
 		local.agregarRangoHorario(new RangoHorario(6, horaInicioSabado, horaFinSabado));
+		local.agregarRangoHorario(new RangoHorarioEspecial(new LocalDate(2016, 12, 25), horaInicioSabado, horaFinSabado, true));
+		local.agregarRangoHorario(new RangoHorarioEspecial(new LocalDate(2016, 12, 24), horaInicioSabado, horaFinSabado, false));
         // setUp para esCercano
         rubroLibreria = new Rubro();
         geolocalizacionLocal = new Geolocalizacion(12, 28);
         rubroLibreria.setNombre("Libreria Escolar");
         rubroLibreria.setRadioCercania(5);
+        
+        
     }
 
     @After
@@ -62,6 +69,19 @@ public class LocalComercialTest {
     @Test
     public void siendoUnaFechaFueraDelHorarioDeAtencionDeUnLocalNoDebeEstarDisponible() {
     	local.setDateTimeProvider(new DateTimeProviderImpl(new DateTime(2016, 11, 17, 20, 30, 0)));
+        Assert.assertFalse(this.local.estaDisponible());
+    }
+    
+    @Test
+    public void siendoUnaFechaFueraDelHorarioDeAtencionPeroDentroDelHorarioEspecialDebeEstarDisponible(){
+    	local.setDateTimeProvider(new DateTimeProviderImpl(new DateTime(2016, 12, 25, 11, 30, 0)));
+    	Assert.assertTrue(this.local.estaDisponible());
+    }
+    
+    @Test
+    public void siendoUnaFechaDentroDelHorarioNormalIgualNoAtiendePorExistirUnHorarioEspecialCerrado(){
+    	local.setDateTimeProvider(new DateTimeProviderImpl(new DateTime(2016, 12, 24, 11, 30, 0)));
+    	local.getHorariosEspeciales().forEach(x -> System.out.println("Especial:"+x.getFecha() +" inicio:"+x.getHoraInicio() + " fin:"+x.getHoraFin() + " abierto:"+x.isAbierto()));
         Assert.assertFalse(this.local.estaDisponible());
     }
     
@@ -108,5 +128,7 @@ public class LocalComercialTest {
         local.setPalabrasClave(palabrasClave);
         Assert.assertFalse(local.tienePalabra("futbol"));
     }
+    
+    
 
 }
