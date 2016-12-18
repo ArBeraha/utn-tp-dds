@@ -19,6 +19,7 @@ import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.busqueda.Reporte;
+import ar.edu.utn.frba.dds.model.user.Usuario;
 
 @RestController
 public class BusquedaController {
@@ -43,12 +44,17 @@ public class BusquedaController {
     public @ResponseBody Map<String, Long> generarReportePorTerminal() {
         return  new Reporte().busquedasPorTerminal();
     }
-
+    
     @RequestMapping(value = { "/reporteParcialPorTerminal/{idTerminal}" }, method = RequestMethod.GET)
     public @ResponseBody Map<String, Long> generarReporteDeTerminal(@PathVariable("idTerminal") int idTerminal) {
         return new Reporte().busquedasDeTerminal(idTerminal);
     }
 
+    @RequestMapping(value = { "/usuarios" }, method = RequestMethod.GET)
+    public @ResponseBody List<Usuario> usuarios() {
+        return  App.getUsuarios();
+    }
+    
     @RequestMapping(value = { "/accionesBusqueda/{idTerminal}" }, method = RequestMethod.GET)
     public @ResponseBody List<AccionAnteBusqueda> getAccionesBusqueda(@PathVariable("idTerminal") int idTerminal) {
     	return App.buscarUsuarioPorId(idTerminal).getAccionesAnteBusqueda().stream().collect(Collectors.toList());

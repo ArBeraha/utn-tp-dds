@@ -11,6 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+
 import ar.edu.utn.frba.dds.model.accion.Accion;
 
 @Entity

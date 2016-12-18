@@ -24,6 +24,7 @@ public abstract class PuntoDeInteres extends Servicio {
 	protected Geolocalizacion geolocalizacion;
 	@Transient
 	protected DateTimeProvider dateTimeProvider;
+	protected boolean activo;
 
 	public String getDireccion() {
 		return direccion;
@@ -66,6 +67,14 @@ public abstract class PuntoDeInteres extends Servicio {
 	protected boolean esPalabraClave(final String palabra) {
 		List<String> result = getPalabrasClave().stream().map(String::toLowerCase).collect(Collectors.toList());
 		return result.contains(palabra.toLowerCase());
+	}
+
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
 	}
 	
 }
