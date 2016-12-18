@@ -6,7 +6,7 @@ app.controller('ConfigurarAccionesController', ['$scope', '$http', '$cookies', '
     $scope.acciones = [];
     var usuario = $cookies.getObject('user');
     $scope.isAdmin = (usuario !== undefined && usuario.tipo.toLowerCase() === "administrador");
-    var getAccionesPromise = Acciones.lista();
+    var getAccionesPromise = Acciones.lista(usuario.id);
 
     var init = function () {
         getAccionesPromise.then(function (response) {
@@ -22,7 +22,7 @@ app.controller('ConfigurarAccionesController', ['$scope', '$http', '$cookies', '
     };
 
     $scope.enviarAcciones = function () {
-        var enviarAccionesPromise = Acciones.enviar($scope.acciones);
+        var enviarAccionesPromise = Acciones.enviar(usuario.id, $scope.acciones);
         enviarAccionesPromise.then(function (response) {
             toaster.success("Acciones guardadas con éxito!");
         }, function (response) {
