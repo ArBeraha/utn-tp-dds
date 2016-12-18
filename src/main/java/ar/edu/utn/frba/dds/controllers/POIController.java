@@ -58,7 +58,7 @@ public class POIController {
 		App.modificarPuntoDeInteres(App.buscarPuntoDeInteresPorId(idPoi), poi);
 	}
 
-	@RequestMapping(value = { "/baja/{idPoi}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/baja/{idPoi}" }, method = RequestMethod.POST)
 	public @ResponseBody void eliminarPoi(@PathVariable("idPoi") int idPoi) {
 		App.eliminarPuntoDeInteres(App.buscarPuntoDeInteresPorId(idPoi));
 	}
