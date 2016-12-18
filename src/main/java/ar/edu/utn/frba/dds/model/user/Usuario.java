@@ -32,7 +32,7 @@ import ar.edu.utn.frba.dds.model.user.error.NoHacerNada;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({ "pass" })
+@JsonIgnoreProperties({ "pass", "resultadoAcciones" ,"email"})
 @Entity
 public class Usuario {
 
