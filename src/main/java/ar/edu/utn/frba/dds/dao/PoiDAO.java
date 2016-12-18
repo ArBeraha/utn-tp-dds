@@ -42,15 +42,15 @@ public class PoiDAO extends DAO {
 	}
 
 	public List<PuntoDeInteres> getPoisPersistidos() {
-		return entityManager().createQuery("FROM PuntoDeInteres").getResultList();
+		return entityManager().createQuery("FROM PuntoDeInteres WHERE Activo=1").getResultList();
 	}
 
 	public PuntoDeInteres getPoiPersistidoPorId(int idPoi) {
-		return (PuntoDeInteres) entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + idPoi).getSingleResult();
+		return (PuntoDeInteres) entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + idPoi + " AND Activo=1").getSingleResult();
 	}
 
 	public List<PuntoDeInteres> getPoisPersistidosPorId(int idPoi) {
-		return entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + idPoi).getResultList();
+		return entityManager().createQuery("FROM PuntoDeInteres WHERE id =" + idPoi + " AND Activo=1").getResultList();
 	}
 
 	public boolean isEmpty() {
@@ -105,10 +105,25 @@ public class PoiDAO extends DAO {
 		}
 		return nuevosCGP;
 	}
-
+	
+	public void persistir(PuntoDeInteres pdi) {
+		entityManager().getTransaction().begin();
+		pdi.setActivo(true);
+		entityManager().persist(pdi);
+		entityManager().getTransaction().commit();
+	}
+	
+	public void eliminar(PuntoDeInteres pdi) {
+		entityManager().getTransaction().begin();
+		pdi.setActivo(false);
+		entityManager().merge(pdi);
+		entityManager().getTransaction().commit();
+	}
+	
 	public void eliminarPorInactividad(PuntoDeInteres pdi, BajaInactividad baja) {
 		entityManager().getTransaction().begin();
-		entityManager().remove(pdi);
+		pdi.setActivo(false);
+		entityManager().merge(pdi);
 		entityManager().persist(baja);
 		entityManager().getTransaction().commit();
 	}

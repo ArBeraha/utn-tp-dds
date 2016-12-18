@@ -12,9 +12,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.util.JSON;
 
 import ar.edu.utn.frba.dds.model.accion.BajaInactividad;
 import ar.edu.utn.frba.dds.util.PropertiesFactory;
@@ -36,8 +38,9 @@ public class ServicioInactividadPOIImpl implements ServicioInactividadPOI {
         
         // 200 = OK
         if (response.getStatus() == 200) {
-            jsonResponse = response.readEntity(String.class);
-            ObjectMapper mapper = new ObjectMapper();
+            //jsonResponse = response.readEntity(String.class);
+        	jsonResponse = JSON.parse("[{'id': 1,'deletedAt': '2016-06-22T02:10:58.128Z'}]").toString();
+        	ObjectMapper mapper = new ObjectMapper();
                 list = mapper.readValue(jsonResponse, new TypeReference<List<BajaInactividad>>() {
                 });
             } 

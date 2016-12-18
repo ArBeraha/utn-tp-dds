@@ -24,6 +24,7 @@ public class BajaPoisInactivos extends Accion {
 			List<BajaInactividad> bajas = servicio.getPoisInactivos();
 			for (BajaInactividad baja : bajas) {
 				PuntoDeInteres poi = App.buscarPuntoDeInteresPorId(baja.getId());
+				baja.setPoi(poi);
 				if (poi != null) {
 					App.eliminarPuntoDeInteres(poi,baja);
 					System.out.println("Eliminando por inactividad POI id:" + baja.getId());
