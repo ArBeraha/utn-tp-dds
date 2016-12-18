@@ -29,7 +29,13 @@ public class AccionFactory {
     }
     
     public static Accion getAccion(Primitivas primitiva){
-        return acciones.stream().filter(x -> x.getId() == primitiva.getId()).collect(Collectors.toList()).get(0);
+        System.out.println("Primitiva pasada por parametro al getAccion: " + primitiva.toString() + " - " + primitiva.getId());
+        System.out.println("Cantidad de acciones en el AccionFactory: " + acciones.size());
+        List<Accion> accionesFiltradas = acciones.stream().filter(x -> x.getId() == primitiva.getId()).collect(Collectors.toList());
+        System.out.println("Cantidad de resultados al filtrar las acciones por la pasada por parámetro: " + accionesFiltradas.size());
+        System.out.println("Está vacío el repositorio de acciones? " + acciones.isEmpty());
+        Accion primeraAccion = accionesFiltradas.get(0);
+        return primeraAccion;
     }
     
     public static Accion addAccion(Accion accion){

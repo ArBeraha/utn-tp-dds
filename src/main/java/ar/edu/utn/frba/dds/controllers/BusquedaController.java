@@ -19,8 +19,10 @@ import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.busqueda.Reporte;
+import io.swagger.annotations.Api;
 
 @RestController
+@Api(description = "API de reportes y acciones ante búsquedas" )
 public class BusquedaController {
 
     // Endpoint que devuelve el historial por nombre de usuario
@@ -29,7 +31,7 @@ public class BusquedaController {
         return DaoFactory.getBusquedaDao().getBusquedasPersistidasMongo(desde, hasta, "");
     }
     
-    @RequestMapping(value = { "/historial/{desde}/{hasta}/{nombreDeUsuario}" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/historial/{desde}/{hasta}/{nombreDeUsuario}" }, method = RequestMethod.GET, produces="application/json" )
     public @ResponseBody List<DBObject> getHistorialPorUsuario(@PathVariable("desde") long desde, @PathVariable("hasta") long hasta, @PathVariable("nombreDeUsuario") String nombreDeUsuario) {
         return DaoFactory.getBusquedaDao().getBusquedasPersistidasMongo(desde, hasta, nombreDeUsuario);
     }

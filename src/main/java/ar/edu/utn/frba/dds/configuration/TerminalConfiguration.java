@@ -14,9 +14,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.fasterxml.jackson.datatype.joda.JodaMapper;
 
 import ar.edu.utn.frba.dds.model.app.App;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableWebMvc
+@EnableSwagger2
 @ComponentScan(basePackages = "ar.edu.utn.frba.dds")
 public class TerminalConfiguration extends WebMvcConfigurerAdapter {
 
@@ -31,6 +33,8 @@ public class TerminalConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/js/");
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        //Swagger-UI - Para mostrar mediante una UI más amigable, la documentación de las API expuestas
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     //Agregado por serialización a JSON de LocalTime y LocalDate de JodaTime

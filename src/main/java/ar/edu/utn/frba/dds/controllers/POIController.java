@@ -8,19 +8,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.utn.frba.dds.model.app.App;
+import ar.edu.utn.frba.dds.model.busqueda.Busqueda;
 import ar.edu.utn.frba.dds.model.poi.PuntoDeInteres;
 import ar.edu.utn.frba.dds.model.user.Terminal;
+import io.swagger.annotations.Api;
 
 @RestController
+@Api(description = "API de administración y búsqueda de POIs" )
 public class POIController {
 	
 	@RequestMapping(value = { "/pois" }, method = RequestMethod.GET)
 	public @ResponseBody List<PuntoDeInteres> getAllPois() {
 		return App.getPuntosDeInteres();
 	}
+	
+	   @RequestMapping(value = { "/pois/{textoBusqueda}" }, method = RequestMethod.GET, produces = "application/json")
+	    public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda) throws Exception {
+	        try {
+	            return new Busqueda(textoBusqueda).getResultados();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new Exception("Error interno al obtener los pois");
+	        }
+	    }
 
 	@RequestMapping(value = { "/pois/{idTerminal}/{textoBusqueda}" }, method = RequestMethod.GET)
-	public @ResponseBody List<PuntoDeInteres> buscarPoi(@PathVariable("textoBusqueda") String textoBusqueda,
+	public @ResponseBody List<PuntoDeInteres> buscarPoiPorTerminal(@PathVariable("textoBusqueda") String textoBusqueda,
 			@PathVariable("idTerminal") int idTerminal) throws Exception {
 		try {
 			return App.buscarUsuarioPorId(idTerminal).buscarPuntoDeInteres(textoBusqueda);
