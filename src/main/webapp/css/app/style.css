@@ -114,3 +114,8 @@ body {
 .boton-menu {
     margin-top: 10px;
 }
+
+.resultadosCero {
+    text-align: center;
+    font-weight: 500;
+}
