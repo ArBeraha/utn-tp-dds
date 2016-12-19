@@ -1,4 +1,4 @@
-app.controller('HistorialBusquedasController', ['$scope', '$cookies', '$http', 'toaster', 'LoadingBackdrop', function ($scope, $cookies, $http, toaster, LoadingBackdrop) {
+app.controller('HistorialBusquedasController', ['$scope', '$cookies', '$http', '$location', 'toaster', 'LoadingBackdrop', function ($scope, $cookies, $http, $location, toaster, LoadingBackdrop) {
 
     'use strict';
 
@@ -127,6 +127,10 @@ app.controller('HistorialBusquedasController', ['$scope', '$cookies', '$http', '
     $scope.cerrarModal = function () {
         $scope.showModal = false;
         $scope.poiNames = [];
+    };
+
+    $scope.volver = function () {
+        $location.url('/admin');
     };
 
 }]);
