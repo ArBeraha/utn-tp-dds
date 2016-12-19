@@ -12,7 +12,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
 @Entity
-@JsonIgnoreProperties({ "dateTimeProvider","geolocalizacion","palabrasClave" })
+@JsonIgnoreProperties({ "dateTimeProvider", "geolocalizacion", "palabrasClave" })
 
 public class LocalComercial extends PuntoDeInteres {
 
@@ -58,8 +58,11 @@ public class LocalComercial extends PuntoDeInteres {
 
 	@Override
 	public boolean esCercano(final Geolocalizacion geolocalizacion) {
-		return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro()
-				.obtenerRadioCercania();
+		if (this.geolocalizacion == null)
+			return false;
+		else
+			return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < this.getRubro()
+					.obtenerRadioCercania();
 	}
 
 	@Override

@@ -59,6 +59,9 @@ public abstract class PuntoDeInteres extends Servicio {
 	public abstract String getTipo();
 
 	public boolean esCercano(final Geolocalizacion geolocalizacion) {
+		if (this.geolocalizacion==null)
+			return false;
+		else
 		return this.getGeolocalizacion().calcularDistanciaEnCuadras(geolocalizacion) < 5;
 	}
 
