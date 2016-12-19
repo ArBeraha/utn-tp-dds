@@ -19,6 +19,7 @@ import ar.edu.utn.frba.dds.dao.DaoFactory;
 import ar.edu.utn.frba.dds.model.acciones.ante.busqueda.AccionAnteBusqueda;
 import ar.edu.utn.frba.dds.model.app.App;
 import ar.edu.utn.frba.dds.model.busqueda.Reporte;
+import ar.edu.utn.frba.dds.model.user.Terminal;
 import ar.edu.utn.frba.dds.model.user.Usuario;
 
 @RestController
@@ -52,7 +53,7 @@ public class BusquedaController {
 
     @RequestMapping(value = { "/usuarios" }, method = RequestMethod.GET)
     public @ResponseBody List<Usuario> usuarios() {
-        return  App.getUsuarios();
+        return  App.getUsuarios().stream().filter(x -> x.getTipoUsuario().getClass() == Terminal.class).collect(Collectors.toList());
     }
     
     @RequestMapping(value = { "/accionesBusqueda/{idTerminal}" }, method = RequestMethod.GET)
