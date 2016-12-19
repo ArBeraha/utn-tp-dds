@@ -51,7 +51,7 @@ public class BusquedaController {
         return new Reporte().busquedasDeTerminal(idTerminal);
     }
 
-    @RequestMapping(value = { "/usuarios" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/terminales" }, method = RequestMethod.GET)
     public @ResponseBody List<Usuario> usuarios() {
         return  App.getUsuarios().stream().filter(x -> x.getTipoUsuario().getClass() == Terminal.class).collect(Collectors.toList());
     }
